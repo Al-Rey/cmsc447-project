@@ -1,9 +1,0 @@
-VS code
-
-Extension: Live server (Ritwick Dey) download in vscode
-
-
-Right click in in .html and run "Open Live Server" 
-Right click in web browser to "inspect" nav to Consol to see 
-
-26:03
