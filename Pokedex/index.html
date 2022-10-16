@@ -13,8 +13,46 @@
     <body>
         <div class="container">
             <h1>447 Pokedex</h1>
-            <ul id="pokedex"></ul>
+            <div class="row">
+                <div class="w-20 text-center">
+                    <div class="form-container">
+                        <div class="checkbox-container">
+                          <input type="text" placeholder="Search" class="search_field" />
+                        </div>
+                        <div class="checkbox-container">
+                          <input type="checkbox" id="generation1" class="generation_check_box" value="1"/>
+                          <label class="checkbox" for="generation1">Generation 1</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="generation2" class="generation_check_box" value="2"/>
+                            <label class="checkbox" for="generation2">Generation 2</label>
+                          </div>
+                          <div class="checkbox-container">
+                            <input type="checkbox" id="generation3" class="generation_check_box" value="3"/>
+                            <label class="checkbox" for="generation3">Generation 3</label>
+                          </div>
+                          <div class="checkbox-container">
+                            <input type="checkbox" id="generation4" class="generation_check_box" value="4"/>
+                            <label class="checkbox" for="generation4">Generation 4</label>
+                          </div>
+                          <div class="checkbox-container">
+                            <input type="checkbox" id="generation5" class="generation_check_box" value="5"/>
+                            <label class="checkbox" for="generation5">Generation 5</label>
+                          </div>
+                          <div class="checkbox-container">
+                            <input type="checkbox" id="generation6" class="generation_check_box" value="6"/>
+                            <label class="checkbox" for="generation6">Generation 6</label>
+                          </div>
+
+                    </div>
+                </div>
+                <div class="w-75">
+                    <ul id="pokedex"></ul>
+                </div>
+            </div>
+            
         </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="script.js"></script>
     </body>
 </html>

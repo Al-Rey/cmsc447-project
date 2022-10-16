@@ -50,6 +50,80 @@ h1 {
 .card-image {
     height: 180px;
 }
+.row{
+    width: 100%;
+    display: flex;
+}
+.w-20{
+    width: 20%;
+}
+.w-25{
+    width: 25%;
+}
+.w-75{
+    width: 75%;
+}
+
+  
+input[type="checkbox"]{
+    display:none;
+  }
+  
+  input[type="checkbox"]:hover + label:before{
+    opacity: .5;
+  }
+  
+  .checkbox{
+    display:inline-block;
+    position:relative;
+    padding-left:40px;
+    line-height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #111;
+    font-weight: 600;
+  }
+  
+  .checkbox:before{
+    z-index:15;
+    content: '';
+    position:absolute;
+    left:0;
+    top: 6px;
+    transition:all 0.3s ease;
+    cursor:pointer;
+    width:20px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: #444;
+    height:20px;
+  }
+  input[type="checkbox"]:checked + label{
+    color:#000;
+  }
+  
+  input[type="checkbox"]:checked +  label:before{
+    border-color: transparent;
+    border-left-color: #2ecc71;
+    border-bottom-color: #2ecc71;
+    transform:rotate(-50deg);
+    width:22px;
+    height:12px;
+    top: 3px;
+  }
+  .checkbox-container{
+    margin: 10px;
+  }
+
+  .text-center{
+    text-align: center;
+  }
+  
+    .search_field{
+    height: 30px;
+    border-radius: 8px;
+  }
+
 
 @keyframes bounce {
     20% {
