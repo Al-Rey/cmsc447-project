@@ -1,8 +1,10 @@
 const pokedex = document.getElementById('pokedex');
 const pokemons = [];
 const generation = [];
+var all_pokemon = [];
 function  fetchGeneration(generation){
-    const pokemon = [];
+    all_pokemon = [];
+    $(pokedex).html('');
     for (let i = 0; i < generation.length; i++) {
         const url = `https://pokeapi.co/api/v2/generation/${generation[i]}`;
         $.ajax({
@@ -11,7 +13,7 @@ function  fetchGeneration(generation){
             type: "Get",
             async: true,
             success: function (results) {
-                console.log(results);
+                //console.log(results);
                 for (let j = 0; j < results.pokemon_species.length; j++) {
                     if (typeof results.pokemon_species[j] !== 'undefined'){
                         var pathname = new URL(results.pokemon_species[j].url).pathname;
@@ -24,7 +26,7 @@ function  fetchGeneration(generation){
                             type: "Get",
                             async: true,
                             success: function (results) {
-                                console.log(results);
+                                //console.log(results);
                                 const pokemon2 = {
                                     name: results.name,
                                     image: results.sprites['front_default'],
@@ -33,17 +35,14 @@ function  fetchGeneration(generation){
                                     
                                 };
                                 t = `
-                                            <li class="card generation_${generation[i]}">
+                                            <li class="card generation_${generation[i]}" id="${pokemon2.id}">
                                                 <img class="card-image" src="${pokemon2.image}"/>
                                                 <h2 class="card-title">${pokemon2.id}. ${pokemon2.name}</h2>
                                                 <p class="card-subtitle">Type: ${pokemon2.type}</p>
                                                 
                                             </li>
                                         `;
-                                $(pokedex).append(t);
-                                
-                                //pokemon.push(pokemon2);
-                                //displayPokemon(pokemon);
+                                all_pokemon[pokemon2.id] = t;
                             },
                             error: function (xhr, exception) {
                                 
@@ -53,14 +52,14 @@ function  fetchGeneration(generation){
                     }
                     
                 }
-                console.log(pokemon);
+                //console.log(pokemon);
             },
             error: function (xhr, exception) {
                 
             }
         });
     }
-    console.log(pokemons);
+    
 }
 
 $('.generation_check_box').change(function(){
@@ -71,10 +70,10 @@ $('.generation_check_box').change(function(){
               generation.splice(index, 1);
             }
             $('.generation_'+$(this).val()).remove();
+            fetchGeneration(generation);
         }else{
             generation.push($(this).val());
-            var new_generation = [$(this).val()];
-            fetchGeneration(new_generation);
+            fetchGeneration(generation);
         }
 });
 
@@ -85,20 +84,16 @@ $(".search_field").on("keyup", function() {
     });
   });
   
+ function displayPokemon(){
+     $(pokedex).html('');
+     all_pokemon.forEach((item, index)=>{
+         $(pokedex).append(item);
+});
 
-const displayPokemon = (pokemon) => {
-    console.log(pokemon);
-    const pokemonHTMLString = pokemon
-        .map(
-            (pokeman) => `
-        <li class="card">
-            <img class="card-image" src="${pokeman.image}"/>
-            <h2 class="card-title">${pokeman.id}. ${pokeman.name}</h2>
-            <p class="card-subtitle">Type: ${pokeman.type}</p>
-            
-        </li>
-    `
-        )
-        .join('');
-    pokedex.innerHTML = pokemonHTMLString;
-};
+ }
+ 
+setInterval(function(){ 
+    displayPokemon();  
+}, 1000);
+  
+
