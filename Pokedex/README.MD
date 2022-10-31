@@ -44,7 +44,12 @@ JB - 10/16/2022
 
 ___________________________________________________________________________
 
+V5
 
+Fixed the Search bar, the search bar use to breifly show the pokemon 'searched' then it would revert to the generationlist. 
+Created a popup window which show's the user statistics of the pokemon selected.  The way the user does this is by clicking on the pokemon's image.
+
+JB - 10/31/2022
 
 
 
