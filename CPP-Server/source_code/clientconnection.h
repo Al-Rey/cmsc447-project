@@ -17,11 +17,15 @@ namespace API
     class ClientConnection
     {
         public:
+            ClientConnection();
             ClientConnection(int new_socket);
             ~ClientConnection();
             void closeConnection();
             void sendData(string data, int bytesToSend);
+            bool operator==(ClientConnection compareTo);
+            bool operator!=(ClientConnection compareTo);
             int getPosition();
+            int getSocket();
         private:
             int queuePosition;
             int clientSocket;

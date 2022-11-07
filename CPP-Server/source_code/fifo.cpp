@@ -15,7 +15,7 @@ Fifo::Fifo()
     queuedRequests = 0;
     reservedSpots = 0;
     *requests = new int [API::MAX_SIZE];
-    *clients = new int [API::MAX_SIZE];
+    *clients = new ClientConnection [API::MAX_SIZE];
     for (int i = 0; i < API::MAX_SIZE; i++)
     {
         requests[i] = NULL;
@@ -25,14 +25,12 @@ Fifo::Fifo()
 }
 
 //Reserves positions in queue
-int Fifo::reserve_next_available(int client)
+int Fifo::reserve_next_available(ClientConnection client)
 {
     int reserveIndex = get_next_open();
-    cout << "reserveIndex: " << reserveIndex << "\n";
     if (reserveIndex != -1)
     {
         reserve_position(reserveIndex, client);
-        cout << "*clients[reserveIndex]: " << *clients[reserveIndex] << "\n";
         return reserveIndex;
     }
     //occurs if the queue is full
@@ -72,19 +70,17 @@ bool Fifo::check_if_expired(int index)
     return difftime(time(NULL), reservedAt[index]) >= API::RES_INTERVAL;
 }
 
-void Fifo::reserve_position(int index, int client)
+void Fifo::reserve_position(int index, ClientConnection client)
 {
     time(&reservedAt[index]);
-    clients[index] = new int;
+    //clients[index] = new ClientConnection;
     *clients[index] = client;
-    cout << "client: " << client << "\n";
-    cout << "*clients[index]: " << *clients[index] << "\n";
     reservedSpots++;
     return;
 }
 
 //Takes in requests for reserved positions
-void Fifo::add_new_request(int requestedIndex, int client, int request)
+void Fifo::add_new_request(int requestedIndex, ClientConnection client, int request)
 {
     //checks that requested index in proper range.
     if (requestedIndex >= 0 && requestedIndex < API::MAX_SIZE)
@@ -103,19 +99,19 @@ void Fifo::add_new_request(int requestedIndex, int client, int request)
 }
 
 //Processes queued requests.
-std::tuple<int, int> Fifo::process_requests()
+std::tuple<ClientConnection, int> Fifo::process_requests()
 {
     if (queuedRequests > 0)
     {
         return process_next_request();
     }
-    return tuple<int, int>(NULL, NULL);
+    return tuple<ClientConnection, int>(NULL, NULL);
 }
 
-std::tuple<int, int> Fifo::process_next_request()
+std::tuple<ClientConnection, int> Fifo::process_next_request()
 {
     get_next_queued();
-    tuple<int, int> clientRequest = tuple<int, int>(*clients[currentIndex], *requests[currentIndex]);
+    tuple<ClientConnection, int> clientRequest = tuple<ClientConnection, int>(*clients[currentIndex], *requests[currentIndex]);
     delete requests[currentIndex];
     delete clients[currentIndex];
     requests[currentIndex] = NULL;

@@ -8,7 +8,8 @@ using namespace API;
 
 int main()
 {
-  int reservedIndices[API::MAX_SIZE];
+  return 0;
+/*  int reservedIndices[API::MAX_SIZE];
   Fifo testQueue = Fifo();
   cout << "reserving queue spots\n";
   for (int i = 0; i < API::MAX_SIZE; i++)
@@ -33,5 +34,5 @@ int main()
   }
   while (lastReq != tuple<int, int> (NULL, NULL));
   cout << "processed " << count << " requests.\n";
-  return 0;
+  return 0;*/
 }

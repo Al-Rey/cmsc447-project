@@ -1,9 +1,9 @@
 CXX = g++
 CXXFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17 -g
 
-SRC = *.cpp *.h
+SRC = source_code/*.cpp source_code/*.h
 OBJ = $(SRC:.cc=.o)
-EXEC = server
+EXEC = server.exe
 
 all: $(EXEC)
 

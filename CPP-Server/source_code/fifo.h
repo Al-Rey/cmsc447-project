@@ -3,6 +3,7 @@
 
 #include <tuple>
 #include <ctime>
+#include "clientconnection.h"
 #include "constants.h"
 
 namespace API
@@ -11,10 +12,10 @@ namespace API
     {
         public:
             Fifo();
-            std::tuple<int, int> process_requests();
-            int reserve_next_available(int client);
+            std::tuple<ClientConnection, int> process_requests();
+            int reserve_next_available(ClientConnection client);
             time_t get_current_time();
-            void add_new_request(int requestedIndex, int client, int request);
+            void add_new_request(int requestedIndex, ClientConnection client, int request);
         private:
             time_t currentTime;
             time_t expiredSentinelValue;
@@ -22,12 +23,12 @@ namespace API
             int queuedRequests;
             int reservedSpots;
             int *requests[MAX_SIZE];
-            int *clients[MAX_SIZE];
+            ClientConnection *clients[MAX_SIZE];
             time_t reservedAt[MAX_SIZE];
             //methods
-            std::tuple<int, int> process_next_request();
+            std::tuple<ClientConnection, int> process_next_request();
             bool check_availability(int index);
-            void reserve_position(int index, int client);
+            void reserve_position(int index, ClientConnection client);
             void increment_index();
             int get_next_open();
             void get_next_queued();

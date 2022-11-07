@@ -3,6 +3,9 @@
 using namespace std;
 using namespace API;
 
+//Communications Handler
+//Public Methods
+
 ComsHandler::ComsHandler()
 {
     listenerSocket = startListening();
@@ -12,6 +15,11 @@ ComsHandler::ComsHandler()
 ComsHandler::~ComsHandler()
 {
     cout << "destructing ComsHandler\n";
+}
+
+void ComsHandler::receiveData()
+{
+
 }
 
 sockaddr_in ComsHandler::startListening()
@@ -44,11 +52,28 @@ sockaddr_in ComsHandler::startListening()
         perror("listen"); 
         exit(EXIT_FAILURE); 
     }
-    if ((new_socket = accept(server_fd, (struct sockaddr *) &listener, (socklen_t*)&addrlen))<0) 
-    { 
-        perror("accept"); 
-        exit(EXIT_FAILURE); 
-    }
     return listener;
 }
 
+ClientConnection ComsHandler::listenForConnections()
+{
+    int clientSocket;
+    if ((clientSocket = accept(server_fd, (struct sockaddr *) &listenerSocket, (socklen_t*)&addrlen))<0) 
+    {
+        perror("accept"); 
+        exit(EXIT_FAILURE); 
+    }
+    return ClientConnection(clientSocket);
+}
+
+//Private Methods
+
+void ComsHandler::closeConnection(ClientConnection client)
+{
+
+}
+
+string ComsHandler::receivePackets()
+{
+    return "placeholder";
+}

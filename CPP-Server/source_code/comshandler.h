@@ -20,19 +20,18 @@ namespace API
         public:
             ComsHandler();
             ~ComsHandler();
+            void receiveData();
             sockaddr_in startListening();
             ClientConnection listenForConnections();
-            void receiveData();
         private:
             bool readyForNewClients;
             int server_fd, new_socket, valread;
-            sockaddr_in listenerSocket;
             int opt;
-            char buffer[BUFFER_SIZE];
             int addrlen;
-            string receivePackets();
-            ClientConnection acceptConnections();
+            char buffer[BUFFER_SIZE];
+            sockaddr_in listenerSocket;
             void closeConnection(ClientConnection client);
+            string receivePackets();
     };
 }
 
