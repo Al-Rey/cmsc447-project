@@ -3,11 +3,10 @@
 
 #include <tuple>
 #include <ctime>
+#include "constants.h"
 
 namespace API
 {
-    const int MAX_SIZE = 50;
-    const double RES_INTERVAL = 2;
     class Fifo
     {
         public:
