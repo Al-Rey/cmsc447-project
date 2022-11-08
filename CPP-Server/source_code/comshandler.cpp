@@ -8,17 +8,28 @@ using namespace API;
 
 ComsHandler::ComsHandler()
 {
-    listenerSocket = startListening();
+    cout << "instantiating ComsHandler.\n";
+    startListening();
     readyForNewClients = false;
 }
 
 ComsHandler::~ComsHandler()
 {
-    cout << "destructing ComsHandler\n";
+    cout << "destructing ComsHandler.\n";
 }
 
 void ComsHandler::receiveData()
 {
+    valread = -1;
+    while (valread == -1)
+    {
+        cout << "waiting for message from client...\n";
+        valread = recv(client_socket, &buffer, BUFFER_SIZE, MSG_WAITALL);
+        sleep(1);
+    }
+    cout << buffer << "\n";
+    //TODO: connect this function to DataBufferLL's addData and mergeDatamethod's
+    //to allow messages of varying sizes to be received and processed.
     return;
 }
 
@@ -57,18 +68,12 @@ sockaddr_in ComsHandler::startListening()
 
 int ComsHandler::listenForConnections()
 {
-    int clientSocket;
-    if ((clientSocket = accept(server_fd, (struct sockaddr *) &listenerSocket, (socklen_t*)&addrlen))<0) 
+    if ((client_socket = accept(server_fd, (struct sockaddr *) &listenerSocket, (socklen_t*)&addrlen))<0) 
     {
         perror("accept"); 
         exit(EXIT_FAILURE); 
     }
-    if (valread = read(clientSocket, buffer, BUFFER_SIZE))
-    {
-        cout << valread << "\n";
-        return clientSocket;
-    }
-    return -1;
+    return client_socket;
 }
 
 //Private Methods

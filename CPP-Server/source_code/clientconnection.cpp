@@ -7,14 +7,14 @@ ClientConnection::ClientConnection()
 {
     queuePosition = -1;
     clientSocket = -1;
-    cout << "New client connection created\n";    
+    cout << "New client connection created using default constructor\n";    
 }
 
 ClientConnection::ClientConnection(int new_socket)
 {
     queuePosition = -1;
     clientSocket = new_socket;
-    cout << "New client connection created\n";
+    cout << "New client connection created using arguments\n";
 }
 
 ClientConnection::~ClientConnection()

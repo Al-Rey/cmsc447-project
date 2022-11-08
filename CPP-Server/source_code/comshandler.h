@@ -25,7 +25,7 @@ namespace API
             int listenForConnections();
         private:
             bool readyForNewClients;
-            int server_fd, new_socket, valread;
+            int server_fd, client_socket, valread;
             int opt;
             int addrlen;
             char buffer[BUFFER_SIZE];

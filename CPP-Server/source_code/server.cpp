@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include "fifo.h"
 #include "top_level_handler.h"
+#include "comshandler.h"
 
 using namespace std;
 using namespace API;
@@ -10,7 +11,12 @@ using namespace API;
 int main()
 {
   //TopLevelHandler server = TopLevelHandler();
-  Fifo f = Fifo();
+  ComsHandler coms = ComsHandler();
+  while (true)
+  {
+    coms.receiveData();
+  }
+  //Fifo f = Fifo();
   return 0;
 /*  int reservedIndices[API::MAX_SIZE];
   Fifo testQueue = Fifo();
