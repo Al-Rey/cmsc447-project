@@ -22,7 +22,7 @@ namespace API
             ~ComsHandler();
             void receiveData();
             sockaddr_in startListening();
-            ClientConnection listenForConnections();
+            int listenForConnections();
         private:
             bool readyForNewClients;
             int server_fd, new_socket, valread;

@@ -24,6 +24,15 @@ Fifo::Fifo()
     sleep(API::RES_INTERVAL);
 }
 
+Fifo::~Fifo()
+{
+    for (int i = 0; i < MAX_SIZE; i++)
+    {
+        delete requests[i];
+        delete clients[i];
+    }
+}
+
 //Reserves positions in queue
 int Fifo::reserve_next_available(ClientConnection client)
 {

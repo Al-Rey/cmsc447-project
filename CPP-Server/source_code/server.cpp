@@ -2,12 +2,15 @@
 #include <ctime>
 #include <unistd.h>
 #include "fifo.h"
+#include "top_level_handler.h"
 
 using namespace std;
 using namespace API;
 
 int main()
 {
+  //TopLevelHandler server = TopLevelHandler();
+  Fifo f = Fifo();
   return 0;
 /*  int reservedIndices[API::MAX_SIZE];
   Fifo testQueue = Fifo();

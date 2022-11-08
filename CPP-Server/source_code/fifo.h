@@ -12,6 +12,7 @@ namespace API
     {
         public:
             Fifo();
+            ~Fifo();
             std::tuple<ClientConnection, int> process_requests();
             int reserve_next_available(ClientConnection client);
             time_t get_current_time();

@@ -19,7 +19,7 @@ ComsHandler::~ComsHandler()
 
 void ComsHandler::receiveData()
 {
-
+    return;
 }
 
 sockaddr_in ComsHandler::startListening()
@@ -55,7 +55,7 @@ sockaddr_in ComsHandler::startListening()
     return listener;
 }
 
-ClientConnection ComsHandler::listenForConnections()
+int ComsHandler::listenForConnections()
 {
     int clientSocket;
     if ((clientSocket = accept(server_fd, (struct sockaddr *) &listenerSocket, (socklen_t*)&addrlen))<0) 
@@ -63,7 +63,12 @@ ClientConnection ComsHandler::listenForConnections()
         perror("accept"); 
         exit(EXIT_FAILURE); 
     }
-    return ClientConnection(clientSocket);
+    if (valread = read(clientSocket, buffer, BUFFER_SIZE))
+    {
+        cout << valread << "\n";
+        return clientSocket;
+    }
+    return -1;
 }
 
 //Private Methods
