@@ -4,18 +4,17 @@
 #include "fifo.h"
 #include "top_level_handler.h"
 #include "comshandler.h"
+#include "clientconnection.h"
 
 using namespace std;
 using namespace API;
 
 int main()
 {
-  //TopLevelHandler server = TopLevelHandler();
-  ComsHandler coms = ComsHandler();
-  while (true)
-  {
-    coms.receiveData();
-  }
+  //ClientConnection client = ClientConnection();
+  //ClientConnection client2 = ClientConnection();
+  TopLevelHandler server = TopLevelHandler();
+  //ComsHandler coms = ComsHandler();
   //Fifo f = Fifo();
   return 0;
 /*  int reservedIndices[API::MAX_SIZE];

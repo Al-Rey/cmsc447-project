@@ -5,42 +5,44 @@ using namespace API;
 
 ClientConnection::ClientConnection()
 {
-    queuePosition = -1;
     clientSocket = -1;
-    cout << "New client connection created using default constructor\n";    
 }
 
-ClientConnection::ClientConnection(int new_socket)
+ClientConnection::ClientConnection(int clientSocket)
 {
-    queuePosition = -1;
-    clientSocket = new_socket;
-    cout << "New client connection created using arguments\n";
+    this->clientSocket = clientSocket;
 }
 
 ClientConnection::~ClientConnection()
 {
     closeConnection();
-    cout << "Client connection ended\n";
+}
+
+void ClientConnection::resetClient()
+{
+    clientSocket = -1;
+    return;
 }
 
 void ClientConnection::closeConnection()
 {
-    cout << "closing client connection\n";
+    //TODO: close socket
+    resetClient();
+}
+
+bool ClientConnection::isEmpty()
+{
+    return clientSocket == -1;
 }
 
 bool ClientConnection::operator==(ClientConnection compareTo)
 {
-    return (this->queuePosition==compareTo.getPosition() && this->clientSocket==compareTo.getSocket());
+    return this->clientSocket==compareTo.getSocket();
 }
 
 bool ClientConnection::operator!=(ClientConnection compareTo)
 {
-    return (this->queuePosition!=compareTo.getPosition() || this->clientSocket!=compareTo.getSocket());
-}
-
-int ClientConnection::getPosition()
-{
-    return queuePosition;
+    return this->clientSocket!=compareTo.getSocket();
 }
 
 int ClientConnection::getSocket()

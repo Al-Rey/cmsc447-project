@@ -23,8 +23,8 @@ namespace API
             int currentIndex;
             int queuedRequests;
             int reservedSpots;
-            int *requests[MAX_SIZE];
-            ClientConnection *clients[MAX_SIZE];
+            int requests[MAX_SIZE];
+            ClientConnection clients[MAX_SIZE];
             time_t reservedAt[MAX_SIZE];
             //methods
             std::tuple<ClientConnection, int> process_next_request();

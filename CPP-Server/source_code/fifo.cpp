@@ -2,6 +2,8 @@
 #include <chrono>
 #include <unistd.h>
 #include "fifo.h"
+#include "constants.h"
+
 
 
 using namespace std;
@@ -14,13 +16,12 @@ Fifo::Fifo()
     currentIndex = 0;
     queuedRequests = 0;
     reservedSpots = 0;
-    *requests = new int [API::MAX_SIZE];
-    *clients = new ClientConnection [API::MAX_SIZE];
-    for (int i = 0; i < API::MAX_SIZE; i++)
+    for (int i = 0; i < MAX_SIZE; i++)
     {
-        requests[i] = NULL;
+        clients[i] = ClientConnection(i + 50);
+        requests[i] = i;
+        reservedAt[i] = expiredSentinelValue;
     }
-    std::fill_n(reservedAt, API::MAX_SIZE, expiredSentinelValue);
     sleep(API::RES_INTERVAL);
 }
 
@@ -28,8 +29,7 @@ Fifo::~Fifo()
 {
     for (int i = 0; i < MAX_SIZE; i++)
     {
-        delete requests[i];
-        delete clients[i];
+        requests[i] = 0;
     }
 }
 
@@ -67,7 +67,7 @@ int Fifo::get_next_open()
 
 bool Fifo::check_availability(int index)
 {
-    if ((requests[index] == NULL) && (clients[index] == NULL) && (check_if_expired(index)))
+    if ((requests[index] == -1) && (clients[index].isEmpty()) && (check_if_expired(index)))
     {
         return true;
     }
@@ -82,8 +82,7 @@ bool Fifo::check_if_expired(int index)
 void Fifo::reserve_position(int index, ClientConnection client)
 {
     time(&reservedAt[index]);
-    //clients[index] = new ClientConnection;
-    *clients[index] = client;
+    clients[index] = client;
     reservedSpots++;
     return;
 }
@@ -95,10 +94,9 @@ void Fifo::add_new_request(int requestedIndex, ClientConnection client, int requ
     if (requestedIndex >= 0 && requestedIndex < API::MAX_SIZE)
     {
         //checks that request came from matching client. prevents client impersonation.
-        if ((*clients[requestedIndex] == client) && (requests[requestedIndex] == NULL))
-        {
-            requests[requestedIndex] = new int; 
-            *requests[requestedIndex] = request;
+        if ((clients[requestedIndex] == client) && (requests[requestedIndex] == -1))
+        { 
+            requests[requestedIndex] = request;
             reservedAt[requestedIndex] = expiredSentinelValue;
             reservedSpots--;
             queuedRequests++;
@@ -114,24 +112,22 @@ std::tuple<ClientConnection, int> Fifo::process_requests()
     {
         return process_next_request();
     }
-    return tuple<ClientConnection, int>(NULL, NULL);
+    return tuple<ClientConnection, int>(ClientConnection(), -1);
 }
 
 std::tuple<ClientConnection, int> Fifo::process_next_request()
 {
     get_next_queued();
-    tuple<ClientConnection, int> clientRequest = tuple<ClientConnection, int>(*clients[currentIndex], *requests[currentIndex]);
-    delete requests[currentIndex];
-    delete clients[currentIndex];
-    requests[currentIndex] = NULL;
-    clients[currentIndex] = NULL;
+    tuple<ClientConnection, int> clientRequest = tuple<ClientConnection, int>(clients[currentIndex], requests[currentIndex]);
+    requests[currentIndex] = -1;
+    clients[currentIndex].resetClient();
     queuedRequests--;
     return clientRequest;
 }
 
 void Fifo::get_next_queued()
 {
-    while (requests[currentIndex] == NULL)
+    while (requests[currentIndex] == -1)
     {
         increment_index();
     }

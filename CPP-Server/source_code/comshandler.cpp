@@ -8,15 +8,11 @@ using namespace API;
 
 ComsHandler::ComsHandler()
 {
-    cout << "instantiating ComsHandler.\n";
     startListening();
     readyForNewClients = false;
 }
 
-ComsHandler::~ComsHandler()
-{
-    cout << "destructing ComsHandler.\n";
-}
+ComsHandler::~ComsHandler(){ }
 
 void ComsHandler::receiveData()
 {
@@ -80,7 +76,7 @@ int ComsHandler::listenForConnections()
 
 void ComsHandler::closeConnection(ClientConnection client)
 {
-
+    client.closeConnection();
 }
 
 string ComsHandler::receivePackets()
