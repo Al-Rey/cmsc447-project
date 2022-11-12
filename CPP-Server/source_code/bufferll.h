@@ -19,9 +19,10 @@ namespace API
             ~DataBufferLL();
             void addData(char new_data[BUFFER_SIZE]);
             bool getReachedEnd();
-            int getLength();
             string mergeData();
         private:
+            void reserveMessageSpace();
+            string message;
             void addNext();
             bool reachedEnd;
             DataBuffer* head;

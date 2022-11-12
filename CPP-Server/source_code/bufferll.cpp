@@ -1,4 +1,5 @@
 #include "bufferll.h"
+#include <string>
 
 using namespace std;
 using namespace API;
@@ -32,6 +33,23 @@ void DataBufferLL::addData(char new_data[BUFFER_SIZE])
 {
     addNext();
     reachedEnd = current->addData(new_data);
+    if (reachedEnd)
+    {
+        mergeData();
+    }
+}
+
+void DataBufferLL::reserveMessageSpace()
+{
+    int length = 0;
+    DataBuffer* currentBuffer = head;
+    while (currentBuffer != NULL)
+    {
+        length += currentBuffer->getLength();
+        currentBuffer = currentBuffer->getNext();
+    }
+    message.reserve(length);
+    return;
 }
 
 bool DataBufferLL::getReachedEnd()
@@ -39,47 +57,32 @@ bool DataBufferLL::getReachedEnd()
     return reachedEnd;
 }
 
-int DataBufferLL::getLength()
-{
-    int length = 0;
-    DataBuffer* currentBuffer = head;
-    while (currentBuffer != NULL)
-    {
-        length += currentBuffer->getLength();
-    }
-    return length;
-}
-
 string DataBufferLL::mergeData()
 {
-    int length = getLength();
-    char message[length];
-    int currentIndex = 0;
+    reserveMessageSpace();
     current = head;
-    while (currentIndex < length)
+    while (current != NULL)
     {
-        currentIndex = current->connectData(&message[currentIndex], currentIndex);
-        if (current->getNext() != NULL)
-        {
-            current = current->getNext();
-        }
+        current->connectData(&message);
+        current = current->getNext();
     }
-    string messageString = message;
-    return messageString;
+    cout << message;
+    return message;
 }
 
 //Private Methods
-
 void DataBufferLL::addNext()
 {
     if (current == NULL)
     {
-        current = new DataBuffer;
+        head = new DataBuffer;
+        current = head;
     }
     else
     {
         current->addNext();
         current = current->getNext();
     }
+    //
     return;
 }

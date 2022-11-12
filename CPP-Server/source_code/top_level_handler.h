@@ -16,8 +16,10 @@ namespace API
             TopLevelHandler();
             TopLevelHandler(ComsHandler comsHandler, Fifo fifoQueue);
             ~TopLevelHandler();
+            void checkOpSys();
             
         private:
+            string opSys;
             ComsHandler coms;
             Fifo queue;
     };

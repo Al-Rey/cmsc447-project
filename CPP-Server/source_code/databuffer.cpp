@@ -29,16 +29,18 @@ bool DataBuffer::addData(char new_data[BUFFER_SIZE])
     {
         bufferData[i] = new_data[i];
     }
-    return setLength();
+    return this->setLength();
 }
 
-int DataBuffer::connectData(char* mergedBuffer, int currentIndex)
+void DataBuffer::connectData(string* message)
 {
-    for (int i = 0; i < length; i++, mergedBuffer++)
+    int bufferIndex = 0;
+    while ((message->length() < message->capacity()) && (bufferIndex < getLength()))
     {
-        *mergedBuffer = bufferData[i];
+        message->push_back(bufferData[bufferIndex]);
+        bufferIndex++;
     }
-    return currentIndex += length;
+    return;
 }
 
 int DataBuffer::getLength()
@@ -56,13 +58,13 @@ DataBuffer* DataBuffer::getNext()
 bool DataBuffer::setLength()
 {
     length = 0;
-    while (length < BUFFER_SIZE && bufferData[length] != '\0')
+    while (length < API::BUFFER_SIZE)
     {
-        length++;
         if (bufferData[length] == '\0')
         {
             return true;
         }
+        length++;
     }
     return false;
 }

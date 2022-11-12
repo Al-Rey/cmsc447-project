@@ -18,7 +18,7 @@ namespace API
             ~DataBuffer();
             void addNext();
             bool addData(char new_data[BUFFER_SIZE]);
-            int connectData(char* mergedBuffer, int currentIndex);
+            void connectData(string* message);
             int getLength();
             DataBuffer* getNext();
         private:

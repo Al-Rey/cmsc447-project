@@ -1,4 +1,5 @@
 #include "comshandler.h"
+#include "fifo.h"
 
 using namespace std;
 using namespace API;
@@ -29,8 +30,40 @@ void ComsHandler::receiveData()
     return;
 }
 
-sockaddr_in ComsHandler::startListening()
+int ComsHandler::createSocket()
 {
+    listenerSocketa = socket(AF_INET, SOCK_STREAM, 0);
+    if (listenerSocketa < 0)
+    {
+        cout << "Cannot create socket\n";
+        return 1;
+    }
+    return 0;
+}
+
+void ComsHandler::closeSocket()
+{
+    close(listenerSocketa);        
+}
+
+int bindSocket(int sock, const struct sockaddr *addr, socklen_t addrlen)
+{
+    return bind(sock, addr, addrlen);
+}
+
+int ComsHandler::listenForConnections()
+{
+    /*if (bind(listenerSocketa, ))
+    {
+        return -1;
+    }*/
+    return 0;
+}
+
+
+void ComsHandler::startListening()
+{
+
     struct sockaddr_in listener;
     opt = 1;
     addrlen = sizeof(listener);
@@ -59,10 +92,10 @@ sockaddr_in ComsHandler::startListening()
         perror("listen"); 
         exit(EXIT_FAILURE); 
     }
-    return listener;
+    //return listener;
 }
 
-int ComsHandler::listenForConnections()
+/*int ComsHandler::listenForConnections()
 {
     if ((client_socket = accept(server_fd, (struct sockaddr *) &listenerSocket, (socklen_t*)&addrlen))<0) 
     {
@@ -70,10 +103,9 @@ int ComsHandler::listenForConnections()
         exit(EXIT_FAILURE); 
     }
     return client_socket;
-}
+}*/
 
 //Private Methods
-
 void ComsHandler::closeConnection(ClientConnection client)
 {
     client.closeConnection();
