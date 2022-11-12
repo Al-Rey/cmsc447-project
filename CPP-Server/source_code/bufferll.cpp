@@ -62,6 +62,11 @@ bool DataBufferLL::getReachedEnd()
     return reachedEnd;
 }
 
+string DataBufferLL::getMessage()
+{
+    return message;
+}
+
 string DataBufferLL::mergeData()
 {
     reserveMessageSpace();

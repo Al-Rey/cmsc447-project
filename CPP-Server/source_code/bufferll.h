@@ -20,6 +20,7 @@ namespace API
             void addData(char new_data[BUFFER_SIZE]);
             bool getReachedEnd();
             string mergeData();
+            string getMessage();
         private:
             void reserveMessageSpace();
             string message;
