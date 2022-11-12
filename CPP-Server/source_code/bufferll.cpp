@@ -7,6 +7,8 @@ using namespace API;
 //Data Buffer Linked List
 //Public Methods
 
+
+//Default Constructor
 DataBufferLL::DataBufferLL()
 {
     bool reachedEnd = false;
@@ -14,6 +16,7 @@ DataBufferLL::DataBufferLL()
     current = head;
 }
 
+//Destructor
 DataBufferLL::~DataBufferLL()
 {
     DataBuffer* lastVisited = head;
@@ -29,6 +32,7 @@ DataBufferLL::~DataBufferLL()
     return;
 }
 
+//Adds data to the next open buffer
 void DataBufferLL::addData(char new_data[BUFFER_SIZE])
 {
     addNext();
@@ -52,6 +56,7 @@ void DataBufferLL::reserveMessageSpace()
     return;
 }
 
+//getter to check if a null terminating char has been reached.
 bool DataBufferLL::getReachedEnd()
 {
     return reachedEnd;
@@ -71,6 +76,7 @@ string DataBufferLL::mergeData()
 }
 
 //Private Methods
+//Adds a DataBuffer onto the end of the linked list.
 void DataBufferLL::addNext()
 {
     if (current == NULL)
@@ -83,6 +89,5 @@ void DataBufferLL::addNext()
         current->addNext();
         current = current->getNext();
     }
-    //
     return;
 }
