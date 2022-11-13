@@ -27,7 +27,30 @@ void ClientConnection::resetClient()
 void ClientConnection::closeConnection()
 {
     //TODO: close socket
+    close(clientSocket);
     resetClient();
+}
+
+string ClientConnection::receiveDataFromClient()
+{
+    while (!checkIfBufferIsDone())
+    {
+        cout << "receiving data from client socket: " << clientSocket << "\n";
+        char* nextBuffer[API::BUFFER_SIZE];
+        recv(clientSocket, nextBuffer, API::BUFFER_SIZE, MSG_WAITALL);
+        for (int i = 0; i < API::BUFFER_SIZE; i++)
+        {
+            cout << *nextBuffer[i];
+        }
+        cout << "\n";
+        messageBuffer.addData(*nextBuffer);
+    }
+    return messageBuffer.getMessage();
+}
+
+bool ClientConnection::checkIfBufferIsDone()
+{
+    return messageBuffer.getReachedEnd();
 }
 
 bool ClientConnection::isEmpty()

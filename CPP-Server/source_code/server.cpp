@@ -8,6 +8,7 @@
 #include "bufferll.h"
 #include "constants.h"
 #include "tester.h"
+#include "serversocket.h"
 #include <array>
 #include <string.h>
 #include <cstring>
@@ -17,7 +18,12 @@ using namespace API;
 
 int main()
 {
-  Tester tester = Tester();
-  tester.testPacketMerging();
+  //Tester tester = Tester();
+  //tester.testPacketMerging();
+  //TopLevelHandler handler = TopLevelHandler();
+  ServerSocket socket = ServerSocket();
+  ClientConnection client = socket.acceptConnections();
+  cout << client.receiveDataFromClient();
+
   return 0;
 }

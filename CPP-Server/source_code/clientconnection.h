@@ -8,6 +8,7 @@
 #include <string>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "bufferll.h"
 #include "constants.h"
 
 using namespace std;
@@ -26,9 +27,15 @@ namespace API
             bool isEmpty();
             bool operator==(ClientConnection compareTo);
             bool operator!=(ClientConnection compareTo);
+            bool checkIfBufferIsDone();
+            void addToBuffer(string);
+            string receiveDataFromClient();
+            void sendDataToClient(string message);
             int getSocket();
         private:
             int clientSocket;
+            DataBufferLL messageBuffer;
+
     };
 }
 
