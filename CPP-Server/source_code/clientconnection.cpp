@@ -33,11 +33,23 @@ void ClientConnection::closeConnection()
 
 string ClientConnection::receiveDataFromClient()
 {
+    char* nextBuffer[API::BUFFER_SIZE];
+    cout << recv(this->clientSocket, nextBuffer, API::BUFFER_SIZE, MSG_PEEK);
+    for (int i = 0; i < API::BUFFER_SIZE; i++)
+    {
+        cout << *nextBuffer[i];
+    }
+    send(this->clientSocket, *nextBuffer, API::BUFFER_SIZE, 0);
+    //readv(clientSocket, nextBuffer, API::BUFFER_SIZE);
+    /*for (int i = 0; i < API::BUFFER_SIZE; i++)
+    {
+        cout << *nextBuffer[i];
+    }
     while (!checkIfBufferIsDone())
     {
         cout << "receiving data from client socket: " << clientSocket << "\n";
         char* nextBuffer[API::BUFFER_SIZE];
-        recv(clientSocket, nextBuffer, API::BUFFER_SIZE, MSG_WAITALL);
+        recv(clientSocket, nextBuffer, API::BUFFER_SIZE, MSG_PEEK);
         for (int i = 0; i < API::BUFFER_SIZE; i++)
         {
             cout << *nextBuffer[i];
@@ -45,7 +57,8 @@ string ClientConnection::receiveDataFromClient()
         cout << "\n";
         messageBuffer.addData(*nextBuffer);
     }
-    return messageBuffer.getMessage();
+    return messageBuffer.getMessage();*/
+    return "success.\n";
 }
 
 bool ClientConnection::checkIfBufferIsDone()

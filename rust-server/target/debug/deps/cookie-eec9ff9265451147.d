@@ -1,0 +1,12 @@
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/cookie-eec9ff9265451147.rmeta: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/builder.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/parse.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/jar.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/delta.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/draft.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/libcookie-eec9ff9265451147.rlib: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/builder.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/parse.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/jar.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/delta.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/draft.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/cookie-eec9ff9265451147.d: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/builder.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/parse.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/jar.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/delta.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/draft.rs
+
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/lib.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/builder.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/parse.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/jar.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/delta.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/cookie-0.11.5/src/draft.rs:

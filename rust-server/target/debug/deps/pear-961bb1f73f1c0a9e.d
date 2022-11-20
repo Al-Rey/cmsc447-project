@@ -1,0 +1,13 @@
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/pear-961bb1f73f1c0a9e.rmeta: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/macros.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/input.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/result.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/debug.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/combinators.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/parsers.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/libpear-961bb1f73f1c0a9e.rlib: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/macros.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/input.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/result.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/debug.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/combinators.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/parsers.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/pear-961bb1f73f1c0a9e.d: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/macros.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/input.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/result.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/debug.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/combinators.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/parsers.rs
+
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/lib.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/macros.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/input.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/result.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/debug.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/combinators.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/pear-0.1.5/src/parsers.rs:

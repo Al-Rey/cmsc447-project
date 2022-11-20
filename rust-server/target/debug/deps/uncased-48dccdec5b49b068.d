@@ -1,0 +1,11 @@
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/GoldenParachute/server/server/rust-server/target/debug/deps/uncased-48dccdec5b49b068.rmeta: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/serde.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/owned.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/borrowed.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/as_uncased.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/GoldenParachute/server/server/rust-server/target/debug/deps/libuncased-48dccdec5b49b068.rlib: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/serde.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/owned.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/borrowed.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/as_uncased.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/GoldenParachute/server/server/rust-server/target/debug/deps/uncased-48dccdec5b49b068.d: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/serde.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/owned.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/borrowed.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/as_uncased.rs
+
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/lib.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/serde.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/owned.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/borrowed.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/uncased-0.9.7/src/as_uncased.rs:

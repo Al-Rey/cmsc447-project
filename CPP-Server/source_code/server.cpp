@@ -23,6 +23,7 @@ int main()
   //TopLevelHandler handler = TopLevelHandler();
   ServerSocket socket = ServerSocket();
   ClientConnection client = socket.acceptConnections();
+  cout << "made it through client creation";
   cout << client.receiveDataFromClient();
 
   return 0;
