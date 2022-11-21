@@ -9,6 +9,90 @@ var HOST = '127.0.0.1';
 var PORT = 8081;
 var MAX_SIZE = 1024;
 
+class Rule
+{
+    constructor(category, rule, filter)
+    {
+        this.category = category;
+        this.rule = rule;
+        this.filter = filter;
+    }
+}
+
+class OrParameters
+{
+    constructor(rules)
+    {
+        this.rules = rules;
+    }
+}
+
+class AndParameters
+{
+    constructor(params)
+    {
+        this.params = params;
+    }
+}
+
+class JsonRequest
+{
+    constructor(entries, rules)
+    {
+        this.entries = entries;
+        this.query = query;
+    }
+
+    buildJson(rules)
+    {
+        let i = 0;
+        let olist = [];
+        let alist = [];
+        let params = [];
+        while (i < rule.length)
+        {            
+            if (rule[i] == "-AND-")
+            {
+                if (olist.length > 0)
+                {
+                    alist.push(AndParameters(olist));
+                    olist = [];
+                }
+            }
+            else
+            {
+                params.push()
+            }
+            i++;
+        }
+    }
+}
+
+function buildRequest(rules)
+{
+
+}
+
+function JsonRequest()
+{
+    var json
+}
+
+function AndParameters()
+{
+
+}
+
+function OrParameters()
+{
+
+}
+
+function Rules(category, rule, filter)
+{
+
+}
+
 function sendData(client, data)
 {
     data = splitData(data);

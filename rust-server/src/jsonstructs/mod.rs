@@ -232,7 +232,7 @@ fn merge_two_or_lists(list1: &Vec<Pokemon>, list2: &Vec<Pokemon>) -> Vec<Pokemon
 pub struct JsonRequest
 {
     pub entries: u32,
-    pub query: Vec<AndParameters>
+    pub params: Vec<OrParameters>
 }
 
 #[derive(Serialize, Deserialize)]
@@ -247,22 +247,6 @@ pub struct QueryParameter
 pub struct OrParameters
 {
     pub rules: Vec<QueryParameter>
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct AndParameters
-{
-    pub params: Vec<OrParameters>
-}
-
-#[derive(Serialize, Deserialize)]
-struct Message<'r> {
-   contents: &'r str,
-}
-
-trait GetEntries
-{
-    fn get_my_entries(&self) -> u32;
 }
 
 trait ParseQuery
@@ -300,65 +284,25 @@ trait IsValidRule
     fn is_valid_rule(&self) -> bool;
 }
 
-impl GetEntries for JsonRequest
-{
-    fn get_my_entries(&self) -> u32
-    {
-        return self.entries;
-    }
-}
-
 impl ParseQuery for JsonRequest
 {
     fn parse_query(&self) -> Vec<String>
     {
         let mut i: usize = 0;
         let mut output_vec: Vec<String> = Vec::new();
-        while i < self.query.len()
+        while i < self.params.len()
         {
-            let ap_result: Vec<String> = self.query[i].parse_query();
+            let or_result: Vec<String> = self.params[i].parse_query();
             let mut j: usize = 0;
             loop
             {
-                if j >= ap_result.len()
+                if j >= or_result.len()
                 {
                     break;
                 }
-                else if ap_result[i] != ""
+                else if or_result[i] != ""
                 {
-                    output_vec.push(ap_result[i].clone());
-                }
-                j += 1;
-            }
-            i += 1;
-        }
-        return output_vec;
-    }
-}
-
-impl ParseQuery for AndParameters
-{
-    fn parse_query(&self) -> Vec<String>
-    {
-        let mut i: usize = 0;
-        let mut output_vec: Vec<String> = Vec::new();
-        loop
-        {
-            if i >= self.params.len()
-            {
-                break;
-            }
-            let or_results: Vec<String> = self.params[i].parse_query();
-            let mut j: usize = 0;
-            loop
-            {
-                if j as usize >= or_results.len()
-                {
-                    break;
-                }
-                else if or_results[j] != ""
-                {
-                    output_vec.push(or_results[j].clone());
+                    output_vec.push(or_result[i].clone());
                 }
                 j += 1;
             }
@@ -378,7 +322,6 @@ impl ParseQuery for OrParameters
         {
             if i >= self.rules.len()
             {
-                parsed_output.push("-AND-".to_string());
                 break;
             }
             parsed_output.push(self.rules[i].parse_rule());

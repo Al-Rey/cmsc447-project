@@ -9,39 +9,39 @@ use serde_json;
 fn get_using_post(query: String) -> String
 {
     let json_object: JsonRequest = serde_json::from_str(query.as_str()).unwrap();
+    print_json_request(json_object);
+    return query;
+}
+
+fn print_json_request(json_object: JsonRequest)
+{
     let mut and_rules: usize = 0;
     let mut or_rules: usize = 0;
-    let mut rules: usize = 0;
-    while and_rules < json_object.query.len()
+    while and_rules < json_object.params.len()
     {
-        loop
+        if json_object.params[and_rules].rules.len() > 0
         {
             println!("{{");
-            loop
+            while or_rules < json_object.params[and_rules].rules.len()
             {
-                println!("  category = {}", json_object.query[and_rules].params[or_rules].rules[rules].category);
-                println!("  rule = {}", json_object.query[and_rules].params[or_rules].rules[rules].rule);
-                println!("  filter = {}", json_object.query[and_rules].params[or_rules].rules[rules].filter);
-                rules += 1;
-                if rules >= json_object.query[and_rules].params[or_rules].rules.len()
+                println!("  category = {}", json_object.params[and_rules].rules[or_rules].category);
+                println!("  rule = {}", json_object.params[and_rules].rules[or_rules].rule);
+                println!("  filter = {}", json_object.params[and_rules].rules[or_rules].filter);
+                or_rules += 1;
+                if or_rules < json_object.params[and_rules].rules.len()
                 {
-                    println!("}}");
-                    break;
+                    println!("  or");
                 }
-                println!("  or");
             }
-            rules = 0;
-            or_rules += 1;
-            if or_rules >= json_object.query[and_rules].params.len()
-            {
-                break;
-            }
+            println!("}}");
+            or_rules = 0;
+        }
+        and_rules += 1;
+        if and_rules < json_object.params.len()
+        {
             println!("and");
         }
-        or_rules = 0;
-        and_rules += 1;
-    }
-    return query;
+    }        
 }
 
 fn rocket() -> rocket::Rocket
