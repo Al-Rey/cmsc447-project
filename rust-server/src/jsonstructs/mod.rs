@@ -97,7 +97,7 @@ impl ParseRequest for JsonRequest
                     query.push_str(&or_result[j].clone());
                 }
                 j += 1;
-                if j < or_result.len() && or_result[j] != ""
+                if j < or_result.len() && or_result[j] != "" && or_result[j - 1] != ""
                 {
                     query.push_str(" OR ");
                 }
@@ -105,7 +105,7 @@ impl ParseRequest for JsonRequest
             i += 1;
             if i < self.params.len()
             {
-                query.push_str(" AND ");
+                query.push_str("\n INTERSECT\n SELECT * FROM pokemon WHERE ");
             }
         }
         query.push_str("'");
