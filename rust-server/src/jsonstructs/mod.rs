@@ -84,28 +84,60 @@ impl ParseRequest for JsonRequest
 {
     fn parse_request(&self) -> String
     {
-        let mut query: String = String::from("'SELECT * FROM pokemon WHERE ");
         let mut i: usize = 0;
+        let mut query: String = String::new();
+        //This loop runs until the end of the list has been reached
         while i < self.params.len()
         {
-            let or_result: Vec<String> = self.params[i].parse_query();
-            let mut j: usize = 0;
-            while j < or_result.len()
+            let mut foundnext: bool = false;
+            //loop runs until a valid set of or conditions is found or the loop reaches the end of the list of parameters.
+            //This loop ensures that only valid sets of or parameters are included.
+            while i < self.params.len() && foundnext == false
             {
-                if or_result[j] != ""
+                let mut k: usize = 0;
+                let mut next_result_set: Vec<String> = self.params[i].parse_query();
+                //This loop checks if there are any valid rules within each set of or parameters
+                while k < next_result_set.len()
                 {
-                    query.push_str(&or_result[j].clone());
+                    if next_result_set[k] != ""
+                    {
+                        foundnext = true;
+                        break;
+                    }
+                    k += 1;
                 }
-                j += 1;
-                if j < or_result.len() && or_result[j] != "" && or_result[j - 1] != ""
+                if foundnext == true
                 {
-                    query.push_str(" OR ");
+                    if query.len() > 0
+                    {
+                        query.push_str("\n INTERSECT\n SELECT * FROM pokemon WHERE ");
+                    }
+                    else
+                    {
+                        query.push_str("'SELECT * FROM pokemon WHERE ");                        
+                    }
+                    break;
                 }
+                i += 1;
             }
-            i += 1;
             if i < self.params.len()
             {
-                query.push_str("\n INTERSECT\n SELECT * FROM pokemon WHERE ");
+                //This loop parses valid sets of or conditions
+                let mut j: usize = 0;
+                let or_result: Vec<String> = self.params[i].parse_query();
+                while j < or_result.len()
+                {
+                    if or_result[j] != ""
+                    {
+                        query.push_str(&or_result[j].clone());
+                    }
+                    j += 1;
+                    if j < or_result.len() && or_result[j] != "" && or_result[j - 1] != ""
+                    {
+                        query.push_str(" OR ");
+                    }
+                    i += 1;
+                }
             }
         }
         query.push_str("'");
