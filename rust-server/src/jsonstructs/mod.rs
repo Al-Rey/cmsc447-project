@@ -1,5 +1,5 @@
+use crate::pokemonmodel::{Pokemon};
 use serde::{Serialize, Deserialize};
-use rocket::{Responder};
 
 //Constants
 
@@ -30,40 +30,18 @@ pub struct OrParameters
     pub rules: Vec<QueryParameter>
 }
 
-#[derive(Serialize, Deserialize, Responder)]
+#[derive(Serialize, Deserialize)]
 pub struct JsonResponse
 {
-    pub results: String
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct DbEntriesReturned
-{
-    result_lists: Vec<Vec<Pokemon>>
-}
-
-#[derive(Serialize, Deserialize, Clone)]
-pub struct Pokemon
-{
-    pub index: u32,
-    pub name: String,
-    pub pokedex_id: u32,
-    pub attack: u32,
-    pub special_attack: u32,
-    pub defense: u32,
-    pub special_defense: u32,
-    pub speed: u32,
-    pub hp: u32,
-    pub type1: String,
-    pub type2: String,
-    pub list_of_moves: Vec<String>,
-    pub ability_name: String,
-    pub height: u32,
-    pub weight: u32,
-    pub generation: u32
+    pub results: Vec<Pokemon>
 }
 
 //Trait Declarations
+
+pub trait ParseRequest
+{
+    fn parse_request(&self) -> String;
+}
 
 trait ParseQuery
 {
@@ -100,43 +78,39 @@ trait IsValidRule
     fn is_valid_rule(&self) -> bool;
 }
 
-trait AreEqual
-{
-    fn are_equal(&self, check_against: Pokemon) -> bool;
-}
-
-trait QueryDatabase
-{
-    fn query_database(&mut self, params: Vec<String>) -> Vec<Pokemon>;
-}
-
 //Trait Definitions/Implementations <--- "I always just call it a goober."
 
-impl ParseQuery for JsonRequest
+impl ParseRequest for JsonRequest
 {
-    fn parse_query(&self) -> Vec<String>
+    fn parse_request(&self) -> String
     {
+        let mut query: String = String::from("'SELECT * FROM pokemon WHERE ");
         let mut i: usize = 0;
-        let mut output_vec: Vec<String> = Vec::new();
         while i < self.params.len()
         {
             let or_result: Vec<String> = self.params[i].parse_query();
             let mut j: usize = 0;
-            loop
+            while j < or_result.len()
             {
-                if j >= or_result.len()
+                if or_result[j] != ""
                 {
-                    break;
-                }
-                else if or_result[i] != ""
-                {
-                    output_vec.push(or_result[i].clone());
+                    query.push_str(&or_result[j].clone());
                 }
                 j += 1;
+                if j < or_result.len() && or_result[j] != ""
+                {
+                    query.push_str(" OR ");
+                }
             }
             i += 1;
+            if i < self.params.len()
+            {
+                query.push_str(" AND ");
+            }
         }
-        return output_vec;
+        query.push_str("'");
+        println!("{}", query);
+        return query;
     }
 }
 
@@ -184,7 +158,7 @@ impl FilterWithInt for QueryParameter
     {
         match &self.filter.parse::<i32>()
         {
-            Ok(_n) => format!("http://get/pokemon/{}/{}/{}", &self.category, &self.rule, &self.filter),
+            Ok(_n) => format_rule(self),
             Err(_err) => "".to_string(),
         }
     }
@@ -197,7 +171,7 @@ impl FilterWithString for QueryParameter
         //must be "eq" or "neq"
         if self.rule == VALID_RULES[0] || self.rule == VALID_RULES[1]
         {
-            return format!("http://get/pokemon/{}/{}/{}", &self.category, &self.rule, &self.filter);
+            return format_rule(self);
         }
         return "".to_string();
     }
@@ -230,185 +204,15 @@ impl IsValidRule for QueryParameter
     }
 }
 
-impl AreEqual for Pokemon
-{
-    fn are_equal(&self, check_against: Pokemon) -> bool
-    {
-        if self.index != check_against.index { return false; }
-        else if self.name != check_against.name { return false; }
-        else if self.pokedex_id != check_against.pokedex_id { return false; }
-        else if self.attack != check_against.attack { return false; }
-        else if self.special_attack != check_against.special_attack { return false; }
-        else if self.defense != check_against.defense { return false; }
-        else if self.special_defense != check_against.special_defense{ return false; }
-        else if self.speed != check_against.speed { return false; }
-        else if self.hp != check_against.hp { return false; }
-        else if self.type1 != check_against.type1 { return false; }
-        else if self.type2 != check_against.type2 { return false; }
-        else if self.ability_name != check_against.ability_name { return false; }
-        else if self.height != check_against.height { return false; }
-        else if self.weight != check_against.weight { return false; }
-        else if self.generation != check_against.generation { return false; }
-        //Check if list sizes are different to potentially avoid needing to loop through each entry
-        else if self.list_of_moves.len() != check_against.list_of_moves.len() { return false; }
-        let mut i: usize = 0;
-        loop
-        {
-            if i >= self.list_of_moves.len()
-            {
-                return true;
-            }
-            else if self.list_of_moves[i] != check_against.list_of_moves[i]
-            {
-                return false;
-            }
-            i += 1;
-        }
-    }
-}
-
-impl QueryDatabase for DbEntriesReturned
-{
-    fn query_database(&mut self, params: Vec<String>) -> Vec<Pokemon>
-    {
-        let mut i: usize = 0;
-        while i < params.len()
-        {
-            let or_lists: Vec<Vec<Pokemon>> = Vec::new();
-            while params[i] != "-AND-"
-            {
-                //TODO: implement database query
-                i += 1;
-            }
-            if or_lists.len() > 0
-            {
-                self.result_lists.push(merge_k_or_lists(or_lists));
-            }
-            i += 1;
-        }
-        if self.result_lists.len() > 0
-        {
-            return merge_k_and_lists(&mut self.result_lists);
-        }
-        let empty_vec: Vec<Pokemon> = Vec::new();
-        return empty_vec;
-    }
-}
-
 //Definitions of non-trait methods/functions/subroutines <--- "I always just call it a goober."
 
-fn merge_k_and_lists(and_lists: &mut Vec<Vec<Pokemon>>) -> Vec<Pokemon>
+fn format_rule(param: &QueryParameter) -> String
 {
-    while and_lists.len() > 1
-    {
-        let mut i: usize = 0;
-        let mut j: usize = 0;
-        while i < and_lists.len() - 1
-        {
-            //merges next pair of vectors
-            and_lists[j] = merge_two_and_lists(&and_lists[i], &and_lists[i + 1]);
-            i += 2;
-            j += 1;
-        }
-        //adds on last vector if there were an odd number of vectors
-        if i < and_lists.len()
-        {
-            and_lists[j] = and_lists[i].clone();
-            //shrinks the list by half
-            and_lists.truncate(j + 1);
-        }
-    }
-    return and_lists[0].clone();
-}
-
-fn merge_two_and_lists(list1: &Vec<Pokemon>, list2: &Vec<Pokemon>) -> Vec<Pokemon>
-{
-    let mut list1_position: usize = 0;
-    let mut list2_position: usize = 0;
-    let list1_length: usize = list1.len();
-    let list2_length: usize = list2.len();    
-    let mut merged_vec: Vec<Pokemon> = Vec::with_capacity(std::cmp::min(list1_length, list2_length) + 1);
-    while list1_position < list1_length && list2_position < list2_length
-    {
-        if list1[list1_position].index < list2[list2_position].index
-        {
-            list1_position += 1;
-        }
-        else if list1[list1_position].index > list2[list2_position].index
-        {
-            list2_position += 1;            
-        }
-        else
-        {
-            merged_vec.push(list1[list1_position].clone());
-            list1_position += 1;
-            list2_position += 1;
-        }
-    }
-    merged_vec.shrink_to_fit();
-    return merged_vec;
-}
-
-fn merge_k_or_lists(mut or_lists: Vec<Vec<Pokemon>>) -> Vec<Pokemon>
-{
-    while or_lists.len() > 1
-    {
-        let mut i: usize = 0;
-        let mut j: usize = 0;
-        while i < or_lists.len() - 1
-        {
-            //merges next pair of vectors
-            or_lists[j] = merge_two_or_lists(&or_lists[i], &or_lists[i + 1]);
-            i += 2;
-            j += 1;
-        }
-        //adds on last vector if there were an odd number of vectors
-        if i < or_lists.len()
-        {
-            or_lists[j] = or_lists[i].clone();
-            //shrinks the list by half
-            or_lists.truncate(j + 1);
-        }
-    }
-    return or_lists[0].clone();
-}
-
-fn merge_two_or_lists(list1: &Vec<Pokemon>, list2: &Vec<Pokemon>) -> Vec<Pokemon>
-{
-    let mut list1_position: usize = 0;
-    let mut list2_position: usize = 0;
-    let list1_length: usize = list1.len();
-    let list2_length: usize = list2.len();    
-    let mut merged_vec: Vec<Pokemon> = Vec::with_capacity(list1_length + list2_length);
-    while list1_position < list1_length && list2_position < list2_length
-    {
-        if list1[list1_position].index < list2[list2_position].index
-        {
-            merged_vec.push(list1[list1_position].clone());
-            list1_position += 1;
-        }
-        else if list1[list1_position].index > list2[list2_position].index
-        {
-            merged_vec.push(list2[list2_position].clone());
-            list2_position += 1;            
-        }
-        else
-        {
-            merged_vec.push(list1[list1_position].clone());
-            list1_position += 1;
-            list2_position += 1;
-        }
-    }
-    while list1_position < list1_length
-    {
-        merged_vec.push(list1[list1_position].clone());
-        list1_position += 1;
-    }
-    while list2_position < list2_length
-    {
-        merged_vec.push(list2[list2_position].clone());
-        list2_position += 1;
-    }
-    merged_vec.shrink_to_fit();
-    return merged_vec;
+    if param.rule == VALID_RULES[0].to_string() { return format!("{} == {}", param.category, param.filter) }
+    else if param.rule == VALID_RULES[1].to_string() { return format!("{} != {}", param.category, param.filter) }
+    else if param.rule == VALID_RULES[2].to_string() { return format!("{} < {}", param.category, param.filter) }
+    else if param.rule == VALID_RULES[3].to_string() { return format!("{} > {}", param.category, param.filter) }
+    else if param.rule == VALID_RULES[4].to_string() { return format!("{} <= {}", param.category, param.filter) }
+    else if param.rule == VALID_RULES[5].to_string() { return format!("{} >= {}", param.category, param.filter) }
+    return "".to_string();
 }

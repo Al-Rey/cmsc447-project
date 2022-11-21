@@ -1,5 +1,6 @@
 #![feature(decl_macro)]
 use lib::jsonstructs::*;
+use lib::dbquery::*;
 use rocket::{self, post, routes};
 use serde_json;
 
@@ -9,7 +10,8 @@ use serde_json;
 fn get_using_post(query: String) -> String
 {
     let json_object: JsonRequest = serde_json::from_str(query.as_str()).unwrap();
-    print_json_request(json_object);
+    build_query(json_object);
+    //print_json_request(json_object);
     return query;
 }
 
