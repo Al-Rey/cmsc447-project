@@ -1,13 +1,45 @@
 use serde::{Serialize, Deserialize};
 use rocket::{Responder};
+
+//Constants
+
 const VALID_RULES: [&str; 6] = ["eq", "neq", "lt", "gt", "lte", "gte"];
 const STRING_CATEGORIES: [&str; 4] = ["name", "type1", "type2", "ability_name"];
 const INT_CATEGORIES: [&str; 10] = ["pokedex_id", "attack", "special-attack", "defense", "special-defense", "speed", "hp", "height", "weight", "generation"];
+
+//Struct Declarations
+
+#[derive(Serialize, Deserialize)]
+pub struct JsonRequest
+{
+    pub entries: u32,
+    pub params: Vec<OrParameters>
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct QueryParameter
+{
+    pub category: String,
+    pub rule: String,
+    pub filter: String
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct OrParameters
+{
+    pub rules: Vec<QueryParameter>
+}
 
 #[derive(Serialize, Deserialize, Responder)]
 pub struct JsonResponse
 {
     pub results: String
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct DbEntriesReturned
+{
+    result_lists: Vec<Vec<Pokemon>>
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -31,9 +63,171 @@ pub struct Pokemon
     pub generation: u32
 }
 
+//Trait Declarations
+
+trait ParseQuery
+{
+    fn parse_query(&self) -> Vec<String>;
+}
+
+trait ParseRule
+{
+    fn parse_rule(&self) -> String;
+}
+
+trait FilterWithInt
+{
+    fn filter_with_int(&self) -> String;
+}
+
+trait FilterWithString
+{
+    fn filter_with_string(&self) -> String;
+}
+
+trait IsIntCategory
+{
+    fn is_int_category(&self) -> bool;
+}
+
+trait IsStringCategory
+{
+    fn is_string_category(&self) -> bool;
+}
+
+trait IsValidRule
+{
+    fn is_valid_rule(&self) -> bool;
+}
+
 trait AreEqual
 {
     fn are_equal(&self, check_against: Pokemon) -> bool;
+}
+
+trait QueryDatabase
+{
+    fn query_database(&mut self, params: Vec<String>) -> Vec<Pokemon>;
+}
+
+//Trait Definitions/Implementations <--- "I always just call it a goober."
+
+impl ParseQuery for JsonRequest
+{
+    fn parse_query(&self) -> Vec<String>
+    {
+        let mut i: usize = 0;
+        let mut output_vec: Vec<String> = Vec::new();
+        while i < self.params.len()
+        {
+            let or_result: Vec<String> = self.params[i].parse_query();
+            let mut j: usize = 0;
+            loop
+            {
+                if j >= or_result.len()
+                {
+                    break;
+                }
+                else if or_result[i] != ""
+                {
+                    output_vec.push(or_result[i].clone());
+                }
+                j += 1;
+            }
+            i += 1;
+        }
+        return output_vec;
+    }
+}
+
+impl ParseQuery for OrParameters
+{
+    fn parse_query(&self) -> Vec<String>
+    {
+        let mut parsed_output: Vec<String> = Vec::new();
+        let mut i: usize = 0;
+        loop
+        {
+            if i >= self.rules.len()
+            {
+                break;
+            }
+            parsed_output.push(self.rules[i].parse_rule());
+            i += 1;
+        }
+        return parsed_output;
+    }
+}
+
+impl ParseRule for QueryParameter
+{
+    fn parse_rule(&self) -> String
+    {
+        if self.is_valid_rule()
+        {
+            if self.is_int_category()
+            {
+                return self.filter_with_int();
+            }
+            else if self.is_string_category()
+            {
+                return self.filter_with_string();
+            }
+        }
+        return "".to_string();
+    }
+}
+
+impl FilterWithInt for QueryParameter
+{
+    fn filter_with_int(&self) -> String
+    {
+        match &self.filter.parse::<i32>()
+        {
+            Ok(_n) => format!("http://get/pokemon/{}/{}/{}", &self.category, &self.rule, &self.filter),
+            Err(_err) => "".to_string(),
+        }
+    }
+}
+
+impl FilterWithString for QueryParameter
+{
+    fn filter_with_string(&self) -> String
+    {
+        //must be "eq" or "neq"
+        if self.rule == VALID_RULES[0] || self.rule == VALID_RULES[1]
+        {
+            return format!("http://get/pokemon/{}/{}/{}", &self.category, &self.rule, &self.filter);
+        }
+        return "".to_string();
+    }
+}
+
+impl IsIntCategory for QueryParameter
+{
+    fn is_int_category(&self) -> bool
+    {
+        let temp: &str = &self.category as &str;
+        return INT_CATEGORIES.contains(&temp);
+    }
+}
+
+impl IsStringCategory for QueryParameter
+{
+    fn is_string_category(&self) -> bool
+    {
+        let temp: &str = &self.category as &str; 
+        return STRING_CATEGORIES.contains(&temp);
+    }
+}
+
+impl IsValidRule for QueryParameter
+{
+    fn is_valid_rule(&self) -> bool
+    {
+        let temp: &str = &self.rule as &str;
+        return VALID_RULES.contains(&temp);
+    }
 }
 
 impl AreEqual for Pokemon
@@ -73,17 +267,6 @@ impl AreEqual for Pokemon
     }
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct DbEntriesReturned
-{
-    result_lists: Vec<Vec<Pokemon>>
-}
-
-trait QueryDatabase
-{
-    fn query_database(&mut self, params: Vec<String>) -> Vec<Pokemon>;
-}
-
 impl QueryDatabase for DbEntriesReturned
 {
     fn query_database(&mut self, params: Vec<String>) -> Vec<Pokemon>
@@ -111,6 +294,8 @@ impl QueryDatabase for DbEntriesReturned
         return empty_vec;
     }
 }
+
+//Definitions of non-trait methods/functions/subroutines <--- "I always just call it a goober."
 
 fn merge_k_and_lists(and_lists: &mut Vec<Vec<Pokemon>>) -> Vec<Pokemon>
 {
@@ -226,178 +411,4 @@ fn merge_two_or_lists(list1: &Vec<Pokemon>, list2: &Vec<Pokemon>) -> Vec<Pokemon
     }
     merged_vec.shrink_to_fit();
     return merged_vec;
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct JsonRequest
-{
-    pub entries: u32,
-    pub params: Vec<OrParameters>
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct QueryParameter
-{
-    pub category: String,
-    pub rule: String,
-    pub filter: String
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct OrParameters
-{
-    pub rules: Vec<QueryParameter>
-}
-
-trait ParseQuery
-{
-    fn parse_query(&self) -> Vec<String>;
-}
-
-trait ParseRule
-{
-    fn parse_rule(&self) -> String;
-}
-
-trait FilterWithInt
-{
-    fn filter_with_int(&self) -> String;
-}
-
-trait FilterWithString
-{
-    fn filter_with_string(&self) -> String;
-}
-
-trait IsIntCategory
-{
-    fn is_int_category(&self) -> bool;
-}
-
-trait IsStringCategory
-{
-    fn is_string_category(&self) -> bool;
-}
-
-trait IsValidRule
-{
-    fn is_valid_rule(&self) -> bool;
-}
-
-impl ParseQuery for JsonRequest
-{
-    fn parse_query(&self) -> Vec<String>
-    {
-        let mut i: usize = 0;
-        let mut output_vec: Vec<String> = Vec::new();
-        while i < self.params.len()
-        {
-            let or_result: Vec<String> = self.params[i].parse_query();
-            let mut j: usize = 0;
-            loop
-            {
-                if j >= or_result.len()
-                {
-                    break;
-                }
-                else if or_result[i] != ""
-                {
-                    output_vec.push(or_result[i].clone());
-                }
-                j += 1;
-            }
-            i += 1;
-        }
-        return output_vec;
-    }
-}
-
-impl ParseQuery for OrParameters
-{
-    fn parse_query(&self) -> Vec<String>
-    {
-        let mut parsed_output: Vec<String> = Vec::new();
-        let mut i: usize = 0;
-        loop
-        {
-            if i >= self.rules.len()
-            {
-                break;
-            }
-            parsed_output.push(self.rules[i].parse_rule());
-            i += 1;
-        }
-        return parsed_output;
-    }
-}
-
-impl ParseRule for QueryParameter
-{
-    fn parse_rule(&self) -> String
-    {
-        if self.is_valid_rule()
-        {
-            if self.is_int_category()
-            {
-                return self.filter_with_int();
-            }
-            else if self.is_string_category()
-            {
-                return self.filter_with_string();
-            }
-        }
-        return "".to_string();
-    }
-}
-
-impl IsValidRule for QueryParameter
-{
-    fn is_valid_rule(&self) -> bool
-    {
-        let temp: &str = &self.rule as &str;
-        return VALID_RULES.contains(&temp);
-    }
-}
-
-impl IsIntCategory for QueryParameter
-{
-    fn is_int_category(&self) -> bool
-    {
-        let temp: &str = &self.category as &str;
-        return INT_CATEGORIES.contains(&temp);
-    }
-}
-
-impl IsStringCategory for QueryParameter
-{
-    fn is_string_category(&self) -> bool
-    {
-        let temp: &str = &self.category as &str; 
-        return STRING_CATEGORIES.contains(&temp);
-    }
-}
-
-impl FilterWithString for QueryParameter
-{
-    fn filter_with_string(&self) -> String
-    {
-        //must be "eq" or "neq"
-        if self.rule == VALID_RULES[0] || self.rule == VALID_RULES[1]
-        {
-            return format!("http://get/pokemon/{}/{}/{}", &self.category, &self.rule, &self.filter);
-        }
-        return "".to_string();
-    }
-}
-
-impl FilterWithInt for QueryParameter
-{
-    fn filter_with_int(&self) -> String
-    {
-        match &self.filter.parse::<i32>()
-        {
-            Ok(_n) => format!("http://get/pokemon/{}/{}/{}", &self.category, &self.rule, &self.filter),
-            Err(_err) => "".to_string(),
-        }
-    }
 }
