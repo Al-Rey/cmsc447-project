@@ -6,7 +6,7 @@ const { send } = require('process');
 //import net from "net";
 
 var HOST = '127.0.0.1';
-var PORT = 8081;
+var PORT = 8000;
 var MAX_SIZE = 1024;
 
 class Rule
@@ -46,12 +46,19 @@ class JsonRequest
     buildJson(rules)
     {
         let i = 0;
+        let ruleslist = [];
         let olist = [];
-        let alist = [];
         let params = [];
-        while (i < rule.length)
-        {            
-            if (rule[i] == "-AND-")
+        while (i < rules.length)
+        {
+            while (rules[i] != "AND")
+            {
+                if (rules[i] != "")
+                {
+                    
+                }
+            }
+            if (rule[i] == "AND")
             {
                 if (olist.length > 0)
                 {

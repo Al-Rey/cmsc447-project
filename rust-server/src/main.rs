@@ -9,9 +9,17 @@ use serde_json;
 #[post("/GUP", data="<query>")]
 fn get_using_post(query: String) -> String
 {
-    let json_object: JsonRequest = serde_json::from_str(query.as_str()).unwrap();
-    return build_query(json_object);
-    //print_json_request(json_object);
+    let try_parse_json = serde_json::from_str(query.as_str());
+    match try_parse_json
+    {
+        Ok(json_object) => build_query(json_object),
+        Err(error) => 
+        {
+            let error_msg: String = "ERROR: Invalid response detected.".to_string();
+            println!("{}", error_msg);
+            return error_msg;
+        },
+    }
 }
 
 fn print_json_request(json_object: JsonRequest)
