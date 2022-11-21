@@ -15,7 +15,7 @@ fn get_using_post(query: String) -> String
         Ok(json_object) => build_query(json_object),
         Err(error) => 
         {
-            let error_msg: String = "ERROR: Invalid response detected.".to_string();
+            let error_msg: String = "ERROR: Invalid request detected.".to_string();
             println!("{}", error_msg);
             return error_msg;
         },
