@@ -193,7 +193,18 @@ impl FilterWithInt for QueryParameter
     {
         match &self.filter.parse::<i32>()
         {
-            Ok(_n) => format_rule(self),
+            Ok(_n) => 
+            {
+                if &self.filter.parse::<i32>().unwrap() < &0 as &i32
+                {
+                    return "".to_string();
+                }
+                else if self.category == "generation".to_string() && &self.filter.parse::<i32>().unwrap() > &5 as &i32
+                {
+                    return "".to_string();
+                }
+                return format_rule(self);
+            },
             Err(_err) => "".to_string(),
         }
     }
