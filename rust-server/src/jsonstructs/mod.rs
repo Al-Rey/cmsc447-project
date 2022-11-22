@@ -108,7 +108,6 @@ impl ParseRequest for JsonRequest
                 }
                 if foundnext == true
                 {
-                    println!("{} {}", i, self.params.len());
                     if query.len() > 0
                     {
                         query.push_str("\n INTERSECT\n SELECT * FROM pokemon WHERE ");
@@ -121,11 +120,9 @@ impl ParseRequest for JsonRequest
                 }
                 else
                 {
-                    println!("{} {}", i, self.params.len());
                     i += 1;
                 }
             }
-            println!("{} {}", i, self.params.len());
             if i < self.params.len()
             {
                 //This loop parses valid sets of or conditions
@@ -142,7 +139,6 @@ impl ParseRequest for JsonRequest
                     {
                         query.push_str(" OR ");
                     }
-                    println!("{} {}", i, self.params.len());
                 }
                 i += 1;
             }
