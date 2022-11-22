@@ -1,7 +1,7 @@
 use std::process::Command;
 use serde::{Serialize, Deserialize};
-use diesel::pg::PgConnection;
-use diesel::prelude::*;
+//use diesel::pg::PgConnection;
+//use diesel::prelude::*;
 use std::env;
 use crate::pokemonmodel::Pokemon;
 use crate::jsonstructs::JsonRequest;
