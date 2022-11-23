@@ -3,6 +3,17 @@ name = "rust-server"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+
+[profile.dev]
+opt-level = 3
+
+[profile.dev.package."*"]
+opt-level = 3
+
 [lib]
 name = "lib"
 path = "src/lib.rs"
@@ -14,5 +25,3 @@ rocket = "0.4"
 rocket_contrib = { version = "0.4", default-features = false, features = ["json"] }
 serde = { version = "1.0.147", features = ["derive",] }
 serde_json = "1.0.67"
-dotenv = "0.15.0"
-chrono = "^0"

@@ -13,7 +13,7 @@ fn get_using_post(query: String) -> String
     match try_parse_json
     {
         Ok(json_object) => build_query(json_object),
-        Err(error) => 
+        Err(_error) => 
         {
             let error_msg: String = "ERROR: Invalid request detected.".to_string();
             println!("{}", error_msg);
@@ -22,7 +22,7 @@ fn get_using_post(query: String) -> String
     }
 }
 
-fn print_json_request(json_object: JsonRequest)
+/*fn print_json_request(json_object: JsonRequest)
 {
     let mut and_rules: usize = 0;
     let mut or_rules: usize = 0;
@@ -51,7 +51,7 @@ fn print_json_request(json_object: JsonRequest)
             println!("and");
         }
     }        
-}
+}*/
 
 fn rocket() -> rocket::Rocket
 {

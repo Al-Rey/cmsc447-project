@@ -1,8 +1,8 @@
-use std::process::Command;
+//use std::process::Command;
 use serde::{Serialize, Deserialize};
 //use diesel::pg::PgConnection;
 //use diesel::prelude::*;
-use std::env;
+//use std::env;
 use crate::pokemonmodel::Pokemon;
 use crate::jsonstructs::JsonRequest;
 use crate::jsonstructs::ParseRequest;
@@ -176,7 +176,7 @@ fn merge_two_or_lists(list1: &Vec<Pokemon>, list2: &Vec<Pokemon>) -> Vec<Pokemon
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }*/
 
-pub fn run_query(username: String, db: String, request: JsonRequest)
+pub fn run_query(_username: String, _db: String, _request: JsonRequest)
 {
     /*let output = Command::new("ls")
         .arg("-l")

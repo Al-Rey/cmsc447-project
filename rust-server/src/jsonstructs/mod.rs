@@ -95,7 +95,7 @@ impl ParseRequest for JsonRequest
             while i < self.params.len() && foundnext == false
             {
                 let mut k: usize = 0;
-                let mut next_result_set: Vec<String> = self.params[i].parse_query();
+                let next_result_set: Vec<String> = self.params[i].parse_query();
                 //This loop checks if there are any valid rules within each set of or parameters
                 while k < next_result_set.len()
                 {
@@ -195,11 +195,11 @@ impl FilterWithInt for QueryParameter
         {
             Ok(_n) => 
             {
-                if &self.filter.parse::<i32>().unwrap() < &0 as &i32
+                if self.filter.parse::<i32>().unwrap() < 0
                 {
                     return "".to_string();
                 }
-                else if self.category == "generation".to_string() && &self.filter.parse::<i32>().unwrap() > &5 as &i32
+                else if self.category == "generation".to_string() && self.filter.parse::<i32>().unwrap() > 5
                 {
                     return "".to_string();
                 }

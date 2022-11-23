@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/build/typenum-b95e556e6921e39d/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/build/typenum-b95e556e6921e39d/out/op.rs

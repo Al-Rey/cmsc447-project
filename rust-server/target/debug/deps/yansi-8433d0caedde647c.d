@@ -1,0 +1,12 @@
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/yansi-8433d0caedde647c.rmeta: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/macros.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/windows.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/paint.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/style.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/color.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/libyansi-8433d0caedde647c.rlib: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/macros.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/windows.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/paint.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/style.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/color.rs
+
+/home/adam/School/Software Engineering/GroupProj/cmsc447-project/rust-server/target/debug/deps/yansi-8433d0caedde647c.d: /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/lib.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/macros.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/windows.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/paint.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/style.rs /home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/color.rs
+
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/lib.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/macros.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/windows.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/paint.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/style.rs:
+/home/adam/.cargo/registry/src/github.com-1ecc6299db9ec823/yansi-0.5.1/src/color.rs:
