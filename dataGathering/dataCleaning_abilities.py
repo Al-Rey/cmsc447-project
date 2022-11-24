@@ -4,32 +4,33 @@ import pandas as np
 from cleaning_helpers import query_api_general
 from cleaning_helpers import query_api_specific
 from cleaning_helpers import get_generations
+from cleaning_helpers import get_gen_number
 
-def get_gen_number(gen):
-    """
-    name: get_gen_number
-    Params:
-        - gen(string) - a string that represents a generation
-    Return Type: int
-    Desc: This function takes the string that represents a generation and
-    returns a number corresponding to that generation
-    """
+# def get_gen_number(gen):
+#     """
+#     name: get_gen_number
+#     Params:
+#         - gen(string) - a string that represents a generation
+#     Return Type: int
+#     Desc: This function takes the string that represents a generation and
+#     returns a number corresponding to that generation
+#     """
 
-    if "iv" in gen:
-        return 4
-    elif "v" in gen:
-        return 5
-    elif "iii" in gen:
-        return 3
-    elif "ii" in gen:
-        return 2
-    elif "i" in gen:
-        return  1
+#     if "iv" in gen:
+#         return 4
+#     elif "v" in gen:
+#         return 5
+#     elif "iii" in gen:
+#         return 3
+#     elif "ii" in gen:
+#         return 2
+#     elif "i" in gen:
+#         return  1
 
-    # raise an error if we get a value that is not one of these generations
-    else:
-        print(gen)
-        raise ValueError("We got an invalid generation!")
+#     # raise an error if we get a value that is not one of these generations
+#     else:
+#         print(gen)
+#         raise ValueError("We got an invalid generation!")
 
 def get_text(data, text_type):
     """
