@@ -51,6 +51,21 @@ Created a popup window which show's the user statistics of the pokemon selected.
 
 JB - 10/31/2022
 
+___________________________________________________________________________
 
+V6
 
+Enlarged the popup window to a bigger size, organized the move list in a scroll bar menu, add aditional statisics to the popup window.
+Issue: Base-stats don't show up, also need to add abilities.
 
+JB - 11/22/2022
+
+___________________________________________________________________________
+
+V7
+
+Add base stat numbers to the statistics popup window and fixed abilites
+
+JB - 11/23/2022
+
+___________________________________________________________________________
