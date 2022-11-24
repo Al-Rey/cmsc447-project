@@ -35,8 +35,11 @@ function  fetchGeneration(generation){
                             moves = moves.split(',').sort();
                             stats = results.stats.map((stat) => stat.stat.name).join(',');
                             stats = stats.split(',').sort();
-                            //abilities = results.abilities.map((abilitie) => abilitie.name).join(',');
-                            //abilities = abilities.split(',').sort();
+                            abilities = results.abilities.map((ability) => ability.ability.name).join(',');
+                            abilities = abilities.split(',').sort();
+                            base_stat = results.stats.map((stat) => stat.base_stat).join('<br>');
+                            //stats = stats.split(',').sort();
+                            console.log(abilities);
 
 
                                 const pokemon2 = {
@@ -47,7 +50,8 @@ function  fetchGeneration(generation){
                                     type: types.map((type) => type).join(', '),
                                     moves: moves.map((move) => move).join('<br>'),
                                     stats: stats.map((stat) => stat).join('<br>'),
-                                    //abilities: abilities.map((abilitie) => abilitie).join('<br>'),
+                                    abilities: abilities.map((abilitie) => abilitie).join('<br>'),
+                                    base_stat:base_stat,
                                     id: results.id
                                     
                                 };
@@ -59,8 +63,13 @@ function  fetchGeneration(generation){
                                                 <p class="card-subtitle card-weight">Weight: ${pokemon2.weight}</p>
                                                 <p class="card-subtitle card-height">Height: ${pokemon2.height}</p>
                                                 <div class="d-flex">
+                                                    <div class="card-subtitle card-moves w-50"><h3>Base Stats</h3> <p class="md-section">${pokemon2.base_stat}</p></div>
                                                     <div class="card-subtitle card-moves w-50"><h3>Stats</h3> <p class="md-section">${pokemon2.stats}</p></div>
-                                                    <div class="card-subtitle card-moves w-50"><h3>Move</h3> <p class="md-section">${pokemon2.moves}</p></div>
+                                                    <div class="card-subtitle card-moves w-50"><h3>Moves</h3> <p class="md-section">${pokemon2.moves}</p></div>
+                                                    
+                                                </div>
+                                                <div class="d-flex">
+                                                    <div class="card-subtitle card-moves w-50"><h3>Abilities</h3> <p class="md-section">${pokemon2.abilities}</p></div>
                                                 </div>
                                             </li>
                                         `;
