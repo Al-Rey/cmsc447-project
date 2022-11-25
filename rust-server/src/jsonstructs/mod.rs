@@ -13,7 +13,7 @@ const INT_CATEGORIES: [&str; 10] = ["pokedex_id", "attack", "special-attack", "d
 pub struct JsonRequest
 {
     pub entries: u32,
-    pub params: Vec<OrParameters>
+    pub params: Vec<AndParameters>
 }
 
 #[derive(Serialize, Deserialize)]
@@ -25,7 +25,7 @@ pub struct QueryParameter
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct OrParameters
+pub struct AndParameters
 {
     pub rules: Vec<QueryParameter>
 }
@@ -90,13 +90,13 @@ impl ParseRequest for JsonRequest
         while i < self.params.len()
         {
             let mut foundnext: bool = false;
-            //loop runs until a valid set of or conditions is found or the loop reaches the end of the list of parameters.
-            //This loop ensures that only valid sets of or parameters are included.
+            //loop runs until a valid set of and conditions is found or the loop reaches the end of the list of parameters.
+            //This loop ensures that only valid sets of and parameters are included.
             while i < self.params.len() && foundnext == false
             {
                 let mut k: usize = 0;
                 let next_result_set: Vec<String> = self.params[i].parse_query();
-                //This loop checks if there are any valid rules within each set of or parameters
+                //This loop checks if there are any valid rules within each set of and parameters
                 while k < next_result_set.len()
                 {
                     if next_result_set[k] != ""
@@ -110,7 +110,7 @@ impl ParseRequest for JsonRequest
                 {
                     if query.len() > 0
                     {
-                        query.push_str("\n INTERSECT\n SELECT * FROM pokemon WHERE ");
+                        query.push_str("\n UNION\n SELECT * FROM pokemon WHERE ");
                     }
                     else
                     {
@@ -125,31 +125,30 @@ impl ParseRequest for JsonRequest
             }
             if i < self.params.len()
             {
-                //This loop parses valid sets of or conditions
+                //This loop parses valid sets of and conditions
                 let mut j: usize = 0;
-                let or_result: Vec<String> = self.params[i].parse_query();
-                while j < or_result.len()
+                let and_result: Vec<String> = self.params[i].parse_query();
+                while j < and_result.len()
                 {
-                    if or_result[j] != ""
+                    if and_result[j] != ""
                     {
-                        query.push_str(&or_result[j].clone());
+                        query.push_str(&and_result[j].clone());
                     }
                     j += 1;
-                    if j < or_result.len() && or_result[j] != "" && or_result[j - 1] != ""
+                    if j < and_result.len() && and_result[j] != "" && and_result[j - 1] != ""
                     {
-                        query.push_str(" OR ");
+                        query.push_str(" AND ");
                     }
                 }
                 i += 1;
             }
         }
         query.push_str("'");
-        println!("{}", query);
         return query;
     }
 }
 
-impl ParseQuery for OrParameters
+impl ParseQuery for AndParameters
 {
     fn parse_query(&self) -> Vec<String>
     {

@@ -1,4 +1,5 @@
 #![feature(decl_macro)]
+use json::stringify;
 use lib::jsonstructs::*;
 use lib::dbquery::*;
 use rocket::{self, post, routes};
@@ -12,7 +13,12 @@ fn get_using_post(query: String) -> String
     let try_parse_json = serde_json::from_str(query.as_str());
     match try_parse_json
     {
-        Ok(json_object) => build_query(json_object),
+        Ok(json_object) =>
+        {
+            let response: String = build_query(json_object);
+            println!("{}", response);
+            return response;
+        },
         Err(_error) => 
         {
             let error_msg: String = "ERROR: Invalid request detected.".to_string();

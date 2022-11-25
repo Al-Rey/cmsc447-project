@@ -1,0 +1,12 @@
+C:\Users\adamp\OneDrive\Documents\cmsc447-project\rust-server\target\debug\deps\cookie-68e488e1ae003286.rmeta: C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\lib.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\builder.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\parse.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\jar.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\delta.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\draft.rs
+
+C:\Users\adamp\OneDrive\Documents\cmsc447-project\rust-server\target\debug\deps\libcookie-68e488e1ae003286.rlib: C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\lib.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\builder.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\parse.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\jar.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\delta.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\draft.rs
+
+C:\Users\adamp\OneDrive\Documents\cmsc447-project\rust-server\target\debug\deps\cookie-68e488e1ae003286.d: C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\lib.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\builder.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\parse.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\jar.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\delta.rs C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\draft.rs
+
+C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\lib.rs:
+C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\builder.rs:
+C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\parse.rs:
+C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\jar.rs:
+C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\delta.rs:
+C:\Users\adamp\.cargo\registry\src\github.com-1ecc6299db9ec823\cookie-0.11.5\src\draft.rs:
