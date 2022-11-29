@@ -265,7 +265,6 @@ async function stressTest(request)
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     while (i < numRequests)
     {
-        await sleep(100);
         const s = new Date();
         let start = s.getTime();
         await makeApiCallSilent(request);
@@ -281,6 +280,7 @@ async function stressTest(request)
             min = timeElapsed;
         }
         i += 1;
+        await sleep(100);
     }
     console.log("Stress Test Results:");
     console.log(numRequests + " requests sent.");
@@ -293,11 +293,11 @@ async function stressTest(request)
 async function multiclientTest(request)
 {
     let i = 0;
-    while (i < 250)
+    while (i < 100)
     {
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         await sleep(250);
-        makeApiCall(request);
+        makeApiCallSilent(request);
         i += 1;
     }
 }
