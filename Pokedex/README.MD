@@ -79,6 +79,8 @@ V7
 
 Add base stat numbers to the statistics popup window and fixed abilites
 
+Update: Attack stat and HP base-stat are switched around, UI is small interface for beginning window.  Need to add something in whitespace for Popup window.
+
 JB - 11/23/2022
 
 ___________________________________________________________________________
