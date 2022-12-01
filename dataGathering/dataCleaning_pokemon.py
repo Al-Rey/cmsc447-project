@@ -5,6 +5,8 @@ from cleaning_helpers import query_api_general
 from cleaning_helpers import query_api_specific
 from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
+from cleaning_helpers import get_games_gen_num
+from cleaning_helpers import get_games
 
 def get_index(index_name, columns):
         try:
@@ -18,12 +20,50 @@ def get_index(index_name, columns):
             print(inst)
             return None
 
+def get_item_list(item_data, item_name, valid_items):
+    item_list = []
+    # all_items = item_data[item_name]
+    info = 0
+
+    for item in item_data:
+        name = item[item_name]["name"]
+        if name not in valid_items:
+            continue
+
+        if item_name == "move":
+            # info = (name, -1)
+            info = get_move_tuple(item)
+        elif item_name == "ability":
+            info = (name, item["is_hidden"])
+        else:
+            print("item name is not ability or move")
+            return np.nan
+            
+        item_list.append(info)
+    
+    return item_list
+
+def get_move_tuple(move_data):
+    name = move_data["move"]["name"]
+    learn = -1
+    learn_list = move_data["version_group_details"]
+
+    for index in range(len(learn_list)-1, -1, -1):
+        if learn_list[index]["version_group"]["name"] in get_games():
+            learn = learn_list[index]["level_learned_at"]
+            if learn == 0:
+                learn = learn_list[index]["move_learn_method"]["name"]
+                break
+
+    return (name, learn)
+
+
 def get_pokmeon_data():
     link = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
     pokemon_data = query_api_general(link)
 
-    move_names = (pd.read_csv("move_names.csv"))["name"].tolist()
-    ability_names = (pd.read_csv("ability_data.csv"))["name"].tolist()
+    move_names = (pd.read_csv("dataGathering\\move_names.csv"))["name"].tolist()
+    ability_names = (pd.read_csv("dataGathering\\ability_data.csv"))["name"].tolist()
 
     game_gen = {"red" : 1,
                 "blue" : 1,
@@ -56,7 +96,7 @@ def get_pokmeon_data():
     
     pokemon_df = pd.DataFrame(columns=frame_columns)
 
-    for pokemon in pokemon_df:
+    for pokemon in pokemon_data:
         pokemon_query = query_api_specific(pokemon["url"])
 
         hold = [0] * len(frame_columns)
@@ -88,7 +128,7 @@ def get_pokmeon_data():
         fail = False
         all_stats = pokemon_query["stats"]
         for stat in all_stats:
-            index = get_index(stat["stat"]["name"])
+            index = get_index(stat["stat"]["name"], frame_columns)
             if index != None:
                 hold[index] = stat["base_stat"]
             else:
@@ -109,25 +149,26 @@ def get_pokmeon_data():
                 print(pokemon_query["name"], "has no types")
                 break
 
-            index = get_index("type1", frame_columns)
-            if index != None:
-                hold[index] = type_data[0]["type"]["name"]
-            else:
-                break
-
-            index2 = get_index("type2", frame_columns)
-            if index2 != None:
-                if two_types:
-                    hold[index2] = type_data[1]["type"]["name"]
-                else:
-                    hold[index2] = hold[index]
-            else:
-                break
-
         except Exception as inst:
             print("error getting type data")
             print(inst)
             break
+
+        index = get_index("type1", frame_columns)
+        if index != None:
+            hold[index] = type_data[0]["type"]["name"]
+        else:
+            break
+
+        index2 = get_index("type2", frame_columns)
+        if index2 != None:
+            if two_types:
+                hold[index2] = type_data[1]["type"]["name"]
+            else:
+                hold[index2] = hold[index]
+        else:
+            break
+
 
         # get the height
         index = get_index("height", frame_columns)
@@ -147,17 +188,8 @@ def get_pokmeon_data():
         # TODO: get how the pokemon learns the data
         index = get_index("list_of_moves", frame_columns)
         if index != None:
-            known_moves = []
             all_moves = pokemon_query["moves"]
-            info = 0
-
-            for move in all_moves:
-                if move["move"]["name"] not in move_names:
-                    continue
-                
-                info = (move["move"]["name"], -1)
-                known_moves.append(info)
-                
+            known_moves = get_item_list(all_moves, "move", move_names)
             hold[index] = known_moves
         else:
             break
@@ -165,17 +197,8 @@ def get_pokmeon_data():
         # get ability infomration
         index = get_index("ability_name", frame_columns)
         if index != None:
-            abils = []
             all_abilities = pokemon_query["abilities"]
-            info = 0
-            for ability in all_abilities:
-                if ability["ability"]["name"] not in ability_names:
-                    continue
-                
-                info = (ability["ability"]["name"], ability["is_hidden"])
-                #info[1] = move["move"][]
-                abils.append(info)
-                
+            abils = get_item_list(all_abilities, "ability", ability_names)                
             hold[index] = abils
         else:
             break
@@ -189,8 +212,13 @@ def get_pokmeon_data():
 
         pokemon_df.loc[len(pokemon_df.index)] = hold
 
+        # TODO:Evolution data
+
     return pokemon_df
         
+if __name__ == "__main__":
+    test_df = get_pokmeon_data()
+    print(test_df.head(10))
         
 
         

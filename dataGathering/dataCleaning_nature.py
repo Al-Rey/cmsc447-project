@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from cleaning_helpers import query_api_general, query_api_specific
 
 
@@ -6,7 +7,7 @@ def get_stat(stat_name, query_data):
     temp = query_data[stat_name]
 
     if temp == None:
-        return ""
+        return np.nan
     else:
         return temp["name"]
 
