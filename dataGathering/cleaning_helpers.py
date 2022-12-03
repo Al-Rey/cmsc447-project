@@ -5,7 +5,7 @@ import json
 # import numpy as np
 
 GEN_DICT = {'generation-i':1, 'generation-ii':2, 'generation-iii':3, 'generation-iv':4, 'generation-v':5}
-
+HIGHEST_GEN_NUM = 5
 GAME_GENS_SINGLE = { "red" : 1,
                 "blue" : 1,
                 "yellow" : 1,
