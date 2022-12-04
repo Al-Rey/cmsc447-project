@@ -164,7 +164,7 @@ def get_pokmeon_data(export_data = False):
     move_names = (pd.read_csv(config_path / "move_names.csv"))["name"].tolist()
     
     # TODO fix this to get ability name data instead of move data
-    ability_names = (pd.read_csv(config_path / "move_names.csv"))["name"].tolist()
+    ability_names = (pd.read_csv(config_path / "ability_names.csv"))["name"].tolist()
 
     # Names of the columns in tha dataframe
     frame_columns = ["name","pokedex_id","attack", "special-attack", "defense",
@@ -277,7 +277,7 @@ def get_pokmeon_data(export_data = False):
         
 if __name__ == "__main__":
     test_df = get_pokmeon_data(True)
-    print(test_df[["evolutions"]].head(30))
+    print(test_df.head(30))
         
 
         

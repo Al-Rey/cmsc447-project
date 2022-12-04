@@ -1,10 +1,14 @@
 # Libraries
 import pandas as pd
 import pandas as np
+
+from pathlib import Path
+from sys import argv
 from cleaning_helpers import query_api_general
 from cleaning_helpers import query_api_specific
 from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
+from cleaning_helpers import export_csv
 
 # def get_gen_number(gen):
 #     """
@@ -43,10 +47,10 @@ def get_text(data, text_type):
     Desc: The function extracts the text specificed by the text_type parameter from
     the dictionary passed in
     """
-
+    print(data)
     want_flavor = False
     if text_type == "effect":
-        text_data = data["effect_entries"] # get the effect description
+        text_data = data["effect"] # get the effect description
     elif text_type == "flavor":
         text_data = data["flavor_text_entries"]
         want_flavor = True
@@ -54,11 +58,12 @@ def get_text(data, text_type):
         raise ValueError("invalid 'text_type' parameter!")
     
     for text in text_data:
-        if text["language"]["name"] == "en": # get the english descriptions
-            if want_flavor:
-                return text["flavor_text"]
-            else:
-                return text["effect"]
+        # if text["language"]["name"] == "en": # get the english descriptions
+        # if want_flavor:
+        #     return text["flavor_text"]
+        # else:
+        #     return text["effect"]
+        return text_data
 
     return np.NaN
 
@@ -81,7 +86,7 @@ def get_ability_data():
         if ability_query["is_main_series"]: 
             
             # get the abilities present in the generations we are looking at
-            if ability_query["generation"]["name"] in get_generations: 
+            if ability_query["generation"]["name"] in get_generations(): 
                 temp = ["", "", "", ""]
                 
                 temp[0] = ability_query["name"] # get the ability's name
@@ -92,16 +97,23 @@ def get_ability_data():
                 
                 # get the effect description
                 effect_data = ability_query["effect_entries"] 
-                temp[2] = get_text(effect_data, "effect")
+                for entry in range(len(effect_data)):
+                    if effect_data[entry]["language"]["name"] == "en":
+                        eng_data = effect_data[entry] 
+                temp[2] = get_text(eng_data, "effect")
                             
-                # get the flavor text data
-                flavor_data = ability_query["flavor_text_entries"]
-                temp[3] = get_text(flavor_data, "flavor")
+                # # get the flavor text data
+                # flavor_data = ability_query["flavor_text_entries"]
+                # temp[3] = get_text(flavor_data, "flavor")
                             
                 # add the entires to the end of the dataframe
                 abilities_df.loc[len(abilities_df.index)] = temp    
     
+    config_path = Path(argv[0]).resolve().parent
+    export_csv(abilities_df[["name"]], config_path / "ability_names.csv")
+
     return abilities_df
 
 if __name__ == '__main__':
-    pass
+    test_df = get_ability_data()
+    print(test_df.head(10))
