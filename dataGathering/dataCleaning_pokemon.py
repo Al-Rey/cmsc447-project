@@ -4,8 +4,6 @@ import numpy as np
 import requests
 import json
 from sys import argv
-from cleaning_helpers import query_api_general
-from cleaning_helpers import query_api_specific
 from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
 from cleaning_helpers import get_games_gen_num
@@ -13,24 +11,27 @@ from cleaning_helpers import get_games
 from cleaning_helpers import query_api
 from cleaning_helpers import HIGHEST_GEN_NUM
 from cleaning_helpers import export_csv
+from cleaning_helpers import get_index
 from pathlib import Path
 
 
 SPECIES_URL_BASE = "https://pokeapi.co/api/v2/pokemon-species/"
 POKEMON_LIST_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
 
+"""
 def get_index(index_name, columns):
-        try:
-            ind = columns.index(index_name)
-            return ind
-        except ValueError:
-            print(index_name, "index not found")
-            exit(1) # trouble finding the index for the column in the dataframe
-        except Exception as inst:
-            print("error getting", index_name, "list data")
-            print(inst)
-            # return None
-            exit(2) # any other error
+    try:
+        ind = columns.index(index_name)
+        return ind
+    except ValueError:
+        print(index_name, "index not found")
+        exit(1) # trouble finding the index for the column in the dataframe
+    except Exception as inst:
+        print("error getting", index_name, "list data")
+        print(inst)
+        # return None
+        exit(2) # any other error
+"""
 
 def get_item_list(item_data, item_name, valid_items):
     item_list = []

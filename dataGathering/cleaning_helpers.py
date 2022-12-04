@@ -60,14 +60,14 @@ GAME_GENS_CONBO = { "red-blue" : 1,
                 "sword-shield": 8
                 }
 
-def query_api_general(link):
-    query = requests.get(link)
-    query_data = json.loads(query.text)
-    return query_data["results"]
+# def query_api_general(link):
+#     query = requests.get(link)
+#     query_data = json.loads(query.text)
+#     return query_data["results"]
 
-def query_api_specific(link):
-    query = requests.get(link)
-    return json.loads(query.text)
+# def query_api_specific(link):
+#     query = requests.get(link)
+#     return json.loads(query.text)
 
 # TODO new query link to use insdtead of the two above
 def query_api(link, specific_index=None):
@@ -125,3 +125,24 @@ def get_games():
 
 def get_games_single():
     return list(GAME_GENS_SINGLE.keys())
+
+def get_index(index_name, columns):
+    """
+    Params:
+        - index_name - the column name that we want to find the index for
+        - columns - the list of column names in our dataframe
+    This function takes the list of column names that our dataframe is using and returns
+    what index that name is in. If the given name is not present in the list of column
+    names, an error is thrown and the program ends with an error exit status
+    """
+    try:
+        ind = columns.index(index_name)
+        return ind
+    except ValueError:
+        print(index_name, "index not found")
+        exit(1) # trouble finding the index for the column in the dataframe
+    except Exception as inst:
+        print("error getting", index_name, "list data")
+        print(inst)
+        # return None
+        exit(2) # any other error
