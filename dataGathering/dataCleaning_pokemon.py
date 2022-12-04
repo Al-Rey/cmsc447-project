@@ -10,13 +10,14 @@ from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
 from cleaning_helpers import get_games_gen_num
 from cleaning_helpers import get_games
+from cleaning_helpers import query_api
 from cleaning_helpers import HIGHEST_GEN_NUM
+from cleaning_helpers import export_csv
 from pathlib import Path
 
 
 SPECIES_URL_BASE = "https://pokeapi.co/api/v2/pokemon-species/"
 POKEMON_LIST_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
-
 
 def get_index(index_name, columns):
         try:
@@ -68,8 +69,93 @@ def get_move_tuple(move_data):
 
     return (name, learn)
 
+def get_evolution_data(chain_link):
+    chain_data = query_api(chain_link, "chain")
+    # cur_name = chain_data["species"]["name"]
+    
+    """
+    info = (cur_name, "", 0)
+    
+    chain = []
 
-def get_pokmeon_data():
+    chain.append(info)
+    
+    rest_of_chain = chain_data["evolves_to"]
+    if len(rest_of_chain) != 0:
+        for poke in rest_of_chain:
+            chain.append(get_evo_tuple(poke, 1))
+    """
+    return get_evo_tuple(chain_data, 0)
+
+def get_evo_tuple(data, stage):
+    cur_name = data["species"]["name"] # get the pokemon's name
+    chain_list = []
+
+    if stage == 0:
+        trigger = ""
+    else:
+        # get evolution trigger
+        details_len = len(data["evolution_details"])
+        if details_len >=1:
+            if details_len != 1:
+                print(cur_name, "has more than one item in evolution details")
+            
+            trigger = []
+            
+            for detail in data["evolution_details"]:
+                # print(detail)
+                temp = ""
+                lvl = ""
+                con = ""
+                if detail["min_level"] != None:
+                    lvl = str(detail["min_level"])
+                
+                conditions = list(detail.keys())
+                conditions.remove("trigger")
+                conditions.remove("min_level")
+
+                not_app = [None, "", False]
+
+                for condition in conditions:
+                    if detail[condition] not in not_app:
+                        con = "condition"
+                        break
+                
+                temp = detail["trigger"]["name"]
+                
+                if lvl == "" and con == "":
+                    trigger.append(temp)
+                elif lvl == "":
+                    entry = temp + "/" + con
+                    trigger.append(entry)
+                elif con == "":
+                    entry = temp + "(" + lvl + ")"
+                    trigger.append(entry)
+                else:
+                    entry = temp + "(" + lvl + ")" + "/" + con
+                    trigger.append(entry)
+                # count += 1
+
+            trigger = ",".join(trigger)
+            trigger = trigger.strip()
+
+        else:
+            trigger = ""
+
+    # make the tuple
+    info = (cur_name, trigger, stage)
+
+    chain_list.append(info)
+    
+    rest_of_chain = data["evolves_to"]
+    if len(rest_of_chain) != 0:
+        for poke in rest_of_chain:
+            chain_list.extend(get_evo_tuple(poke, stage+1))
+
+    return chain_list
+
+    
+def get_pokmeon_data(export_data = False):
     link = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
     pokemon_data = query_api_general(link)
 
@@ -128,7 +214,7 @@ def get_pokmeon_data():
 
         # TODO evolutions data
         index = get_index("evolutions", frame_columns)
-        hold[index] = []
+        hold[index] = get_evolution_data(species_data["evolution_chain"]["url"])
 
         # get the pokemon's game information
         pokemon_query = query_api_specific(pokemon["url"])
@@ -137,7 +223,7 @@ def get_pokmeon_data():
         all_stats = pokemon_query["stats"]
         for stat in all_stats:
             index = get_index(stat["stat"]["name"], frame_columns)
-            hold[index] - stat["base_stat"]
+            hold[index] = stat["base_stat"]
 
         # get the type information
         has_two = False
@@ -182,11 +268,16 @@ def get_pokmeon_data():
         # add the pokemon data into the dataframe
         pokemon_df.loc[len(pokemon_df.index)] = hold
 
+
+    if export_data:
+        export_csv(pokemon_df, config_path / "pokemon_data.csv")
+
+
     return pokemon_df
         
 if __name__ == "__main__":
-    test_df = get_pokmeon_data()
-    print(test_df[["list_of_moves"]].head(10))
+    test_df = get_pokmeon_data(True)
+    print(test_df[["evolutions"]].head(30))
         
 
         

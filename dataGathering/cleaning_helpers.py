@@ -113,7 +113,7 @@ def get_latest_game():
 def get_second_latest_game():
     return "black-white"
 
-def get_csv(dataframe, file_name):
+def export_csv(dataframe, file_name):
     dataframe.to_csv(file_name)
     return None
 
