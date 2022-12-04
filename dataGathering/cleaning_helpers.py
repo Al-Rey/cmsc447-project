@@ -4,7 +4,14 @@ import json
 # import pandas as pd
 # import numpy as np
 
-GEN_DICT = {'generation-i':1, 'generation-ii':2, 'generation-iii':3, 'generation-iv':4, 'generation-v':5}
+GEN_DICT = {'generation-i':1, 
+            'generation-ii':2, 
+            'generation-iii':3, 
+            'generation-iv':4, 
+            'generation-v':5,
+            'generation-vi':6,
+            'generation-vii':7,
+            'generation-viii':8}
 HIGHEST_GEN_NUM = 5
 GAME_GENS_SINGLE = { "red" : 1,
                 "blue" : 1,
@@ -61,6 +68,16 @@ def query_api_general(link):
 def query_api_specific(link):
     query = requests.get(link)
     return json.loads(query.text)
+
+# TODO new query link to use insdtead of the two above
+def query_api(link, specific_index=None):
+    query = requests.get(link)
+    query_data = json.loads(query.text)
+
+    if specific_index:
+        return query_data[specific_index]
+    else:
+        return query_data
 
 def get_generations():
     # important variables we need

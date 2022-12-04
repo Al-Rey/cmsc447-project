@@ -2,13 +2,17 @@
 import pandas as pd
 import numpy as np
 import requests
+import json
+from sys import argv
 from cleaning_helpers import query_api_general
 from cleaning_helpers import query_api_specific
 from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
 from cleaning_helpers import get_games_gen_num
 from cleaning_helpers import get_games
-from dataCleaning_abilities import HIGHEST_GEN_NUM
+from cleaning_helpers import HIGHEST_GEN_NUM
+from pathlib import Path
+
 
 SPECIES_URL_BASE = "https://pokeapi.co/api/v2/pokemon-species/"
 POKEMON_LIST_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
@@ -20,11 +24,12 @@ def get_index(index_name, columns):
             return ind
         except ValueError:
             print(index_name, "index not found")
-            return None
+            exit(1) # trouble finding the index for the column in the dataframe
         except Exception as inst:
             print("error getting", index_name, "list data")
             print(inst)
-            return None
+            # return None
+            exit(2) # any other error
 
 def get_item_list(item_data, item_name, valid_items):
     item_list = []
@@ -68,40 +73,23 @@ def get_pokmeon_data():
     link = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
     pokemon_data = query_api_general(link)
 
-    move_names = (pd.read_csv("dataGathering\\move_names.csv"))["name"].tolist()
-    ability_names = (pd.read_csv("dataGathering\\ability_data.csv"))["name"].tolist()
+    # load the names of the abilities and moves we will be looking at
+    config_path = Path(argv[0]).resolve().parent # ensure that we don't have to worry about file paths for the files
+    move_names = (pd.read_csv(config_path / "move_names.csv"))["name"].tolist()
+    
+    # TODO fix this to get ability name data instead of move data
+    ability_names = (pd.read_csv(config_path / "move_names.csv"))["name"].tolist()
 
-    game_gen = {"red" : 1,
-                "blue" : 1,
-                "yellow" : 1,
-                "gold" : 2,
-                "silver" : 2,
-                "crystal" : 2,
-                "ruby": 3,
-                "sapphire": 3,
-                "firered": 2,
-                "leafgreen": 2,
-                "emerald": 3,
-                "diamond": 4,
-                "pearl": 4,
-                "heartgold": 2,
-                "soulsilver": 2,
-                "platinum": 4,
-                "black": 5,
-                "white": 5,
-                "black-2": 5,
-                "white-2": 5
-                }
-
-
+    # Names of the columns in tha dataframe
     frame_columns = ["name","pokedex_id","attack", "special-attack", "defense",
                      "special-defense", "speed", "hp", "type1", "type2", 
                      "list_of_moves", "ability_name", "height", "weight", 
-                     "generation"
+                     "generation", "evolutions"
                      ]
     
     pokemon_df = pd.DataFrame(columns=frame_columns)
 
+    # loop through all the pokemon gotten from the query
     for pokemon in pokemon_data:
         hold = [0] * len(frame_columns)
 
@@ -109,14 +97,90 @@ def get_pokmeon_data():
         name = pokemon["name"]
 
         # get species data
-        species_data = requests.get(SPECIES_URL_BASE + name)
-        gen = species_data["generation"]
+        species_query = requests.get(SPECIES_URL_BASE + name)
+        if species_query.status_code == 404:
+            print(name, "does not have a species page")
+            continue
+        species_data = json.loads(species_query.text)
+        gen = species_data["generation"]["name"]
         gen = get_gen_number(gen)
 
-        # fi the pokemon is not in the generations we are looking at, ignore it
+        # if the pokemon is not in the generations we are looking at, ignore it
         if gen > HIGHEST_GEN_NUM:
             break
+
+        # put the name and generation in the dataframe
+        index = get_index("name", frame_columns)
+        hold[index] = name
+
+        index = get_index("generation", frame_columns)
+        hold[index] = gen
+
+        # get pokedex number, this is in a try-except statement for testing purposes
+        try:
+            dex_num = species_data["pokedex_numbers"][0]["entry_number"]
+            index = get_index("pokedex_id", frame_columns)
+            hold[index] = dex_num
+        except Exception as inst:
+            print("trying to get national dex number")
+            print(inst)
+            exit(2)
+
+        # TODO evolutions data
+        index = get_index("evolutions", frame_columns)
+        hold[index] = []
+
+        # get the pokemon's game information
+        pokemon_query = query_api_specific(pokemon["url"])
+
+        # get the base stats of the pokemon
+        all_stats = pokemon_query["stats"]
+        for stat in all_stats:
+            index = get_index(stat["stat"]["name"], frame_columns)
+            hold[index] - stat["base_stat"]
+
+        # get the type information
+        has_two = False
+        type_data = pokemon_query["types"]
+
+        if len(type_data) > 1:
+            has_two = True
+        elif len(type_data) < 1:
+            print(name, "has no type")
+            exit(2)
+
+        index = get_index("type1", frame_columns)
+        hold[index] = type_data[0]["type"]["name"]
+
+        index2 = get_index("type2", frame_columns)
+        if has_two:
+            hold[index2] = type_data[1]["type"]["name"]
+        else:
+            hold[index2] = hold[index]
+
+
+        # get height
+        index = get_index("height", frame_columns)
+        hold[index] = pokemon_query["height"]
+
+        # get weight
+        index = get_index("weight", frame_columns)
+        hold[index] = pokemon_query["weight"]
+
+        # get move information
+        index = get_index("list_of_moves", frame_columns)
+        all_moves = pokemon_query["moves"]
+        known_moves = get_item_list(all_moves, "move", move_names)
+        hold[index] = known_moves
+
+        # get ability information
+        index = get_index("ability_name", frame_columns)
+        all_abilities = pokemon_query["abilities"]
+        abils = get_item_list(all_abilities, "ability", ability_names)                
+        hold[index] = abils
         
+        # add the pokemon data into the dataframe
+        pokemon_df.loc[len(pokemon_df.index)] = hold
 
     return pokemon_df
         
