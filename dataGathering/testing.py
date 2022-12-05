@@ -171,6 +171,25 @@ class NatureTests(TestBase):
         
         return result
 
+class AbilityTests(TestBase):
+    def __init__(self):
+        self.ability_df = ability.get_ability_data()
+        super().__init__()
+
+    def __str__(self):
+        if self.run_tests():
+            return "All Ability Tests Passed!"
+        else:
+            return "One or More Ability Tests have Failed!"
+    
+    def run_tests(self):
+        results = True
+        results = results and self.TESTING_no_nans(self.ability_df)
+        results = results and self.TESTING_valid_generation(self.ability_df)
+
+        return results
+
 if __name__ == "__main__":
     # print(MoveTests(), end="\n\n")
-    print(NatureTests(), end="\n\n")
+    # print(NatureTests(), end="\n\n")
+    print(AbilityTests(), end="\n\n")
