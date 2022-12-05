@@ -183,7 +183,7 @@ class JsonRequest
 async function sendRequest(requestBody)
 {
     let url = "http://" + HOST + ":" + PORT + "/" + PROTOCOL;
-    fetch(url, {
+    await fetch(url, {
     method: 'POST',
     headers:
     {
@@ -194,19 +194,20 @@ async function sendRequest(requestBody)
     })
     .then(function(response)
     {
+        //console.log(response.text);
         return response.text();
     })
     .then(function(data)
     {
-        console.log(data); // this will be a string
-        return;
+        //console.log(data); // this will be a string
+        return data;
     });
 }
 
-function sendRequestSilent(requestBody)
+async function sendRequestSilent(requestBody)
 {
     let url = "http://" + HOST + ":" + PORT + "/" + PROTOCOL;
-    fetch(url, {
+    await fetch(url, {
     method: 'POST',
     headers:
     {
@@ -229,24 +230,24 @@ function sendRequestSilent(requestBody)
 async function makeApiCall(request)
 {
     let body = await request.composeRequest();
+    console.log(body);
     if (body != "")
     {
-        //console.log(rule3.composeRule());
-        await sendRequest(body);
+        sendRequest(body);
     }
     else
     {
-        await console.log("ERROR: Invalid request detected by client side input validation, please try again.");
+        console.log("ERROR: Invalid request detected by client side input validation, please try again.");
     }
 }
 
 async function makeApiCallSilent(request)
 {
-    let body = await request.composeRequest();
+    let body = request.composeRequest();
     if (body != "")
     {
         //console.log(rule3.composeRule());
-        sendRequestSilent(body);
+        await sendRequestSilent(body);
     }
     else
     {
@@ -267,7 +268,7 @@ async function stressTest(request)
     {
         const s = new Date();
         let start = s.getTime();
-        await makeApiCallSilent(request);
+        await makeApiCall(request);
         const e = new Date();
         let timeElapsed = e.getTime() - start;
         total += timeElapsed;
@@ -319,6 +320,6 @@ let andBlock2 = new AndParameters([rule3]);
 let andBlock3 = new AndParameters([rule3, rule4]);
 let request = new JsonRequest(10, [andBlock1, andBlock2, andBlock3]);
 //Do not change the lines below, they are what calls to the API.
-multiclientTest(request);
-//makeApiCall(request);
+//multiclientTest(request);
+makeApiCall(request);
 //stressTest(request);

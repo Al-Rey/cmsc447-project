@@ -5,9 +5,101 @@ use serde::{Serialize, Deserialize};
 //use std::env;
 use crate::pokemonmodel::Pokemon;
 use crate::jsonstructs::JsonRequest;
-use crate::jsonstructs::ParseRequest;
+//use crate::jsonstructs::ParseRequ;
+use dotenv;
+use sqlx::postgres::{PgPoolOptions, PgRow, PgConnection};
+use sqlx::{FromRow, Row, Pool, Postgres};
 
 //Struct declarations
+
+pub struct DbClient
+{
+
+}
+
+impl DbClient
+{
+    pub fn new() -> Self
+    {
+        Self { }
+    }
+
+    pub async fn query_database(request: JsonRequest) -> String
+    {
+        let sql_query: String = build_query(request);
+        println!("{}", sql_query);
+        let results: Vec<Pokemon> = DbClient::send_query(&sql_query).await;
+        let mut parsed_results: String = String::new();
+        let mut i: usize = 0;
+        while i < results.len()
+        {
+            if parsed_results == ""
+            {
+                parsed_results.push_str("{ Pokemon: [");
+            }
+            parsed_results.push_str(&format!(" {}", stringify!(results[i])));
+            i += 1;
+        }
+        if parsed_results != ""
+        {
+            parsed_results.push_str("]}");
+        }
+        println!("{}", parsed_results);
+        return parsed_results;
+    }
+
+    async fn send_query(sql_query: &str) -> Vec<Pokemon>
+    {
+        let pool = DbClient::get_connection();
+        let rows = sqlx::query(sql_query);
+        let results: Vec<Pokemon> = rows
+        .map(|row: PgRow| Pokemon
+        {
+            index: row.get("id"),
+            name: row.get("name"),
+            pokedex_id: row.get("pokedex_id"),
+            attack: row.get("attack"),
+            special_attack: row.get("special_attack"),
+            defense: row.get("defense"),
+            special_defense: row.get("special_defense"),
+            speed: row.get("speed"),
+            hp: row.get("hp"),
+            type1: row.get("type1"),
+            type2: row.get("type2"),
+            list_of_moves: row.get("list_of_moves"),
+            ability_name: row.get("ability_name"),
+            height: row.get("height"),
+            weight: row.get("weight"),
+            generation: row.get("generation"),
+        })
+        .fetch_all(&pool.await)
+        .await.unwrap();
+        return results;
+        /*let str_result: String = rows.await.iter().map(|r| format!("{}", r.get::<&str>("id")))
+                                    .collect::<Vec<String>>()
+                                    .join(", ");*/
+        //return rows;
+    }
+
+    pub async fn get_connection() -> Pool<Postgres>
+    {
+        return PgPoolOptions::new()
+            .max_connections(2)
+            .connect(&DbClient::get_connection_string()).await.unwrap();
+    }
+    
+    pub fn get_connection_string() -> String
+    {
+        dotenv::dotenv().ok();
+        let user: &str = &std::env::var("DB_USER").unwrap();
+        let password: &str = &std::env::var("DB_PASSWORD").unwrap();
+        let host: &str = &std::env::var("DB_HOST").unwrap();
+        let name: &str = &std::env::var("DB_NAME").unwrap();
+        let connection_string: String = format!{"postgres://{}:{}@{}:{}", user, password, host, name};
+        println!("{}", connection_string);
+        return connection_string;
+    }
+}
 
 #[derive(Serialize, Deserialize)]
 pub struct DbEntriesReturned
@@ -15,7 +107,7 @@ pub struct DbEntriesReturned
     result_lists: Vec<Vec<Pokemon>>
 }
 
-trait QueryDatabase
+/*trait QueryDatabase
 {
     fn query_database(&mut self, params: Vec<String>) -> Vec<Pokemon>;
 }
@@ -48,7 +140,9 @@ impl QueryDatabase for DbEntriesReturned
         let empty_vec: Vec<Pokemon> = Vec::new();
         return empty_vec;
     }
-}
+}*/
+
+
 
 fn merge_k_and_lists(and_lists: &mut Vec<Vec<Pokemon>>) -> Vec<Pokemon>
 {

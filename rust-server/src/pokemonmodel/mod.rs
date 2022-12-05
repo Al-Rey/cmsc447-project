@@ -1,5 +1,6 @@
 //use diesel::prelude::*;
 use serde::{Serialize, Deserialize};
+use sqlx::{FromRow};
 
 /*#[derive(Queryable)]
 pub struct Post {
@@ -9,7 +10,7 @@ pub struct Post {
     pub published: bool,
 }*/
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, FromRow, Debug)]
 pub struct Pokemon
 {
     pub index: u32,

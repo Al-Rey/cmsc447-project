@@ -16,74 +16,11 @@ pub struct JsonRequest
     pub params: Vec<AndParameters>
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct QueryParameter
+impl JsonRequest
 {
-    pub category: String,
-    pub rule: String,
-    pub filter: String
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct AndParameters
-{
-    pub rules: Vec<QueryParameter>
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct JsonResponse
-{
-    pub results: Vec<Pokemon>
-}
-
-//Trait Declarations
-
-pub trait ParseRequest
-{
-    fn parse_request(&self) -> String;
-}
-
-trait ParseQuery
-{
-    fn parse_query(&self) -> Vec<String>;
-}
-
-trait ParseRule
-{
-    fn parse_rule(&self) -> String;
-}
-
-trait FilterWithInt
-{
-    fn filter_with_int(&self) -> String;
-}
-
-trait FilterWithString
-{
-    fn filter_with_string(&self) -> String;
-}
-
-trait IsIntCategory
-{
-    fn is_int_category(&self) -> bool;
-}
-
-trait IsStringCategory
-{
-    fn is_string_category(&self) -> bool;
-}
-
-trait IsValidRule
-{
-    fn is_valid_rule(&self) -> bool;
-}
-
-//Trait Definitions/Implementations <--- "I always just call it a goober."
-
-impl ParseRequest for JsonRequest
-{
-    fn parse_request(&self) -> String
+    pub fn parse_request(&self) -> String
     {
+        println!("test");
         let mut i: usize = 0;
         let mut query: String = String::new();
         //This loop runs until the end of the list has been reached
@@ -102,6 +39,7 @@ impl ParseRequest for JsonRequest
                     if next_result_set[k] != ""
                     {
                         foundnext = true;
+                        println!("test");
                         break;
                     }
                     k += 1;
@@ -144,9 +82,69 @@ impl ParseRequest for JsonRequest
             }
         }
         query.push_str("'");
+        println!("{}", query);
         return query;
-    }
+    }    
 }
+
+#[derive(Serialize, Deserialize)]
+pub struct QueryParameter
+{
+    pub category: String,
+    pub rule: String,
+    pub filter: String
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct AndParameters
+{
+    pub rules: Vec<QueryParameter>
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct JsonResponse
+{
+    pub results: Vec<Pokemon>
+}
+
+//Trait Declarations
+
+trait ParseQuery
+{
+    fn parse_query(&self) -> Vec<String>;
+}
+
+trait ParseRule
+{
+    fn parse_rule(&self) -> String;
+}
+
+trait FilterWithInt
+{
+    fn filter_with_int(&self) -> String;
+}
+
+trait FilterWithString
+{
+    fn filter_with_string(&self) -> String;
+}
+
+trait IsIntCategory
+{
+    fn is_int_category(&self) -> bool;
+}
+
+trait IsStringCategory
+{
+    fn is_string_category(&self) -> bool;
+}
+
+trait IsValidRule
+{
+    fn is_valid_rule(&self) -> bool;
+}
+
+//Trait Definitions/Implementations <--- "I always just call it a goober."
 
 impl ParseQuery for AndParameters
 {
