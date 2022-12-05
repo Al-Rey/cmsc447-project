@@ -84,10 +84,25 @@ def query_api(link, specific_index=None):
         return query_data
 
 def get_gen_number(gen_str):
+    """
+    The function takes a string representing the generation and tries to
+    convert it to a number representing the generation. The funciton raises
+    an error if the string isn't a generation string.
+    Param:
+        - gen_str: A string representing the generation
+    Return: An integer representing the generaiton
+    """
+    
     if "generation" in gen_str:
         return GEN_DICT[gen_str]
     else:
-        if "iv" in gen_str:
+        if "viii" in gen_str:
+            return 8
+        elif "vii" in gen_str:
+            return 7
+        elif "vi" in gen_str:
+            return 6
+        elif "iv" in gen_str:
             return 4
         elif "v" in gen_str:
             return 5
@@ -104,10 +119,26 @@ def get_gen_number(gen_str):
             raise ValueError("We got an invalid generation!")
 
 def export_csv(dataframe, file_name):
+    """
+    This function takes a dataframe and saves it to a file
+    Param:
+        - dataframe: The pandas dataframe that we want to save as a csv file
+        - file_name: The path and name of the file that we will be saving the
+            data from the dataframe to
+    return: None
+    """
+
     dataframe.to_csv(file_name)
     return None
 
 def get_games_gen_num(game_name):
+    """
+    Takes the combined game text and convert that string into the
+    corresponding generation number. 
+    Param:
+        - game_name: The game string, (usually) in the format of "game-game"
+    Return: The game's generation, or -1 if it is not a main series game
+    """
     try:
         return GAME_GENS_CONBO[game_name]
     except KeyError as inst:
@@ -115,6 +146,11 @@ def get_games_gen_num(game_name):
         return -1 # return -1 if it is not a main series game
 
 def get_games():
+    """
+    Return the names of the games
+    Params: None
+    Return: list of the names of games (as strings)
+    """
     return list(GAME_GENS_CONBO.keys())
 
 def get_index(index_name, columns):
