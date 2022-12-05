@@ -1,8 +1,7 @@
 # Libraries
 import requests
 import json
-# import pandas as pd
-# import numpy as np
+
 
 GEN_DICT = {'generation-i':1, 
             'generation-ii':2, 
@@ -12,8 +11,11 @@ GEN_DICT = {'generation-i':1,
             'generation-vi':6,
             'generation-vii':7,
             'generation-viii':8}
+
 HIGHEST_GEN_NUM = 5
+
 DATA_UNAVAILABLE = "NA"
+
 GAME_GENS_SINGLE = { "red" : 1,
                 "blue" : 1,
                 "yellow" : 1,
@@ -42,6 +44,7 @@ GAME_GENS_SINGLE = { "red" : 1,
                 "shield": 8
                 }
 
+
 GAME_GENS_CONBO = { "red-blue" : 1,
                 "yellow" : 1,
                 "gold-silver" : 2,
@@ -62,8 +65,16 @@ GAME_GENS_CONBO = { "red-blue" : 1,
                 }
 
 
-# TODO new query link to use insdtead of the two above
 def query_api(link, specific_index=None):
+    """
+    This function takes the API link passed into the function and returns the
+    requested results
+    Params:
+        - link: The link that will be used to query the data
+        - specific_index: if you want to get a specific part of the query
+            results
+    return: the JSON file that the function gets from the queries
+    """
     query = requests.get(link)
     query_data = json.loads(query.text)
 
@@ -71,14 +82,6 @@ def query_api(link, specific_index=None):
         return query_data[specific_index]
     else:
         return query_data
-
-def get_generations():
-    # important variables we need
-    gens = list(GEN_DICT.keys())
-    return gens
-
-def get_gen_dict():
-    return GEN_DICT
 
 def get_gen_number(gen_str):
     if "generation" in gen_str:
@@ -100,12 +103,6 @@ def get_gen_number(gen_str):
             print(gen_str)
             raise ValueError("We got an invalid generation!")
 
-def get_latest_game():
-    return "black-2-white-2"
-
-def get_second_latest_game():
-    return "black-white"
-
 def export_csv(dataframe, file_name):
     dataframe.to_csv(file_name)
     return None
@@ -119,9 +116,6 @@ def get_games_gen_num(game_name):
 
 def get_games():
     return list(GAME_GENS_CONBO.keys())
-
-def get_games_single():
-    return list(GAME_GENS_SINGLE.keys())
 
 def get_index(index_name, columns):
     """
