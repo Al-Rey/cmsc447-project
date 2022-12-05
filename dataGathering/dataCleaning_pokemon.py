@@ -4,9 +4,7 @@ import numpy as np
 import requests
 import json
 from sys import argv
-from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
-from cleaning_helpers import get_games_gen_num
 from cleaning_helpers import get_games
 from cleaning_helpers import query_api
 from cleaning_helpers import HIGHEST_GEN_NUM
@@ -158,7 +156,7 @@ def get_evo_tuple(data, stage):
     
 def get_pokmeon_data(export_data = False):
     link = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
-    pokemon_data = query_api_general(link)
+    pokemon_data = query_api(link, "results")
 
     # load the names of the abilities and moves we will be looking at
     config_path = Path(argv[0]).resolve().parent # ensure that we don't have to worry about file paths for the files
@@ -218,7 +216,7 @@ def get_pokmeon_data(export_data = False):
         hold[index] = get_evolution_data(species_data["evolution_chain"]["url"])
 
         # get the pokemon's game information
-        pokemon_query = query_api_specific(pokemon["url"])
+        pokemon_query = query_api(pokemon["url"])
 
         # get the base stats of the pokemon
         all_stats = pokemon_query["stats"]

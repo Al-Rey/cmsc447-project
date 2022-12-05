@@ -13,6 +13,7 @@ GEN_DICT = {'generation-i':1,
             'generation-vii':7,
             'generation-viii':8}
 HIGHEST_GEN_NUM = 5
+DATA_UNAVAILABLE = "NA"
 GAME_GENS_SINGLE = { "red" : 1,
                 "blue" : 1,
                 "yellow" : 1,
@@ -60,14 +61,6 @@ GAME_GENS_CONBO = { "red-blue" : 1,
                 "sword-shield": 8
                 }
 
-# def query_api_general(link):
-#     query = requests.get(link)
-#     query_data = json.loads(query.text)
-#     return query_data["results"]
-
-# def query_api_specific(link):
-#     query = requests.get(link)
-#     return json.loads(query.text)
 
 # TODO new query link to use insdtead of the two above
 def query_api(link, specific_index=None):
@@ -118,7 +111,11 @@ def export_csv(dataframe, file_name):
     return None
 
 def get_games_gen_num(game_name):
-    return GAME_GENS_CONBO[game_name]
+    try:
+        return GAME_GENS_CONBO[game_name]
+    except KeyError as inst:
+        # print("KeyError in get_games_gen:", inst)
+        return -1 # return -1 if it is not a main series game
 
 def get_games():
     return list(GAME_GENS_CONBO.keys())

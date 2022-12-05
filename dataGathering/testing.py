@@ -46,6 +46,32 @@ class TestBase:
         print(test_name, ": Passed!")
         return True
 
+    def TESTING_no_zero(self, df, col_name):
+        test_name = "Testing values in " + col_name + "for negatives"
+
+        for index, row in df.iterrows():
+            val = df.iloc[index, 1]
+            if val != "NA" and val <= 0:
+                print(test_name, ": Failed!")
+                print(row["name"], "has", col_name, val)
+                return False
+
+        print(test_name, ": Passed!")
+        return True
+
+    def TESTING_valid_type(self, df, col_name):
+        test_name = "Testing " + col_name
+
+        for index, row in df.iterrows():
+            type = row[col_name]
+            if type not in TYPES:
+                print(test_name, ": Failed!")
+                print(row["name"], "has type", type)
+                return False
+
+        print(test_name, ": Passed!")
+        return True
+
 class MoveTests(TestBase):
     def __init__(self):
         self.moves_df = move.get_move_data()
@@ -70,18 +96,18 @@ class MoveTests(TestBase):
         print(test_name, ": Passed!")
         return True
 
-    def TESTING_moves_types(self):
-        test_name = "Testing move types"
+    # def TESTING_moves_types(self):
+    #     test_name = "Testing move types"
 
-        for index, row in self.moves_df.iterrows():
-            type = row["type"]
-            if type not in TYPES:
-                print(test_name, ": Failed!")
-                print(row["name"], "has type", type)
-                return False
+    #     for index, row in self.moves_df.iterrows():
+    #         type = row["type"]
+    #         if type not in TYPES:
+    #             print(test_name, ": Failed!")
+    #             print(row["name"], "has type", type)
+    #             return False
 
-        print(test_name, ": Passed!")
-        return True
+    #     print(test_name, ": Passed!")
+    #     return True
 
     # TODO grab select entires and check all their values with what is stored
     # manually
@@ -93,7 +119,7 @@ class MoveTests(TestBase):
         result = result and self.TESTING_no_nans(self.moves_df)
         result = result and self.TESTING_moves_valid_class()
         result = result and self.TESTING_valid_generation(self.moves_df)
-        result = result and self.TESTING_moves_types()
+        result = result and self.TESTING_valid_type(self.moves_df[["name", "type"]], "type")
         result = result and self.TESTING_no_neg(self.moves_df[["name", "accuracy"]], "accuracy")
         result = result and self.TESTING_no_neg(self.moves_df[["name", "crit_rate"]], "crit_rate")
         result = result and self.TESTING_no_neg(self.moves_df[["name", "power"]], "power")
@@ -161,7 +187,6 @@ class NatureTests(TestBase):
         print(test_name, ": Passed!")
         return True
 
-
     def run_tests(self):
         result = True
         result = result and self.TESTING_no_nans(self.nature_df)
@@ -189,7 +214,53 @@ class AbilityTests(TestBase):
 
         return results
 
+class PokemonTests(TestBase):
+    def __init__(self):
+        self.pokemon_df = pokemon.get_pokmeon_data()
+        super().__init__()
+
+    def __str__(self):
+        if self.run_tests():
+            return "All Pokemon Tests Passed!"
+        else:
+            return "One or More Pokemon Tests have Failed!"
+    
+    def TESTING_pokemon_has_moves(self):
+        test_name = "Testing that every pokemon has at least one move"
+        for index, row, in self.pokemon_df.iterrows():
+            num_moves = len(row["list_of_moves"])
+            
+            if num_moves <= 0:
+                print(test_name, ": Failed!")
+                print(row["name"], "does not have any moves")
+                return False
+            else:
+                print(test_name, ": Passed!")
+                return True
+
+
+    def run_tests(self):
+        results = True
+        results = results and self.TESTING_no_nans(self.pokemon_df)
+        results = results and self.TESTING_valid_generation(self.pokemon_df)
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "attack"]], "attack")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "special-attack"]], "special-attack")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "defense"]], "defense")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "special-defense"]], "special-defense")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "speed"]], "speed")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "hp"]], "hp")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "weight"]], "weight")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "height"]], "height")
+        results = results and self.TESTING_no_zero(self.pokemon_df[["name", "pokedex_id"]], "pokedex_id")
+        results = results and self.TESTING_valid_type(self.pokemon_df[["name", "type1"]], "type1")
+        results = results and self.TESTING_valid_type(self.pokemon_df[["name", "type2"]], "type2")
+        results = results and self.TESTING_pokemon_has_moves()
+
+
+        return results
+
 if __name__ == "__main__":
     # print(MoveTests(), end="\n\n")
     # print(NatureTests(), end="\n\n")
-    print(AbilityTests(), end="\n\n")
+    # print(AbilityTests(), end="\n\n")
+    print(PokemonTests(), end="\n\n")
