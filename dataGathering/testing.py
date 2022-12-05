@@ -9,6 +9,8 @@ from testing_samples import NO_EFFECT_NATURES
 
 from cleaning_helpers import HIGHEST_GEN_NUM, DATA_UNAVAILABLE
 
+# the Base testing class. This class contains tests that are used for more
+# than one of the scripts
 class TestBase:
     def TESTING_no_nans(self, df):
         test_name = "Testing no NaN values"
@@ -72,6 +74,7 @@ class TestBase:
         print(test_name, ": Passed!")
         return True
 
+# This class is used for testing the move data cleaning script
 class MoveTests(TestBase):
     def __init__(self):
         self.moves_df = move.get_move_data()
@@ -96,19 +99,6 @@ class MoveTests(TestBase):
         print(test_name, ": Passed!")
         return True
 
-    # def TESTING_moves_types(self):
-    #     test_name = "Testing move types"
-
-    #     for index, row in self.moves_df.iterrows():
-    #         type = row["type"]
-    #         if type not in TYPES:
-    #             print(test_name, ": Failed!")
-    #             print(row["name"], "has type", type)
-    #             return False
-
-    #     print(test_name, ": Passed!")
-    #     return True
-
     # TODO grab select entires and check all their values with what is stored
     # manually
     def TESTING_check_entries(self):
@@ -127,6 +117,7 @@ class MoveTests(TestBase):
 
         return result
 
+# This class is used for testing the nature data cleaning script
 class NatureTests(TestBase):
     def __init__(self):
         self.nature_df = nature.get_nature_data()
@@ -196,6 +187,7 @@ class NatureTests(TestBase):
         
         return result
 
+# This class is used for testing the ability data cleaning script
 class AbilityTests(TestBase):
     def __init__(self):
         self.ability_df = ability.get_ability_data()
@@ -214,6 +206,7 @@ class AbilityTests(TestBase):
 
         return results
 
+# This class is used for testing the pokemon data cleaning script
 class PokemonTests(TestBase):
     def __init__(self):
         self.pokemon_df = pokemon.get_pokmeon_data()
@@ -238,6 +231,11 @@ class PokemonTests(TestBase):
                 print(test_name, ": Passed!")
                 return True
 
+    # TODO test the specific entries of pokemon with the values in the 
+    # testing_samples in the files
+    def TESTING_check_entries(self):
+        return True
+
 
     def run_tests(self):
         results = True
@@ -260,7 +258,7 @@ class PokemonTests(TestBase):
         return results
 
 if __name__ == "__main__":
-    # print(MoveTests(), end="\n\n")
-    # print(NatureTests(), end="\n\n")
-    # print(AbilityTests(), end="\n\n")
+    print(MoveTests(), end="\n\n")
+    print(NatureTests(), end="\n\n")
+    print(AbilityTests(), end="\n\n")
     print(PokemonTests(), end="\n\n")

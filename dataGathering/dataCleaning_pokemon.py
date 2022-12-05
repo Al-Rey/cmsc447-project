@@ -16,24 +16,8 @@ from pathlib import Path
 SPECIES_URL_BASE = "https://pokeapi.co/api/v2/pokemon-species/"
 POKEMON_LIST_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
 
-"""
-def get_index(index_name, columns):
-    try:
-        ind = columns.index(index_name)
-        return ind
-    except ValueError:
-        print(index_name, "index not found")
-        exit(1) # trouble finding the index for the column in the dataframe
-    except Exception as inst:
-        print("error getting", index_name, "list data")
-        print(inst)
-        # return None
-        exit(2) # any other error
-"""
-
 def get_item_list(item_data, item_name, valid_items):
     item_list = []
-    # all_items = item_data[item_name]
     info = 0
 
     for item in item_data:
@@ -42,7 +26,6 @@ def get_item_list(item_data, item_name, valid_items):
             continue
 
         if item_name == "move":
-            # info = (name, -1)
             info = get_move_tuple(item)
         elif item_name == "ability":
             info = (name, item["is_hidden"])
@@ -70,20 +53,7 @@ def get_move_tuple(move_data):
 
 def get_evolution_data(chain_link):
     chain_data = query_api(chain_link, "chain")
-    # cur_name = chain_data["species"]["name"]
-    
-    """
-    info = (cur_name, "", 0)
-    
-    chain = []
 
-    chain.append(info)
-    
-    rest_of_chain = chain_data["evolves_to"]
-    if len(rest_of_chain) != 0:
-        for poke in rest_of_chain:
-            chain.append(get_evo_tuple(poke, 1))
-    """
     return get_evo_tuple(chain_data, 0)
 
 def get_evo_tuple(data, stage):
