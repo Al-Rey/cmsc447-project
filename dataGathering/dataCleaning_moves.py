@@ -9,13 +9,13 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from sys import argv
-from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
 from cleaning_helpers import get_index
 from cleaning_helpers import query_api
 from cleaning_helpers import get_games_gen_num
 from cleaning_helpers import export_csv
 from cleaning_helpers import HIGHEST_GEN_NUM
+from cleaning_helpers import DATA_UNAVAILABLE
 
 def get_effect_text(data, effect_chance):
     for text in data:
@@ -36,17 +36,25 @@ def get_flavor_text(flavor_list):
 
     # loop through the list of flavor text entires and get
     # only the flavor values relavant to the scope
-    for ind in range(len(flavor_list)-1, -1,-1):
+    num_entries = len(flavor_list)
+
+    # if num_entries == 0:
+    #     print("There is 0 here")
+
+    for ind in range(num_entries-1, -1,-1):
         text = flavor_list[ind]
-
-        if text["language"] != lang:
-            continue
-
-        num = get_games_gen_num(text["version_group"]["name"])
         
-        if num > HIGHEST_GEN_NUM:
+        # only get the english text
+        if text["language"]["name"] != lang:
             continue
 
+        # check to make sure that the the game is in the scope of generations
+        # we are looking at
+        num = get_games_gen_num(text["version_group"]["name"])
+        if num > HIGHEST_GEN_NUM or num <= 0:
+            continue
+        
+        
         return text["flavor_text"]
 
     return np.NaN
@@ -85,6 +93,9 @@ def get_move_data(export_data = False):
         # get the move's accuracy
         index = get_index("accuracy", frame_columns)
         temp[index] = move_query["accuracy"]
+        if temp[index] == None:
+            # print(name, "has NaN accuracy")
+            temp[index] = DATA_UNAVAILABLE
 
         # get the move's damage class (physical, special, etc.)
         index = get_index("class", frame_columns)
@@ -99,6 +110,9 @@ def get_move_data(export_data = False):
         # get the flavor text
         index = get_index("game_desc", frame_columns)
         temp[index] = get_flavor_text(move_query["flavor_text_entries"])
+        if temp[index] == np.NaN:
+            print(name, "has NaN flavor text")
+            # temp[index] = "NA"
         
         # get the generation number
         index = get_index("generation", frame_columns)
@@ -108,7 +122,7 @@ def get_move_data(export_data = False):
 
         # get the crit rate of the move
         if move_query["meta"] == None:
-            print(name, "has a meta section of None")
+            # print(name, "has a meta section of None")
             continue
 
         index = get_index("crit_rate", frame_columns)
@@ -121,6 +135,9 @@ def get_move_data(export_data = False):
         # get the power of the move
         index = get_index("power", frame_columns)
         temp[index] = move_query["power"]
+        if temp[index] == None:
+            # print(name, "has NaN power")
+            temp[index] = DATA_UNAVAILABLE
 
         # get the PP of the move
         index = get_index("pp", frame_columns)
@@ -132,12 +149,12 @@ def get_move_data(export_data = False):
 
 
         moves_df.loc[len(moves_df.index)] = temp
-
+    
+    config_path = Path(argv[0]).resolve().parent
     if export_data:
-        config_path = Path(argv[0]).resolve().parent
         export_csv(moves_df, config_path / "move_data.csv")
 
-
+    export_csv(moves_df[["name"]], config_path / "move_names.csv")
     return moves_df
 
 if __name__ == '__main__':

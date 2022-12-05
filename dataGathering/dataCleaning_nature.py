@@ -1,7 +1,12 @@
 import pandas as pd
 import numpy as np
+
+from sys import argv
+from pathlib import Path
 from cleaning_helpers import query_api
 from cleaning_helpers import get_index
+from cleaning_helpers import export_csv
+from cleaning_helpers import DATA_UNAVAILABLE
 
 def get_stat(stat_name, query_data):
     """
@@ -16,11 +21,11 @@ def get_stat(stat_name, query_data):
     temp = query_data[stat_name]
 
     if temp == None:
-        return np.nan
+        return DATA_UNAVAILABLE
     else:
         return temp["name"]
 
-def get_nature_data():
+def get_nature_data(export_data = False):
     link = 'https://pokeapi.co/api/v2/nature?limit=100000&offset=0'
     nature_data = query_api(link, "results")
 
@@ -40,12 +45,17 @@ def get_nature_data():
         hold[index] = get_stat("decreased_stat", nature_query)
 
         # get the name of the stat the nature increases if it does that
-        index = get_index("increased_stat")
+        index = get_index("increased_stat", frame_columns)
         hold[index] = get_stat("increased_stat", nature_query)
 
         # add the data to the end of the dataframe
         natures_df.loc[len(natures_df.index)] = hold
 
+    
+    config_path = Path(argv[0]).resolve().parent 
+    if export_data:
+        export_csv(natures_df, config_path / "pokemon_data.csv")
+ 
     return natures_df
 
 if __name__ == '__main__':
