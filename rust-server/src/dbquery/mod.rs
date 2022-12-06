@@ -24,11 +24,17 @@ impl DbClient
         Self { }
     }
 
-    pub async fn query_database(request: JsonRequest) -> String
+    pub fn query_database(request: JsonRequest) -> String
     {
         let sql_query: String = build_query(request);
         println!("{}", sql_query);
-        let results: Vec<Pokemon> = DbClient::send_query(&sql_query).await;
+        let mut results: Vec<Pokemon> = vec![];
+            async
+            {
+                let conn_str: &str = &DbClient::get_connection_string().await;
+                let pool = DbClient::get_connection(conn_str).await;
+                results = DbClient::send_query(pool, &sql_query).await;
+            };
         let mut parsed_results: String = String::new();
         let mut i: usize = 0;
         while i < results.len()
@@ -48,9 +54,8 @@ impl DbClient
         return parsed_results;
     }
 
-    async fn send_query(sql_query: &str) -> Vec<Pokemon>
+    async fn send_query(pool: Pool<Postgres>, sql_query: &str) -> Vec<Pokemon>
     {
-        let pool = DbClient::get_connection();
         let rows = sqlx::query(sql_query);
         let results: Vec<Pokemon> = rows
         .map(|row: PgRow| Pokemon
@@ -72,7 +77,7 @@ impl DbClient
             weight: row.get("weight"),
             generation: row.get("generation"),
         })
-        .fetch_all(&pool.await)
+        .fetch_all(&pool)
         .await.unwrap();
         return results;
         /*let str_result: String = rows.await.iter().map(|r| format!("{}", r.get::<&str>("id")))
@@ -81,14 +86,14 @@ impl DbClient
         //return rows;
     }
 
-    pub async fn get_connection() -> Pool<Postgres>
+    pub async fn get_connection(conn_str: &str) -> Pool<Postgres>
     {
         return PgPoolOptions::new()
             .max_connections(2)
-            .connect(&DbClient::get_connection_string()).await.unwrap();
+            .connect(conn_str).await.unwrap();
     }
     
-    pub fn get_connection_string() -> String
+    pub async fn get_connection_string() -> String
     {
         dotenv::dotenv().ok();
         let user: &str = &std::env::var("DB_USER").unwrap();

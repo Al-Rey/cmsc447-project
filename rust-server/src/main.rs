@@ -8,7 +8,7 @@ use serde_json;
 
 
 #[post("/GUP", data="<query>")]
-fn get_using_post(query: String) -> Result<Output<String>, String>
+fn get_using_post(query: String) -> String
 {
     println!("{}", query);
     let try_parse_json = serde_json::from_str(query.as_str());
