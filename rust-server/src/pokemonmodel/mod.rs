@@ -47,10 +47,10 @@ impl Pokemon
         jsonString.push_str(&format!("'type1': '{}', ", self.type1));
         jsonString.push_str(&format!("'type2': '{}', ", self.type2));
         //jsonString.push_str(&format!("'move_list': '{}', ", self.list_of_moves));
-        jsonString.push_str(&format!("'ability_name': '{}', ", self.ability_name));
+        //jsonString.push_str(&format!("'ability_name': '{}', ", self.ability_name));
         jsonString.push_str(&format!("'height': {}, ", self.height));
         jsonString.push_str(&format!("'weight': {}, ", self.weight));
-        jsonString.push_str(&format!("'generation': {}]", self.generation));
+        jsonString.push_str(&format!("'generation': {} }}", self.generation));
         return jsonString.replace("\'", "\"");
     }
 }

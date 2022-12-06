@@ -42,12 +42,16 @@ impl DbClient
             {
                 parsed_results.push_str("{\"Results\": { \"Pokemon\": [");
             }
-            parsed_results.push_str(&format!(" {}", results[i].jsonify()));
+            parsed_results.push_str(&format!("{}", results[i].jsonify()));
             i += 1;
+            if i < results.len()
+            {
+                parsed_results.push_str(", ");
+            }
         }
         if parsed_results != ""
         {
-            parsed_results.push_str("}]}");
+            parsed_results.push_str("]} }");
         }
         else
         {
