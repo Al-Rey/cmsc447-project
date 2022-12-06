@@ -40,14 +40,14 @@ impl DbClient
         {
             if parsed_results == ""
             {
-                parsed_results.push_str("{ Pokemon: [");
+                parsed_results.push_str("{\"Results\": { \"Pokemon\": [");
             }
             parsed_results.push_str(&format!(" {}", results[i].jsonify()));
             i += 1;
         }
         if parsed_results != ""
         {
-            parsed_results.push_str("]}");
+            parsed_results.push_str("}]}");
         }
         else
         {
