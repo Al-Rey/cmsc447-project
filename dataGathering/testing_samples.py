@@ -118,7 +118,8 @@ POKEMON_3_EVO = {
 }
 
 POKEMON_4_EVO = {
-    
+    "name": "silcoon",
+    "evolutions": [("wurmple", "", 0), ("silcoon", "level-up(7)", 1), ("beautifly", "level-up(10)", 2), ("cascoon", "level-up(7)", 1), ("dustox", "level-up(10)", 2)] 
 }
 
 STAT_NAMES = ["attack", "defense", "speed", "special-attack", "special-defense"]
@@ -131,3 +132,5 @@ TYPES = ["normal", "fire", "water", "grass", "electric",
          "steel", "fairy", "rock"]
 
 NO_EFFECT_NATURES = ["bashful", "docile", "hardy", "quirky", "serious"]
+
+MOVE_LEARN_METHODS = ["machine", "tutor", "egg"]

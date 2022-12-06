@@ -6,6 +6,7 @@ import dataCleaning_pokemon as pokemon
 from testing_samples import DAMAGE_CLASSES
 from testing_samples import TYPES, STAT_NAMES
 from testing_samples import NO_EFFECT_NATURES
+from testing_samples import MOVE_LEARN_METHODS
 
 from cleaning_helpers import HIGHEST_GEN_NUM, DATA_UNAVAILABLE
 
@@ -231,6 +232,27 @@ class PokemonTests(TestBase):
                 print(test_name, ": Passed!")
                 return True
 
+    def TESTING_pokemon_move_learn(self):
+        test_name = "Testing that the move learn methods are valid entries"
+
+        for index, row in self.pokemon_df.iterrows():
+            moves = row["list_of_moves"]
+
+            for move in moves:
+                method = move[1] # get the method that the move is learned
+                if isinstance(method, str) and method in MOVE_LEARN_METHODS:
+                    continue
+                elif isinstance(method, int) and method > 0:
+                    continue
+
+                print("Failed! :", test_name)
+                print("Error for the move", move[0], "for ", row["name"])
+                print("The method learned is", method)
+                return False
+
+        print("Passed! :", test_name)
+        return True
+
     # TODO test the specific entries of pokemon with the values in the 
     # testing_samples in the files
     def TESTING_check_entries(self):
@@ -252,12 +274,20 @@ class PokemonTests(TestBase):
         results = results and self.TESTING_valid_type(self.pokemon_df[["name", "type1"]], "type1")
         results = results and self.TESTING_valid_type(self.pokemon_df[["name", "type2"]], "type2")
         results = results and self.TESTING_pokemon_has_moves()
+        results = results and self.TESTING_pokemon_move_learn()
 
 
         return results
 
 if __name__ == "__main__":
-    print(MoveTests(), end="\n\n")
-    print(NatureTests(), end="\n\n")
-    print(AbilityTests(), end="\n\n")
+    # print("Running Move data validation tests...")
+    # print(MoveTests(), end="\n\n")
+
+    # print("Running Nature data validation tests...")
+    # print(NatureTests(), end="\n\n")
+
+    # print("Running Ability data validation tests...")
+    # print(AbilityTests(), end="\n\n")
+
+    print("Running Pokemon data validation tests...")
     print(PokemonTests(), end="\n\n")
