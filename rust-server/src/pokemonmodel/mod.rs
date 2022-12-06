@@ -24,7 +24,7 @@ pub struct Pokemon
     pub hp: u32,
     pub type1: String,
     pub type2: String,
-    pub list_of_moves: Vec<String>,
+    pub list_of_moves: String,
     pub ability_name: String,
     pub height: u32,
     pub weight: u32,
@@ -53,24 +53,10 @@ impl AreEqual for Pokemon
         else if self.hp != check_against.hp { return false; }
         else if self.type1 != check_against.type1 { return false; }
         else if self.type2 != check_against.type2 { return false; }
+        else if self.list_of_moves != check_against.list_of_moves { return false; }
         else if self.ability_name != check_against.ability_name { return false; }
         else if self.height != check_against.height { return false; }
         else if self.weight != check_against.weight { return false; }
-        else if self.generation != check_against.generation { return false; }
-        //Check if list sizes are different to potentially avoid needing to loop through each entry
-        else if self.list_of_moves.len() != check_against.list_of_moves.len() { return false; }
-        let mut i: usize = 0;
-        loop
-        {
-            if i >= self.list_of_moves.len()
-            {
-                return true;
-            }
-            else if self.list_of_moves[i] != check_against.list_of_moves[i]
-            {
-                return false;
-            }
-            i += 1;
-        }
+        else { return self.generation == check_against.generation; }
     }
 }

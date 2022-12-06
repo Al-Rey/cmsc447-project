@@ -308,17 +308,17 @@ async function multiclientTest(request)
 
 //These should be caught by client side input validation and changed to all lowercase chars.
 let rule1 = new Rule("genEration", "neq", 1);
-let rule2 = new Rule("Height", "lte", 3);
+//let rule2 = new Rule("Height", "lte", 3);
 //this should be caught by client side input validation and excluded due to the filter being a string for an int category
-let rule3 = new Rule("speed", "lte", 5);
+//let rule3 = new Rule("speed", "lte", 5);
 //this should be caught by client side input validation and converted to all lowercase letters.
-let rule4 = new Rule("name", "eq", "piKAchu");
-let rule5 = new Rule("askjdaksjd", "eq", 5);
+//let rule4 = new Rule("name", "eq", "piKAchu");
+//let rule5 = new Rule("askjdaksjd", "eq", 5);
 
-let andBlock1 = new AndParameters([rule1, rule2]);
-let andBlock2 = new AndParameters([rule3]);
-let andBlock3 = new AndParameters([rule3, rule4]);
-let request = new JsonRequest(10, [andBlock1, andBlock2, andBlock3]);
+let andBlock1 = new AndParameters([rule1]);
+//let andBlock2 = new AndParameters([rule3]);
+//let andBlock3 = new AndParameters([rule3, rule4]);
+let request = new JsonRequest(10, [andBlock1]);
 //Do not change the lines below, they are what calls to the API.
 //multiclientTest(request);
 makeApiCall(request);

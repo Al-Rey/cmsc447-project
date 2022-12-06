@@ -20,7 +20,6 @@ impl JsonRequest
 {
     pub fn parse_request(&self) -> String
     {
-        println!("test");
         let mut i: usize = 0;
         let mut query: String = String::new();
         //This loop runs until the end of the list has been reached
@@ -39,7 +38,6 @@ impl JsonRequest
                     if next_result_set[k] != ""
                     {
                         foundnext = true;
-                        println!("test");
                         break;
                     }
                     k += 1;
@@ -82,7 +80,6 @@ impl JsonRequest
             }
         }
         query.push_str("'");
-        println!("{}", query);
         return query;
     }    
 }
@@ -251,7 +248,7 @@ impl IsValidRule for QueryParameter
 
 fn format_rule(param: &QueryParameter) -> String
 {
-    if param.rule == VALID_RULES[0].to_string() { return format!("{} == {}", param.category, param.filter) }
+    if param.rule == VALID_RULES[0].to_string() { return format!("{} = {}", param.category, param.filter) }
     else if param.rule == VALID_RULES[1].to_string() { return format!("{} != {}", param.category, param.filter) }
     else if param.rule == VALID_RULES[2].to_string() { return format!("{} < {}", param.category, param.filter) }
     else if param.rule == VALID_RULES[3].to_string() { return format!("{} > {}", param.category, param.filter) }

@@ -3,6 +3,7 @@ use json::stringify;
 use lib::jsonstructs::*;
 use lib::dbquery::DbClient;
 use rocket::{self, post, routes};
+use futures::executor::block_on;
 use serde_json;
 
 
@@ -12,24 +13,20 @@ fn get_using_post(query: String) -> String
 {
     println!("{}", query);
     let try_parse_json = serde_json::from_str(query.as_str());
-    println!("test");
     match try_parse_json
     {
         Ok(json_object) =>
         {
-            println!("test");
             //lib::dbquery::build_query(json_object);
             let mut response: String = String::new();
-            println!("test3");
-            response = DbClient::query_database(json_object);
-            println!("test2");
-            println!("{}", response);
+            response = block_on(DbClient::query_database(json_object));
+            //println!("{}", response);
             return response;
         },
         Err(_error) => 
         {
             let error_msg: String = "ERROR: Invalid request detected.".to_string();
-            println!("{}", error_msg);
+            //println!("{}", error_msg);
             return error_msg;
         },
     }

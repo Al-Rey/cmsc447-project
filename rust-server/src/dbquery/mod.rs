@@ -7,8 +7,8 @@ use crate::pokemonmodel::Pokemon;
 use crate::jsonstructs::JsonRequest;
 //use crate::jsonstructs::ParseRequ;
 use dotenv;
-use sqlx::postgres::{PgPoolOptions, PgRow, PgConnection};
-use sqlx::{FromRow, Row, Pool, Postgres};
+use sqlx::mysql::{MySqlPoolOptions, MySqlRow, MySqlConnection};
+use sqlx::{FromRow, Row, Pool, MySql};
 
 //Struct declarations
 
@@ -24,17 +24,17 @@ impl DbClient
         Self { }
     }
 
-    pub fn query_database(request: JsonRequest) -> String
+    pub async fn query_database(request: JsonRequest) -> String
     {
         let sql_query: String = build_query(request);
         println!("{}", sql_query);
         let mut results: Vec<Pokemon> = vec![];
-            async
-            {
-                let conn_str: &str = &DbClient::get_connection_string().await;
-                let pool = DbClient::get_connection(conn_str).await;
-                results = DbClient::send_query(pool, &sql_query).await;
-            };
+        let conn_str: &str = &DbClient::get_connection_string();
+        println!("test");
+        let pool = DbClient::get_connection(conn_str).await;
+        println!("\nconnected\n");
+        results = DbClient::send_query(pool, &sql_query).await;
+        println!("test");
         let mut parsed_results: String = String::new();
         let mut i: usize = 0;
         while i < results.len()
@@ -50,15 +50,15 @@ impl DbClient
         {
             parsed_results.push_str("]}");
         }
-        println!("{}", parsed_results);
+        //println!("{}", parsed_results);
         return parsed_results;
     }
 
-    async fn send_query(pool: Pool<Postgres>, sql_query: &str) -> Vec<Pokemon>
+    async fn send_query(pool: Pool<MySql>, sql_query: &str) -> Vec<Pokemon>
     {
         let rows = sqlx::query(sql_query);
         let results: Vec<Pokemon> = rows
-        .map(|row: PgRow| Pokemon
+        .map(|row: MySqlRow| Pokemon
         {
             index: row.get("id"),
             name: row.get("name"),
@@ -86,21 +86,21 @@ impl DbClient
         //return rows;
     }
 
-    pub async fn get_connection(conn_str: &str) -> Pool<Postgres>
+    pub async fn get_connection(conn_str: &str) -> Pool<MySql>
     {
-        return PgPoolOptions::new()
+        return MySqlPoolOptions::new()
             .max_connections(2)
             .connect(conn_str).await.unwrap();
     }
     
-    pub async fn get_connection_string() -> String
+    pub fn get_connection_string() -> String
     {
         dotenv::dotenv().ok();
         let user: &str = &std::env::var("DB_USER").unwrap();
         let password: &str = &std::env::var("DB_PASSWORD").unwrap();
         let host: &str = &std::env::var("DB_HOST").unwrap();
         let name: &str = &std::env::var("DB_NAME").unwrap();
-        let connection_string: String = format!{"postgres://{}:{}@{}:{}", user, password, host, name};
+        let connection_string: String = format!{"mysql://{}:{}@{}:3306/{}", user, password, host, name};
         println!("{}", connection_string);
         return connection_string;
     }
