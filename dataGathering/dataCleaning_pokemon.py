@@ -6,6 +6,7 @@ import json
 from sys import argv
 from cleaning_helpers import get_gen_number
 from cleaning_helpers import get_games
+from cleaning_helpers import get_games_gen_num
 from cleaning_helpers import query_api
 from cleaning_helpers import HIGHEST_GEN_NUM
 from cleaning_helpers import export_csv
@@ -27,12 +28,12 @@ def get_item_list(item_data, item_name, valid_items):
 
         if item_name == "move":
             info = get_move_tuple(item)
-            if info[1] != None:
+            if info[1] == None:
                 continue
         elif item_name == "ability":
             info = (name, item["is_hidden"])
         else:
-            print("item name is not ability or move")
+            # print("item name is not ability or move") # This statement is for DEBUG purposes
             return np.nan
             
         item_list.append(info)
@@ -45,10 +46,17 @@ def get_move_tuple(move_data):
     learn_list = move_data["version_group_details"]
 
     for index in range(len(learn_list)-1, -1, -1):
-        if learn_list[index]["version_group"]["name"] in get_games():
+        gen = get_games_gen_num(learn_list[index]["version_group"]["name"])
+        if gen <= HIGHEST_GEN_NUM and gen >= 1:
             learn = learn_list[index]["level_learned_at"]
             if learn == 0:
                 learn = learn_list[index]["move_learn_method"]["name"]
+                if learn in ["machine", "tutor", "egg", "level-up"]:
+                    break
+                else:
+                    learn = None
+                    continue
+            if learn != None:
                 break
 
     return (name, learn)
@@ -68,8 +76,9 @@ def get_evo_tuple(data, stage):
         # get evolution trigger
         details_len = len(data["evolution_details"])
         if details_len >=1:
-            if details_len != 1:
-                print(cur_name, "has more than one item in evolution details")
+            # The following if-statment is made for DEBUG purposes
+            # if details_len != 1:
+                # print(cur_name, "has more than one item in evolution details")
             
             trigger = []
             
@@ -156,14 +165,14 @@ def get_pokmeon_data(export_data = False):
         # get species data
         species_query = requests.get(SPECIES_URL_BASE + name)
         if species_query.status_code == 404:
-            print(name, "does not have a species page")
+            # print(name, "does not have a species page") # Print statement for DEBUG purposes
             continue
         species_data = json.loads(species_query.text)
         gen = species_data["generation"]["name"]
         gen = get_gen_number(gen)
 
         # if the pokemon is not in the generations we are looking at, ignore it
-        if gen > HIGHEST_GEN_NUM:
+        if gen > HIGHEST_GEN_NUM or gen < 1:
             break
 
         # put the name and generation in the dataframe
