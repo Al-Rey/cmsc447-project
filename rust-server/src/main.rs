@@ -17,17 +17,11 @@ fn get_using_post(query: String) -> String
     {
         Ok(json_object) =>
         {
-            //lib::dbquery::build_query(json_object);
-            let mut response: String = String::new();
-            response = block_on(DbClient::query_database(json_object));
-            //println!("{}", response);
-            return response;
+            return block_on(DbClient::query_database(json_object));
         },
         Err(_error) => 
         {
-            let error_msg: String = "ERROR: Invalid request detected.".to_string();
-            //println!("{}", error_msg);
-            return error_msg;
+            return "ERROR: Invalid request detected.".to_string();
         },
     }
 }

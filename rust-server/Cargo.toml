@@ -27,5 +27,5 @@ serde = { version = "1.0.147", features = ["derive",] }
 serde_json = "1.0.67"
 json = "0.12.4"
 dotenv = { version = "0.15.0" }
-sqlx = { version = "0.5", features = [ "runtime-tokio-rustls", "mysql" ] }
+sqlx = { version = "0.5", features = [ "runtime-async-std-rustls", "mysql" ] }
 futures = "0.3"

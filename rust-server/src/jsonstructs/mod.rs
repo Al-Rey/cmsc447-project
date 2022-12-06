@@ -50,7 +50,7 @@ impl JsonRequest
                     }
                     else
                     {
-                        query.push_str("'SELECT * FROM pokemon WHERE ");                        
+                        query.push_str("SELECT * FROM pokemon WHERE ");                        
                     }
                     break;
                 }
@@ -79,7 +79,7 @@ impl JsonRequest
                 i += 1;
             }
         }
-        query.push_str("'");
+        //query.push_str("'");
         return query;
     }    
 }
@@ -248,11 +248,19 @@ impl IsValidRule for QueryParameter
 
 fn format_rule(param: &QueryParameter) -> String
 {
-    if param.rule == VALID_RULES[0].to_string() { return format!("{} = {}", param.category, param.filter) }
-    else if param.rule == VALID_RULES[1].to_string() { return format!("{} != {}", param.category, param.filter) }
-    else if param.rule == VALID_RULES[2].to_string() { return format!("{} < {}", param.category, param.filter) }
-    else if param.rule == VALID_RULES[3].to_string() { return format!("{} > {}", param.category, param.filter) }
-    else if param.rule == VALID_RULES[4].to_string() { return format!("{} <= {}", param.category, param.filter) }
-    else if param.rule == VALID_RULES[5].to_string() { return format!("{} >= {}", param.category, param.filter) }
+    if param.is_string_category()
+    {
+        if param.rule == VALID_RULES[0].to_string() { return format!("{} = '{}'", param.category, param.filter) }
+        else if param.rule == VALID_RULES[1].to_string() { return format!("{} != '{}'", param.category, param.filter) }
+    }
+    else
+    {
+        if param.rule == VALID_RULES[0].to_string() { return format!("{} = {}", param.category, param.filter) }
+        else if param.rule == VALID_RULES[1].to_string() { return format!("{} != {}", param.category, param.filter) }
+        else if param.rule == VALID_RULES[2].to_string() { return format!("{} < {}", param.category, param.filter) }
+        else if param.rule == VALID_RULES[3].to_string() { return format!("{} > {}", param.category, param.filter) }
+        else if param.rule == VALID_RULES[4].to_string() { return format!("{} <= {}", param.category, param.filter) }
+        else if param.rule == VALID_RULES[5].to_string() { return format!("{} >= {}", param.category, param.filter) }
+    }
     return "".to_string();
 }

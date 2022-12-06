@@ -13,23 +13,48 @@ pub struct Post {
 #[derive(Serialize, Deserialize, Clone, FromRow, Debug)]
 pub struct Pokemon
 {
-    pub index: u32,
-    pub name: String,
-    pub pokedex_id: u32,
-    pub attack: u32,
-    pub special_attack: u32,
-    pub defense: u32,
-    pub special_defense: u32,
-    pub speed: u32,
-    pub hp: u32,
+    //pub index: u32,
+    pub pokemon_name: String,
+    pub pokedex_id: i32,
+    pub attack: i32,
+    pub special_attack: i32,
+    pub defense: i32,
+    pub special_defense: i32,
+    pub speed: i32,
+    pub hp: i32,
     pub type1: String,
     pub type2: String,
     pub list_of_moves: String,
     pub ability_name: String,
-    pub height: u32,
-    pub weight: u32,
-    pub generation: u32
+    pub height: i32,
+    pub weight: i32,
+    pub generation: i32
 }
+
+impl Pokemon
+{
+    pub fn jsonify(&self) -> String
+    {
+        let mut jsonString: String = String::from("{ ");
+        jsonString.push_str(&format!("'pokemon_name': '{}', ", self.pokemon_name));
+        jsonString.push_str(&format!("'pokedex_id': {}, ", self.pokedex_id));
+        jsonString.push_str(&format!("'attack': {}, ", self.attack));
+        jsonString.push_str(&format!("'special_attack': {}, ", self.special_attack));
+        jsonString.push_str(&format!("'defense': {}, ", self.defense));
+        jsonString.push_str(&format!("'special_defense': {}, ", self.special_defense));
+        jsonString.push_str(&format!("'speed': {}, ", self.speed));
+        jsonString.push_str(&format!("'hp': {}, ", self.hp));
+        jsonString.push_str(&format!("'type1': '{}', ", self.type1));
+        jsonString.push_str(&format!("'type2': '{}', ", self.type2));
+        jsonString.push_str(&format!("'move_list': '{}', ", self.list_of_moves));
+        jsonString.push_str(&format!("'ability_name': '{}', ", self.ability_name));
+        jsonString.push_str(&format!("'height': {}, ", self.height));
+        jsonString.push_str(&format!("'weight': {}, ", self.weight));
+        jsonString.push_str(&format!("'generation': {}]", self.generation));
+        return jsonString;
+    }
+}
+
 
 //Trait Declarations
 
@@ -42,8 +67,8 @@ impl AreEqual for Pokemon
 {
     fn are_equal(&self, check_against: Pokemon) -> bool
     {
-        if self.index != check_against.index { return false; }
-        else if self.name != check_against.name { return false; }
+        //if self.index != check_against.index { return false; }
+        if self.pokemon_name != check_against.pokemon_name { return false; }
         else if self.pokedex_id != check_against.pokedex_id { return false; }
         else if self.attack != check_against.attack { return false; }
         else if self.special_attack != check_against.special_attack { return false; }
