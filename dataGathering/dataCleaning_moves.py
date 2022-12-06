@@ -118,7 +118,29 @@ def get_move_data(export_data = False):
         index = get_index("generation", frame_columns)
         temp[index] = gen
 
-        # TODO: get if the move is learned by a machine
+        # Get if the move is learned by a machine
+        machine_data_list = move_query["machines"]
+        num_entries = len(machine_data_list)
+        index = get_index("machines", frame_columns)
+        
+        # if there are entires for machine information, then get that data
+        if num_entries != 0:
+            # loop backwards in the list of machine data until you get the latest game that is still
+            # in our scope
+            for item in range(num_entries-1, -1, -1):
+
+                # get the generation for the current machine entry
+                mach_gen = machine_data_list[item]["version_group"]["name"]
+                mach_gen = get_games_gen_num(mach_gen)
+
+                # check if the generation is within the range we are looking at
+                if mach_gen <= 5:
+                    machine = query_api(machine_data_list[item]["machine"]["url"], "item")
+                    machine_name = machine["name"]
+                    temp[index] = machine_name
+                    break
+        else: # if the move cannot be learned with a machine, then make that Unavailable
+            temp[index] = DATA_UNAVAILABLE
 
         # get the crit rate of the move
         if move_query["meta"] == None:
