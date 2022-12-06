@@ -27,6 +27,8 @@ def get_item_list(item_data, item_name, valid_items):
 
         if item_name == "move":
             info = get_move_tuple(item)
+            if info[1] != None:
+                continue
         elif item_name == "ability":
             info = (name, item["is_hidden"])
         else:
@@ -39,7 +41,7 @@ def get_item_list(item_data, item_name, valid_items):
 
 def get_move_tuple(move_data):
     name = move_data["move"]["name"]
-    learn = -1
+    learn = None
     learn_list = move_data["version_group_details"]
 
     for index in range(len(learn_list)-1, -1, -1):
