@@ -236,7 +236,6 @@ class PokemonTests(TestBase):
     def TESTING_check_entries(self):
         return True
 
-
     def run_tests(self):
         results = True
         results = results and self.TESTING_no_nans(self.pokemon_df)
