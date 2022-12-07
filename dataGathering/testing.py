@@ -83,6 +83,7 @@ class TestBase:
 # This class is used for testing the move data cleaning script
 class MoveTests(TestBase):
     def __init__(self):
+        print("Making Dataframe...")
         self.moves_df = move.get_move_data()
         super().__init__()
 
@@ -105,15 +106,53 @@ class MoveTests(TestBase):
         print(test_name, ": Passed!")
         return True
 
+    def check_entry(self, sample_entry):
+        name = sample_entry["name"]
+        found = self.moves_df.loc[self.moves_df["name"] == name]
+        print(found.head())
+        if len(found) != 1:
+            print("There wasn't only one entry for", name)
+            return False
+
+        for key in sample_entry.keys():
+            item = ""
+            if key == "effect_chance" or key == "game_desc":
+                # print("We got\t: ", found[key].iloc[0])
+                temp = found[key].iloc[0].replace("\n", " ")
+                temp2 = temp.replace("  ", " ")
+                # item = temp2.replace("\n", " ")
+                item = temp2
+                # print("We got\t: ", item)
+            else:
+                item = found[key].iloc[0]
+            
+            if item != sample_entry[key]:
+                print("The", key, "does not match!")
+                print("We got\t: ", item)
+                print("We expected\t: ", sample_entry[key])
+                return False
+        
+        return True
+    
+
     # TODO grab select entires and check all their values with what is stored
     # manually
     def TESTING_check_entries(self):
         test_name1 = "Testing for the whirlpool entry"
         test_name2 = "Testing for the tackle entry"
         test_name3 = "Testing for the Dragon dance enrty"
-
+        passed = False
+        
+        # check the infomration for move 1
+        if not self.check_entry(MOVE_1):
+            print("Failed!", test_name1)
+            return False
+        else:
+            print("Passed!", test_name1)
+            return True
 
     def run_tests(self):
+        print("Running Test...")
         result = True
         result = result and self.TESTING_no_nans(self.moves_df)
         result = result and self.TESTING_moves_valid_class()
@@ -123,12 +162,14 @@ class MoveTests(TestBase):
         result = result and self.TESTING_no_neg(self.moves_df[["name", "crit_rate"]], "crit_rate")
         result = result and self.TESTING_no_neg(self.moves_df[["name", "power"]], "power")
         result = result and self.TESTING_no_neg(self.moves_df[["name", "pp"]], "pp")
+        result = result and self.TESTING_check_entries()
 
         return result
 
 # This class is used for testing the nature data cleaning script
 class NatureTests(TestBase):
     def __init__(self):
+        print("Making Dataframe...")
         self.nature_df = nature.get_nature_data()
         super().__init__()
 
@@ -225,6 +266,7 @@ class NatureTests(TestBase):
             return False
 
     def run_tests(self):
+        print("Running Tests...")
         result = True
         result = result and self.TESTING_no_nans(self.nature_df)
         result = result and self.TESTING_check_pairs()
@@ -237,6 +279,7 @@ class NatureTests(TestBase):
 # This class is used for testing the ability data cleaning script
 class AbilityTests(TestBase):
     def __init__(self):
+        print("Making Dataframe...")
         self.ability_df = ability.get_ability_data()
         super().__init__()
 
@@ -295,6 +338,7 @@ class AbilityTests(TestBase):
             return False
     
     def run_tests(self):
+        print("Running Tests...")
         results = True
         results = results and self.TESTING_no_nans(self.ability_df)
         results = results and self.TESTING_valid_generation(self.ability_df)
@@ -375,14 +419,14 @@ class PokemonTests(TestBase):
         return results
 
 if __name__ == "__main__":
-    # print("Running Move data validation tests...")
-    # print(MoveTests(), end="\n\n")
+    print("Running Move data validation tests...")
+    print(MoveTests(), end="\n\n")
 
-    print("Running Nature data validation tests...")
-    print(NatureTests(), end="\n\n")
+    # print("Running Nature data validation tests...")
+    # print(NatureTests(), end="\n\n")
 
-    print("Running Ability data validation tests...")
-    print(AbilityTests(), end="\n\n")
+    # print("Running Ability data validation tests...")
+    # print(AbilityTests(), end="\n\n")
 
     # print("Running Pokemon data validation tests...")
     # print(PokemonTests(), end="\n\n")

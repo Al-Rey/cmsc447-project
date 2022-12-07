@@ -18,15 +18,15 @@ MOVE_1 = {
     "name": "whirlpool",
     "accuracy": 85,
     "class": "special",
-    "game_desc": "Traps foes in a violent swirling whirlpool for four to five turns.",
+    "game_desc": "The user traps the target in a violent swirling whirlpool for four to five turns.",
     "effect_chance": "Inflicts regular damage. For the next 2–5 turns, the target cannot leave the field and is damaged for 1/16 its max HP at the end of each turn. The user continues to use other moves during this time. If the user leaves the field, this effect ends. Has a 3/8 chance each to hit 2 or 3 times, and a 1/8 chance each to hit 4 or 5 times. Averages to 3 hits per use. If the target is in the first turn of dive, this move will hit with double power.", 
     "generation": 2, 
-    "machines": "tm04",
+    "machines": "hm05",
     "crit_rate": 0, 
     "type": "water", 
     "power": 35, 
     "pp": 15, 
-    "priority ": 0
+    "priority": 0
 }
 
 MOVE_2 = {

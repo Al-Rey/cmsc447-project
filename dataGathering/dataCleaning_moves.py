@@ -127,7 +127,7 @@ def get_move_data(export_data = False):
         if num_entries != 0:
             # loop backwards in the list of machine data until you get the latest game that is still
             # in our scope
-            for item in range(num_entries-1, -1, -1):
+            for item in range(num_entries):
 
                 # get the generation for the current machine entry
                 mach_gen = machine_data_list[item]["version_group"]["name"]
