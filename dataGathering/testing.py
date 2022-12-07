@@ -10,6 +10,11 @@ from testing_samples import MOVE_LEARN_METHODS
 
 from cleaning_helpers import HIGHEST_GEN_NUM, DATA_UNAVAILABLE
 
+from testing_samples import NATURE_HARDY, NATURE_LONELY
+from testing_samples import ABILITY_1, ABILITY_2
+from testing_samples import MOVE_1, MOVE_2, MOVE_3
+from testing_samples import POKEMON_1, POKEMON_2, POKEMON_3_EVO, POKEMON_4_EVO
+
 # the Base testing class. This class contains tests that are used for more
 # than one of the scripts
 class TestBase:
@@ -103,7 +108,10 @@ class MoveTests(TestBase):
     # TODO grab select entires and check all their values with what is stored
     # manually
     def TESTING_check_entries(self):
-        return True
+        test_name1 = "Testing for the whirlpool entry"
+        test_name2 = "Testing for the tackle entry"
+        test_name3 = "Testing for the Dragon dance enrty"
+
 
     def run_tests(self):
         result = True
@@ -179,12 +187,50 @@ class NatureTests(TestBase):
         print(test_name, ": Passed!")
         return True
 
+    def TESTING_check_entries(self):
+        test_name1 = "Testing values for Hardy nature"
+        test_name2 = "Testing values for Lonely nature"
+        
+        passed = False
+        found = self.nature_df.loc[self.nature_df["name"] == "hardy"]
+        
+
+        if len(found) == 1:
+            if found.loc[0, "name"] == NATURE_HARDY["name"]:
+                if found.loc[0, "decreased_stat"] == NATURE_HARDY["decreased_stat"] and found.loc[0, "increased_stat"] == NATURE_HARDY["increased_stat"]:
+                    passed = True
+
+        if passed:
+            print("Passed!", test_name1)
+            passed = False
+        else:
+            print("Failed!", test_name1)
+            print(found.head())
+            return False
+
+
+        found = self.nature_df.loc[self.nature_df["name"] == "lonely"]
+        # print(found.head())
+        if len(found) == 1:
+            if found["name"].iloc[0] == NATURE_LONELY["name"]:
+                if found["decreased_stat"].iloc[0] == NATURE_LONELY["decreased_stat"] and found["increased_stat"].iloc[0] == NATURE_LONELY["increased_stat"]:
+                    passed = True
+
+
+        if passed:
+            print("Passed!", test_name2)
+            return True
+        else:
+            print("Failed!", test_name2)
+            return False
+
     def run_tests(self):
         result = True
         result = result and self.TESTING_no_nans(self.nature_df)
         result = result and self.TESTING_check_pairs()
         result = result and self.TESTING_valid_stat()
         result = result and self.TESTING_no_stat_change()
+        result = result and self.TESTING_check_entries()
         
         return result
 
@@ -199,11 +245,60 @@ class AbilityTests(TestBase):
             return "All Ability Tests Passed!"
         else:
             return "One or More Ability Tests have Failed!"
+
+    def TESTING_check_entries(self):
+        test_name1 = "Testing values for battle armor nature"
+        test_name2 = "Testing values for flass fire nature"
+        
+        passed = False
+        found = self.ability_df.loc[self.ability_df["name"] == "battle-armor"]
+        
+
+        if len(found) == 1:
+            if found["name"].iloc[0] == ABILITY_1["name"]:
+                if found["generation"].iloc[0] == ABILITY_1["generation"]:
+                    passed = True
+                else:
+                    print("the generations don't match")
+            else:
+                print("the names do not match")
+        else:
+            print("There wasn't only one entry")
+
+        if passed:
+            print("Passed!", test_name1)
+            passed = False
+        else:
+            print("Failed!", test_name1)
+            print(found.head())
+            return False
+
+
+        found = self.ability_df.loc[self.ability_df["name"] == "flash-fire"]
+        # print(found.head())
+        if len(found) == 1:
+            if found["name"].iloc[0] == ABILITY_2["name"]:
+                if found["generation"].iloc[0] == ABILITY_2["generation"]:
+                    passed = True
+                else:
+                    print("the generations don't match")
+            else:
+                print("the names do not match")
+        else:
+            print("There wasn't only one entry")
+
+        if passed:
+            print("Passed!", test_name2)
+            return True
+        else:
+            print("Failed!", test_name2)
+            return False
     
     def run_tests(self):
         results = True
         results = results and self.TESTING_no_nans(self.ability_df)
         results = results and self.TESTING_valid_generation(self.ability_df)
+        results = results and self.TESTING_check_entries()
 
         return results
 
@@ -283,11 +378,11 @@ if __name__ == "__main__":
     # print("Running Move data validation tests...")
     # print(MoveTests(), end="\n\n")
 
-    # print("Running Nature data validation tests...")
-    # print(NatureTests(), end="\n\n")
+    print("Running Nature data validation tests...")
+    print(NatureTests(), end="\n\n")
 
-    # print("Running Ability data validation tests...")
-    # print(AbilityTests(), end="\n\n")
+    print("Running Ability data validation tests...")
+    print(AbilityTests(), end="\n\n")
 
-    print("Running Pokemon data validation tests...")
-    print(PokemonTests(), end="\n\n")
+    # print("Running Pokemon data validation tests...")
+    # print(PokemonTests(), end="\n\n")

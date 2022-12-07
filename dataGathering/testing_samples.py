@@ -2,8 +2,8 @@ from cleaning_helpers import DATA_UNAVAILABLE
 
 # nature sample that changes no stats
 NATURE_HARDY = {
-    "decreased_stat": None,
-    "increased_stat": None,
+    "decreased_stat": DATA_UNAVAILABLE,
+    "increased_stat": DATA_UNAVAILABLE,
     "name": "hardy"
 }
 
@@ -63,15 +63,11 @@ MOVE_3 = {
 ABILITY_1 = {
     "name": "battle-armor",
     "generation": 3,
-    "effects": "Moves cannot score critical hits against this Pokémon. This ability functions identically to shell armor.",
-    "description": "The Pokémon is protected against critical hits."
 }
 
 ABILITY_2 = {
     "name": "flash-fire",
     "generation": 3,
-    "effects": "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5× as much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.",
-    "description": "It powers up Fire-type moves if it’s hit by one."
 }
 
 POKEMON_1 = {
