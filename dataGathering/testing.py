@@ -19,26 +19,49 @@ from testing_samples import POKEMON_1, POKEMON_2, POKEMON_3_EVO, POKEMON_4_EVO
 # than one of the scripts
 class TestBase:
     def TESTING_no_nans(self, df):
+        """
+        This function checks all the values in the dataframe to ensure that
+        there are no None/NaN values in the dataframe. IF there are None/NaN
+        values detected, then the test fails and the fail message is printed
+        along with the count of None/NaN values in each column.
+        
+        Params:
+            - df - the datafarme that we wanna check
+        
+        Return: True if there are no NaN/None values, false otherwise
+        """
         test_name = "Testing no NaN values"
         if df.isna().sum().sum() > 0:
-            print(test_name, ": Failed")
+            print("Failed!", test_name)
             print(df.isna().sum())
             return False
         else:
-            print(test_name, ": Passed!")
+            print("Passed!", test_name)
             return True
 
     def TESTING_valid_generation(self, df):
+        """
+        This funciton checks the `generation` column in the dataframe and
+        checks that the generation number is between 1 and the highest
+        pokemon generation we are considering. If it isn't the fail message
+        is printed along with the name of the pokemon that has the
+        invalid generation number.
+        
+        Params:
+            - df - the datafarme that we wanna check
+        
+        Return: True if there are no invalid generation numbers, false otherwise
+        """
         test_name = "Testing valid gereration"
 
         for index, row in df.iterrows():
             gen = row["generation"]
             if gen > HIGHEST_GEN_NUM or gen <= 0:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has generation", gen)
                 return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
     def TESTING_no_neg(self, df, col_name):
@@ -47,11 +70,11 @@ class TestBase:
         for index, row in df.iterrows():
             val = df.iloc[index, 1]
             if val != "NA" and val < 0:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has", col_name, val)
                 return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
     def TESTING_no_zero(self, df, col_name):
@@ -60,11 +83,11 @@ class TestBase:
         for index, row in df.iterrows():
             val = df.iloc[index, 1]
             if val != "NA" and val <= 0:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has", col_name, val)
                 return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
     def TESTING_valid_type(self, df, col_name):
@@ -73,11 +96,11 @@ class TestBase:
         for index, row in df.iterrows():
             type = row[col_name]
             if type not in TYPES:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has type", type)
                 return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
 # This class is used for testing the move data cleaning script
@@ -99,17 +122,17 @@ class MoveTests(TestBase):
         for index, row in self.moves_df.iterrows():
             class_text = row["class"]
             if class_text not in DAMAGE_CLASSES:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has class", class_text)
                 return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
     def check_entry(self, sample_entry):
         name = sample_entry["name"]
         found = self.moves_df.loc[self.moves_df["name"] == name]
-        # print(found.head())
+        
         if len(found) != 1:
             print("There wasn't only one entry for", name)
             return False
@@ -183,6 +206,7 @@ class MoveTests(TestBase):
 # This class is used for testing the nature data cleaning script
 class NatureTests(TestBase):
     def __init__(self):
+        # create the dataframe using the main celaning function
         print("Making Dataframe...")
         self.nature_df = nature.get_nature_data()
         super().__init__()
@@ -194,7 +218,7 @@ class NatureTests(TestBase):
             return "One or More Nature Tests have Failed!"
     
     def TESTING_check_pairs(self):
-        test_name = "Testing to make sure if the increased_stat column is populated the decreased_stat column is also populated"
+        test_name = "Testing to check that an increased_stat has a matching decreased_stat"
         for index, row in self.nature_df.iterrows():
             inc = row["increased_stat"]
             dec = row["decreased_stat"]
@@ -221,11 +245,11 @@ class NatureTests(TestBase):
                 continue
 
             if row["increased_stat"] not in STAT_NAMES or row["decreased_stat"] not in STAT_NAMES:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has a stat increase but no decrease")
                 return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
     def TESTING_no_stat_change(self):
@@ -235,11 +259,11 @@ class NatureTests(TestBase):
             if row["increased_stat"] == DATA_UNAVAILABLE and row["decreased_stat"] == DATA_UNAVAILABLE:
                 # ignore the natures that aren't supposed to have stat changes
                 if row["name"] not in NO_EFFECT_NATURES:
-                    print(test_name, ": Failed!")
+                    print("Failed!", test_name)
                     print(row["name"], "should have stat changes")
                     return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
     def TESTING_check_entries(self):
@@ -305,7 +329,7 @@ class AbilityTests(TestBase):
 
     def TESTING_check_entries(self):
         test_name1 = "Testing values for battle armor nature"
-        test_name2 = "Testing values for flass fire nature"
+        test_name2 = "Testing values for flash fire nature"
         
         passed = False
         found = self.ability_df.loc[self.ability_df["name"] == "battle-armor"]
@@ -378,11 +402,11 @@ class PokemonTests(TestBase):
             num_moves = len(row["list_of_moves"])
             
             if num_moves <= 0:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "does not have any moves")
                 return False
             else:
-                print(test_name, ": Passed!")
+                print("Passed!", test_name)
                 return True
 
     def TESTING_pokemon_move_learn(self):
