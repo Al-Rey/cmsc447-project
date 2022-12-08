@@ -127,6 +127,7 @@ def get_move_data(export_data = False):
         if num_entries != 0:
             # loop backwards in the list of machine data until you get the latest game that is still
             # in our scope
+            machine_name = None
             for item in range(num_entries):
 
                 # get the generation for the current machine entry
@@ -134,11 +135,14 @@ def get_move_data(export_data = False):
                 mach_gen = get_games_gen_num(mach_gen)
 
                 # check if the generation is within the range we are looking at
-                if mach_gen <= 5:
+                if mach_gen <= 5 and mach_gen >= 1:
                     machine = query_api(machine_data_list[item]["machine"]["url"], "item")
                     machine_name = machine["name"]
                     temp[index] = machine_name
                     break
+
+            if machine_name == None:
+                temp[index] = DATA_UNAVAILABLE
         else: # if the move cannot be learned with a machine, then make that Unavailable
             temp[index] = DATA_UNAVAILABLE
 

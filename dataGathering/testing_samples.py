@@ -48,7 +48,7 @@ MOVE_3 = {
     "name": "dragon-dance",
     "accuracy": DATA_UNAVAILABLE,
     "class": "status",
-    "game_desc": "The user vigorously performs a mystic, powerful dance that boosts its Attack and Speed stats.",
+    "game_desc": "The user vigorously performs a mystic, powerful dance that raises its Attack and Speed stats.",
     "effect_chance": "Raises the user's Attack and Speed by one stage each.", 
     "generation": 3, 
     "machines": DATA_UNAVAILABLE,

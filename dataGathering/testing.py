@@ -109,7 +109,7 @@ class MoveTests(TestBase):
     def check_entry(self, sample_entry):
         name = sample_entry["name"]
         found = self.moves_df.loc[self.moves_df["name"] == name]
-        print(found.head())
+        # print(found.head())
         if len(found) != 1:
             print("There wasn't only one entry for", name)
             return False
@@ -149,6 +149,20 @@ class MoveTests(TestBase):
             return False
         else:
             print("Passed!", test_name1)
+            # return True
+
+        if not self.check_entry(MOVE_2):
+            print("Failed!", test_name2)
+            return False
+        else:
+            print("Passed!", test_name2)
+            # return True
+
+        if not self.check_entry(MOVE_3):
+            print("Failed!", test_name3)
+            return False
+        else:
+            print("Passed!", test_name3)
             return True
 
     def run_tests(self):
