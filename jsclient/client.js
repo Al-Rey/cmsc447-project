@@ -4,6 +4,8 @@ const { Socket } = require('dgram');
 const { message } = require('prompt');
 const { send } = require('process');
 const { format } = require('path');
+const streamToString = require('stream-to-string');
+const { PassThrough } = require('stream');
 //import net from "net";
 
 const HOST = 'localhost';
@@ -149,155 +151,6 @@ class AndParameters
         //console.log("After checking for contradicting query parameters no valid queries were found");
         return "";
     }
-
-    checkForContradictions()
-    {
-        let filteredParams = [];
-        let filtered = true;
-        for (let outer = 0; outer < this.params.length; outer += 1)
-        {
-            while (!this.params[outer].isValidIntRule())
-            {
-                filtered = false;
-                outer += 1;
-                if (outer >= this.params.length)
-                {
-                    this.params = filteredParams;
-                    return filtered;
-                }
-            }
-            let outerParam = this.params[outer];
-            for (let inner = outer + 1; inner < this.params.length; inner += 1)
-            {
-                while (this.params[inner].category != outerParam.category)
-                {
-                    inner += 1;
-                    if (inner >= this.params.length)
-                    {
-                        filteredParams.push(outerParam);
-                        break;
-                    }
-                }
-                if (inner >= this.params.length)
-                {
-                    break;
-                }
-                let innerParam = this.params[inner];
-                if (innerParam.isValidIntRule())
-                {
-                    if ((innerParam.rule == "eq" && outerParam.rule == "neq") || (outerParam.rule == "eq" && innerParam.rule == "neq"))
-                    {
-                        if (innerParam.filter == outerParam.filter)
-                        {
-                            console.log("invalid input detected: shroedinger condition: i.e. ( x=y && x != y)");
-                            this.params = [];
-                            return false;
-                        }
-                    }
-                    //avoid adding duplicate rules.
-                    else if (innerParam.rule == outerParam.rule && innerParam.filter == outerParam.filter)
-                    {
-                        break;
-                    }
-                    else if (outerParam.isIntCategory())
-                    {
-                        if (outerParam.rule == "lt" && innerParam.rule == "gt" && innerParam.filter >= outerParam.filter)
-                        {
-                            console.log("invalid input detected: min greater than max: i.e. ( x < 1 && y > 1 && y <= x)");
-                            this.params = [];
-                            return false;
-                        }
-                        else if (outerParam.rule == "gt" && innerParam.rule == "lt" && innerParam.filter <= outerParam.filter)
-                        {
-                            console.log("invalid input detected: min greater than max: i.e. ( x < 1 && y > 1 && y <= x)");
-                            this.params = [];
-                            return false;
-                        }
-                        else if (outerParam.rule == ("gte"||"eq") && innerParam.rule == ("lte" || "lt") && innerParam.filter < outerParam.filter)
-                        {
-                            this.params = [];
-                            return false;
-                        }
-                        else if (outerParam.rule == ("lte" || "eq") && innerParam.rule == ("gte" || "gt") && innerParam.filter < outerParam.filter)
-                        {
-                            this.params = [];
-                            return false;
-                        }
-                        else if (outerParam.rule == "lte" && innerParam.rule == "neq" && outerParam.filter == innerParam.filter)
-                        {
-                            filtered = false;
-                            innerParam.rule = "lt";
-                            break;
-                        }
-                        else if (outerParam.rule == "gte" && innerParam.rule == "neq" && outerParam.filter == innerParam.filter)
-                        {
-                            filtered = false;
-                            innerParam.rule = "gt";
-                            break;
-                        }
-                        else if (outerParam.rule == ("lte" || "gte") && innerParam.rule == "eq" && outerParam.filter == innerParam.filter)
-                        {
-                            filtered = false;
-                            break;
-                        }
-                        else if (outerParam.rule == "eq" && innerParam.rule == ("lte" || "gte") && outerParam.filter == innerParam.filter)
-                        {
-                            filtered = false;
-                            innerParam.rule = "eq";
-                            break;
-                        }
-                        else if (outerParam.rule == "neq" && innerParam.rule == "lte" && outerParam.filter == innerParam.filter)
-                        {
-                            filtered = false;
-                            innerParam.rule = "lt";
-                            break;
-                        }
-                        else if (outerParam.rule == "neq" && innerParam.rule == "gte" && outerParam.filter == innerParam.filter)
-                        {
-                            filtered = false;
-                            innerParam.rule = "gt";
-                            break;
-                        }
-                        else if (outerParam.rule == "gte" && innerParam.rule == "lte" && innerParam.filter == outerParam.filter)
-                        {
-                            filtered = false;
-                            innerParam.filter = "eq";
-                            break;
-                        }
-                        else if (outerParam.rule == "lte" && innerParam.rule == "gte" && innerParam.filter == outerParam.filter)
-                        {
-                            filtered = false;
-                            innerParam.filter = "eq";
-                            break;
-                        }
-                        else if (outerParam.rule == "gt" && innerParam.rule == "lte" && innerParam.filter == outerParam.filter + 1)
-                        {
-                            filtered = false;
-                            innerParam.rule = "eq";
-                            break;
-                        }
-                        else if (outerParam.rule == "lt" && innerParam.rule == "gte" && innerParam.filter == outerParam.filter - 1)
-                        {
-                            filtered = false;
-                            innerParam.rule = "eq";
-                            break;
-                        }
-                        else
-                        {
-                            filteredParams.push(outerParam);
-                        }
-                    }
-                    else
-                    {
-                        filteredParams.push(outerParam);
-                    }
-                }
-            }
-            //filteredParams.push(outerParam);
-        }
-        this.params = filteredParams;
-        return filtered;
-    }
 }
 
 class JsonRequest
@@ -308,7 +161,7 @@ class JsonRequest
         this.query = rules;
     }
 
-    async composeRequest()
+    composeRequest()
     {
         //console.log(JSON.stringify(this));
         //console.log();
@@ -341,32 +194,21 @@ class JsonRequest
 
 
 async function sendRequest(requestBody)
-{
+{ 
     let url = "http://" + HOST + ":" + PORT + "/" + PROTOCOL;
-    await fetch(url, {
-    method: 'POST',
-    headers:
-    {
-        'Accept': '*/*',
-        'Content-Type': '*/*'
-    },
-    body: requestBody
-    })
-    .then(function(response)
-    {
-        return response.text();
-    })
-    .then(function(data)
-    {
-        console.log(data); // this will be a string
-        return JSON.parse(data);
-    });
+    let request = {method: 'POST', headers: {'Accept': '*/*', 'Content-Type': '*/*'}, body: requestBody};
+    let result = fetch(url, request)
+        .then((response) => { return response.json();});
+        //.then(function(data) {return data;});
+    return await result;
+    //console.log(results);
+    //return await results.json(); //results.then( function(result) { return resolve(result); });
 }
 
-async function sendRequestSilent(requestBody)
+function sendRequestSilent(requestBody)
 {
     let url = "http://" + HOST + ":" + PORT + "/" + PROTOCOL;
-    await fetch(url, {
+    fetch(url, {
     method: 'POST',
     headers:
     {
@@ -374,27 +216,36 @@ async function sendRequestSilent(requestBody)
         'Content-Type': '*/*'
     },
     body: requestBody
-    })
-    .then(function(response)
-    {
-        return response.text();
-    })
-    .then(function(data)
-    {
+    }).then((response) => response.json())
+    .then(data => {
         return data;
     });
 }
 
+function storeResponse(httpResponse)
+{
+    return httpResponse;
+}
+
 async function makeApiCall(request)
 {
-    let body = await request.composeRequest();
-    if (body != "")
+    let requestBody = request.composeRequest();
+    //console.log(body);
+    if (requestBody != "")
     {
-        return sendRequest(body);
+        let results = await sendRequest(requestBody);
+        //console.log(results);
+        RESPONSE = results;
+        //const response = responsePromise.then((result) => storeResponse());
+        //return JSON.stringify(sendRequest(body).Results);
+        /*.then(function(data) { 
+            return JSON.parse(JSON.stringify(data)).Results; });*/
+        //console.log(response);//.then((test) => { console.log(test)});
+        //return response;
     }
     else
     {
-        return "ERROR: Invalid request detected by client side input validation, please try again.";
+        console.log("ERROR: Invalid request detected by client side input validation, please try again.");
     }
 }
 
@@ -479,6 +330,26 @@ let andBlock1 = new AndParameters([rule1, rule4]);
 let request = new JsonRequest(10, [andBlock1]);
 //Do not change the lines below, they are what calls to the API.
 //multiclientTest(request);
-let data = makeApiCall(request);
-//console.log(data);
+var RESPONSE = makeApiCall(request);
+//console.log(typeof RESPONSE);
+/*.then((data) =>
+{
+    console.log(data);
+    return data;
+}).then((r) => 
+{
+    dataGoesHere = r;
+    console.log(dataGoesHere);
+});*/
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+while (typeof RESPONSE == 'undefined')
+{
+    //sleep(100);
+    //console.log(typeof RESPONSE);
+}
+console.log("data goes here: ");
+console.log(typeof RESPONSE);
+RESPONSE.then(function(test) {console.log(JSON.parse(JSON.stringify(RESPONSE)).Results); });
+//Do something with this data
+//console.log(dataGoesHere);
 //stressTest(request);

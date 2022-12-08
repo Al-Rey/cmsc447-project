@@ -58,7 +58,7 @@ impl DbClient
             parsed_results = "No results found".to_string();
         }
         //println!("{}", parsed_results);
-        return parsed_results;
+        return parsed_results.to_string();
     }
 
     async fn send_query(pool: &Pool<MySql>, sql_query: &str) -> Vec<Pokemon>
