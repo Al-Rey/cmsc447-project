@@ -42,7 +42,7 @@ class TestBase:
         return True
 
     def TESTING_no_neg(self, df, col_name):
-        test_name = "Testing values in " + col_name + "for negatives"
+        test_name = "Testing values in " + col_name + " for negatives"
 
         for index, row in df.iterrows():
             val = df.iloc[index, 1]
@@ -55,7 +55,7 @@ class TestBase:
         return True
 
     def TESTING_no_zero(self, df, col_name):
-        test_name = "Testing values in " + col_name + "for negatives"
+        test_name = "Testing values in " + col_name + " for negatives"
 
         for index, row in df.iterrows():
             val = df.iloc[index, 1]
@@ -200,16 +200,16 @@ class NatureTests(TestBase):
             dec = row["decreased_stat"]
             
             if inc == DATA_UNAVAILABLE and dec != DATA_UNAVAILABLE:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has a stat increase but no decrease")
                 return False
             
             if inc != DATA_UNAVAILABLE and dec == DATA_UNAVAILABLE:
-                print(test_name, ": Failed!")
+                print("Failed!", test_name)
                 print(row["name"], "has a stat decrease but no increase")
                 return False
 
-        print(test_name, ": Passed!")
+        print("Passed!", test_name)
         return True
 
     def TESTING_valid_stat(self):
@@ -406,10 +406,74 @@ class PokemonTests(TestBase):
         print("Passed! :", test_name)
         return True
 
+    def check_entry(self, sample_entry):
+        name = sample_entry["name"]
+        found = self.pokemon_df.loc[self.pokemon_df["name"] == name]
+        # print(found.head())
+        if len(found) != 1:
+            print("There wasn't only one entry for", name)
+            return False
+
+        for key in sample_entry.keys():
+            item = ""
+            if key == "effect_chance" or key == "game_desc":
+                # print("We got\t: ", found[key].iloc[0])
+                temp = found[key].iloc[0].replace("\n", " ")
+                temp2 = temp.replace("  ", " ")
+                # item = temp2.replace("\n", " ")
+                item = temp2
+                # print("We got\t: ", item)
+            else:
+                item = found[key].iloc[0]
+            
+            if item != sample_entry[key]:
+                print("The", key, "does not match!")
+                print("We got\t: ", item)
+                print("We expected\t: ", sample_entry[key])
+                return False
+        
+        return True
+
     # TODO test the specific entries of pokemon with the values in the 
     # testing_samples in the files
     def TESTING_check_entries(self):
-        return True
+        test_name1 = "Testing for the Pachirisu entry"
+        test_name2 = "Testing for the Ditto entry"
+        test_name3 = "Testing for Squirtle's evolution enrty"
+        test_name4 = "Testing for Silcoon's evolution entry"
+        passed = False
+        
+        # check the infomration for pokemon 1
+        if not self.check_entry(POKEMON_1):
+            print("Failed!", test_name1)
+            return False
+        else:
+            print("Passed!", test_name1)
+            # return True
+
+        # check the infomration for pokemon 2
+        if not self.check_entry(POKEMON_2):
+            print("Failed!", test_name2)
+            return False
+        else:
+            print("Passed!", test_name2)
+            # return True
+
+        # check the infomration for pokemon 3
+        if not self.check_entry(POKEMON_3_EVO):
+            print("Failed!", test_name3)
+            return False
+        else:
+            print("Passed!", test_name3)
+            # return True
+
+        # check the infomration for move 1
+        if not self.check_entry(POKEMON_4_EVO):
+            print("Failed!", test_name4)
+            return False
+        else:
+            print("Passed!", test_name4)
+            return True
 
     def run_tests(self):
         results = True
@@ -428,6 +492,7 @@ class PokemonTests(TestBase):
         results = results and self.TESTING_valid_type(self.pokemon_df[["name", "type2"]], "type2")
         results = results and self.TESTING_pokemon_has_moves()
         results = results and self.TESTING_pokemon_move_learn()
+        results = results and self.TESTING_check_entries()
 
 
         return results
@@ -436,11 +501,11 @@ if __name__ == "__main__":
     print("Running Move data validation tests...")
     print(MoveTests(), end="\n\n")
 
-    # print("Running Nature data validation tests...")
-    # print(NatureTests(), end="\n\n")
+    print("Running Nature data validation tests...")
+    print(NatureTests(), end="\n\n")
 
-    # print("Running Ability data validation tests...")
-    # print(AbilityTests(), end="\n\n")
+    print("Running Ability data validation tests...")
+    print(AbilityTests(), end="\n\n")
 
-    # print("Running Pokemon data validation tests...")
-    # print(PokemonTests(), end="\n\n")
+    print("Running Pokemon data validation tests...")
+    print(PokemonTests(), end="\n\n")

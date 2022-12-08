@@ -100,7 +100,7 @@ POKEMON_2 = {
     "hp": 48, 
     "type1": "normal", 
     "type2": "normal",
-    "list_of_moves": [("transform", "", 0)],
+    "list_of_moves": [("transform", 1)],
     "ability_name": [("limber", False), ("imposter", True)], 
     "height": 3, 
     "weight": 40,
@@ -110,7 +110,7 @@ POKEMON_2 = {
 
 POKEMON_3_EVO = {
     "name": "squirtle",
-    "evolutions": [("squirtle", "", 0), ("wartortle", "level-up(16)", 16), ("blastoise", "level-up(36)", 36)] 
+    "evolutions": [("squirtle", "", 0), ("wartortle", "level-up(16)", 1), ("blastoise", "level-up(36)", 2)] 
 }
 
 POKEMON_4_EVO = {
