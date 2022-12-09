@@ -1,9 +1,7 @@
-use serde::{Serialize, Deserialize};
 use crate::pokemonmodel::Pokemon;
 use crate::jsonstructs::JsonRequest;
-use sqlx::mysql::{MySqlPoolOptions, MySqlRow, MySqlConnection};
-use sqlx::{FromRow, Row, Pool, MySql};
-use futures::executor::block_on;
+use sqlx::mysql::{MySqlPoolOptions, MySqlRow};
+use sqlx::{Row, Pool, MySql};
 use dotenv;
 
 //Struct declarations
@@ -25,7 +23,6 @@ impl DbClient
     {
         let sql_query: String = build_query(request);
         println!("{}", sql_query);
-        //let mut results: Vec<Pokemon> = vec![];
         let conn_str: &str = &DbClient::get_connection_string();
         let pool = DbClient::get_connection(conn_str);
         let results = DbClient::send_query(&pool.await, &sql_query).await;
@@ -52,7 +49,6 @@ impl DbClient
         {
             parsed_results = "No results found".to_string();
         }
-        //println!("{}", parsed_results);
         return parsed_results.to_string();
     }
 

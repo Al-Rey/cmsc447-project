@@ -1,4 +1,3 @@
-use crate::pokemonmodel::{Pokemon};
 use serde::{Serialize, Deserialize};
 
 //Constants

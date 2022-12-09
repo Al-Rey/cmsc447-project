@@ -1,12 +1,8 @@
 #![feature(decl_macro)]
-use json::stringify;
-use lib::jsonstructs::*;
 use lib::dbquery::DbClient;
 use rocket::{self, post, routes};
 use futures::executor::block_on;
 use serde_json;
-
-
 
 #[post("/GUP", data="<query>")]
 fn get_using_post(query: String) -> String
@@ -25,37 +21,6 @@ fn get_using_post(query: String) -> String
         },
     }
 }
-
-/*fn print_json_request(json_object: JsonRequest)
-{
-    let mut and_rules: usize = 0;
-    let mut or_rules: usize = 0;
-    while and_rules < json_object.params.len()
-    {
-        if json_object.params[and_rules].rules.len() > 0
-        {
-            println!("{{");
-            while or_rules < json_object.params[and_rules].rules.len()
-            {
-                println!("  category = {}", json_object.params[and_rules].rules[or_rules].category);
-                println!("  rule = {}", json_object.params[and_rules].rules[or_rules].rule);
-                println!("  filter = {}", json_object.params[and_rules].rules[or_rules].filter);
-                or_rules += 1;
-                if or_rules < json_object.params[and_rules].rules.len()
-                {
-                    println!("  or");
-                }
-            }
-            println!("}}");
-            or_rules = 0;
-        }
-        and_rules += 1;
-        if and_rules < json_object.params.len()
-        {
-            println!("and");
-        }
-    }        
-}*/
 
 fn rocket() -> rocket::Rocket
 {
