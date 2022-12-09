@@ -14,6 +14,7 @@ NATURE_LONELY = {
     "name": "lonely"
 }
 
+# move example that is a special class
 MOVE_1 = {
     "name": "whirlpool",
     "accuracy": 85,
@@ -29,6 +30,7 @@ MOVE_1 = {
     "priority": 0
 }
 
+# move example that is a physical class
 MOVE_2 = {
     "name": "tackle",
     "accuracy": 100,
@@ -44,6 +46,7 @@ MOVE_2 = {
     "priority": 0 
 }
 
+# move example that is a status class
 MOVE_3 = {
     "name": "dragon-dance",
     "accuracy": DATA_UNAVAILABLE,
@@ -63,11 +66,15 @@ MOVE_3 = {
 ABILITY_1 = {
     "name": "battle-armor",
     "generation": 3,
+    "effects": "Moves cannot score critical hits against this Pokémon. This ability functions identically to shell armor.",
+    "description": "Protects the Pokémon from critical hits."
 }
 
 ABILITY_2 = {
     "name": "flash-fire",
     "generation": 3,
+    "effects": "This Pokémon is immune to fire-type moves. Once this Pokémon has been hit by a Fire move, its own Fire moves will inflict 1.5× as much damage until it leaves battle. This ability has no effect while the Pokémon is frozen. The Fire damage bonus is retained even if the Pokémon is frozen and thawed or the ability is lost or disabled. Fire moves will ignore this Pokémon's substitute. This ability takes effect even on non-damaging moves, i.e. will o wisp.",
+    "description": "Powers up the Pokémon’s Fire-type moves if it’s hit by one."
 }
 
 POKEMON_1 = {

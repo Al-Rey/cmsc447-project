@@ -327,53 +327,56 @@ class AbilityTests(TestBase):
         else:
             return "One or More Ability Tests have Failed!"
 
+    def check_entry(self, sample_entry):
+        name = sample_entry["name"]
+        found = self.ability_df.loc[self.ability_df["name"] == name]
+        # print(found.head())
+        if len(found) != 1:
+            print("There wasn't only one entry for", name)
+            return False
+
+        for key in sample_entry.keys():
+            item = ""
+            if key == "effects" or key == "description":
+                # print("OG\t: ", repr(found[key].iloc[0]))
+                # temp = found[key].iloc[0].replace(".\n", ".")
+                # x= temp.replace("\n", "")
+                # temp2 = temp.replace("  ", " ")
+                item = " ".join(found[key].iloc[0].split())
+                # item = temp2.replace("\n", "")
+                # item = temp2
+                # print("We got\t: ", item)
+            else:
+                item = found[key].iloc[0]
+            
+            if item != sample_entry[key]:
+                print("The", key, "does not match!")
+                print("We got\t: ", item)
+                print("We expected\t: ", sample_entry[key])
+                return False
+        
+        return True
+
     def TESTING_check_entries(self):
         test_name1 = "Testing values for battle armor nature"
         test_name2 = "Testing values for flash fire nature"
-        
-        passed = False
-        found = self.ability_df.loc[self.ability_df["name"] == "battle-armor"]
-        
 
-        if len(found) == 1:
-            if found["name"].iloc[0] == ABILITY_1["name"]:
-                if found["generation"].iloc[0] == ABILITY_1["generation"]:
-                    passed = True
-                else:
-                    print("the generations don't match")
-            else:
-                print("the names do not match")
-        else:
-            print("There wasn't only one entry")
-
-        if passed:
-            print("Passed!", test_name1)
-            passed = False
-        else:
+        # check the infomration for pokemon 1
+        if not self.check_entry(ABILITY_1):
             print("Failed!", test_name1)
-            print(found.head())
             return False
-
-
-        found = self.ability_df.loc[self.ability_df["name"] == "flash-fire"]
-        # print(found.head())
-        if len(found) == 1:
-            if found["name"].iloc[0] == ABILITY_2["name"]:
-                if found["generation"].iloc[0] == ABILITY_2["generation"]:
-                    passed = True
-                else:
-                    print("the generations don't match")
-            else:
-                print("the names do not match")
         else:
-            print("There wasn't only one entry")
+            print("Passed!", test_name1)
+            # return True
 
-        if passed:
-            print("Passed!", test_name2)
-            return True
-        else:
+
+        if not self.check_entry(ABILITY_2):
             print("Failed!", test_name2)
             return False
+        else:
+            print("Passed!", test_name2)
+            return True
+
     
     def run_tests(self):
         print("Running Tests...")
@@ -422,12 +425,12 @@ class PokemonTests(TestBase):
                 elif isinstance(method, int) and method > 0:
                     continue
 
-                print("Failed! :", test_name)
+                print("Failed!", test_name)
                 print("Error for the move", move[0], "for ", row["name"])
                 print("The method learned is", method)
                 return False
 
-        print("Passed! :", test_name)
+        print("Passed!", test_name)
         return True
 
     def check_entry(self, sample_entry):
@@ -439,16 +442,17 @@ class PokemonTests(TestBase):
             return False
 
         for key in sample_entry.keys():
-            item = ""
-            if key == "effect_chance" or key == "game_desc":
-                # print("We got\t: ", found[key].iloc[0])
-                temp = found[key].iloc[0].replace("\n", " ")
-                temp2 = temp.replace("  ", " ")
-                # item = temp2.replace("\n", " ")
-                item = temp2
-                # print("We got\t: ", item)
-            else:
-                item = found[key].iloc[0]
+            # item = ""
+            # if key == "effect_chance" or key == "game_desc":
+            #     # print("We got\t: ", found[key].iloc[0])
+            #     # temp = found[key].iloc[0].replace("\n", " ")
+            #     # temp2 = temp.replace("  ", " ")
+            #     temp2 = " ".join(found[key].iloc[0].split())
+            #     # item = temp2.replace("\n", " ")
+            #     item = temp2
+            #     # print("We got\t: ", item)
+            # else:
+            item = found[key].iloc[0]
             
             if item != sample_entry[key]:
                 print("The", key, "does not match!")
