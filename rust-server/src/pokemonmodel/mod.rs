@@ -36,6 +36,10 @@ impl Pokemon
         json_string.push_str(&format!("'hp': {}, ", self.hp));
         json_string.push_str(&format!("'type1': '{}', ", self.type1));
         json_string.push_str(&format!("'type2': '{}', ", self.type2));
+        
+        //I commented these out because I was unable to get the formatting working for
+        //them in time and because they are extremely long arrays.
+        
         //json_string.push_str(&format!("'move_list': '{}', ", self.list_of_moves));
         //json_string.push_str(&format!("'ability_name': '{}', ", self.ability_name));
         json_string.push_str(&format!("'height': {}, ", self.height));

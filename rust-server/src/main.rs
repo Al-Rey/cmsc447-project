@@ -17,7 +17,8 @@ fn get_using_post(query: String) -> String
         },
         Err(_error) => 
         {
-            return "ERROR: Invalid request detected.".to_string();
+            //Error message sent as json string to avoid a fatal error on the client side.
+            return "{ \"Error\": \"ERROR: Invalid request detected.\" }".to_string();
         },
     }
 }
@@ -30,7 +31,6 @@ fn rocket() -> rocket::Rocket
 
 fn main()
 {
-    DbClient::get_connection_string();
     let api: rocket::Rocket = rocket();
     api.launch();
 }
