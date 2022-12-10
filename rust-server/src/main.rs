@@ -2,7 +2,9 @@
 use lib::dbquery::DbClient;
 use rocket::{self, post, routes};
 use futures::executor::block_on;
-use serde_json;
+//use serde_json;
+#[macro_use]
+extern crate ferris_print;
 
 #[post("/GUP", data="<query>")]
 fn get_using_post(query: String) -> String
@@ -25,12 +27,12 @@ fn get_using_post(query: String) -> String
 
 fn rocket() -> rocket::Rocket
 {
-    rocket::ignite()
-        .mount("/", routes![get_using_post],)
+    return rocket::ignite().mount("/", routes![get_using_post],);
 }
 
 fn main()
 {
     let api: rocket::Rocket = rocket();
+    ferrisprint!("The API is ready!\nPraise the Sun!");
     api.launch();
 }
