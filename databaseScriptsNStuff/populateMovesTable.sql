@@ -1,17 +1,17 @@
 CREATE TABLE IF NOT EXISTS moves(
-   FIELD1        INTEGER  NOT NULL PRIMARY KEY 
-  ,move_name     VARCHAR(14) NOT NULL
-  ,accuracy      VARCHAR(3) NOT NULL
-  ,class         VARCHAR(8) NOT NULL
-  ,game_desc     VARCHAR(30)
-  ,effect_chance VARCHAR(2554) NOT NULL
-  ,generation    INTEGER  NOT NULL
-  ,machines      BIT  NOT NULL
-  ,crit_rate     INTEGER  NOT NULL
-  ,move_type     VARCHAR(8) NOT NULL
-  ,power         VARCHAR(3) NOT NULL
-  ,pp            INTEGER  NOT NULL
-  ,priority      INTEGER  NOT NULL
+    FIELD1        INTEGER  NOT NULL PRIMARY KEY ,
+    move_name     VARCHAR(14) NOT NULL,
+    accuracy      VARCHAR(3) NOT NULL,
+    class         VARCHAR(8) NOT NULL,
+    game_desc     VARCHAR(30),
+    effect_chance VARCHAR(2554) NOT NULL,
+    generation    INTEGER  NOT NULL,
+    machines      BIT  NOT NULL,
+    crit_rate     INTEGER  NOT NULL,
+    move_type     VARCHAR(8) NOT NULL,
+    power         VARCHAR(3) NOT NULL,
+    pp            INTEGER  NOT NULL,
+    priority      INTEGER  NOT NULL
 );
 INSERT INTO moves(FIELD1,move_name,accuracy,class,game_desc,effect_chance,generation,machines,crit_rate,move_type,power,pp,priority) VALUES (0,'pound','100','physical',NULL,'Inflicts regular damage.',1,0,0,'normal','40',35,0);
 INSERT INTO moves(FIELD1,move_name,accuracy,class,game_desc,effect_chance,generation,machines,crit_rate,move_type,power,pp,priority) VALUES (1,'karate-chop','100','physical',NULL,'Inflicts regular damage.  User''s critical hit rate is one level higher when using this move.',1,0,1,'fighting','50',25,0);

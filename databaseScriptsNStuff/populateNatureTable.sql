@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS natures(
-   FIELD1         INTEGER  NOT NULL PRIMARY KEY 
-  ,nature_name    VARCHAR(7) NOT NULL
-  ,decreased_stat VARCHAR(15)
-  ,increased_stat VARCHAR(15)
+    FIELD1         INTEGER  NOT NULL PRIMARY KEY ,
+    nature_name    VARCHAR(7) NOT NULL,
+    decreased_stat VARCHAR(15),
+    increased_stat VARCHAR(15)
 );
 INSERT INTO natures(FIELD1,nature_name,decreased_stat,increased_stat) VALUES (0,'hardy',NULL,NULL);
 INSERT INTO natures(FIELD1,nature_name,decreased_stat,increased_stat) VALUES (1,'bold','attack','defense');

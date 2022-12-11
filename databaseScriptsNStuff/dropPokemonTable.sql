@@ -672,4 +672,4 @@ DELETE FROM pokemon WHERE FIELD1= 670;
 DELETE FROM pokemon WHERE FIELD1= 671;
 DELETE FROM pokemon WHERE FIELD1= 672;
 
-drop table pokemon;
+DROP TABLE pokemon;

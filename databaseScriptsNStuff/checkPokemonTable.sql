@@ -1,2 +1,5 @@
-use pokemon_database;
-SELECT * FROM pokemon where type1 = 'water' and speed <= 20;
+USE pokemon_database;
+SELECT * 
+    FROM pokemon 
+  WHERE type1 = 'water' 
+  AND speed <= 20;

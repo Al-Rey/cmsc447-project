@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS abilities(
-   FIELD1              INTEGER  NOT NULL PRIMARY KEY 
-  ,ability_name        VARCHAR(13) NOT NULL
-  ,generation          INTEGER  NOT NULL
-  ,effects             VARCHAR(1548) NOT NULL
-  ,ability_description VARCHAR(66) NOT NULL
+    FIELD1              INTEGER  NOT NULL PRIMARY KEY,
+	ability_name        VARCHAR(13) NOT NULL,
+    generation          INTEGER  NOT NULL,
+    effects             VARCHAR(1548) NOT NULL,
+    ability_description VARCHAR(66) NOT NULL
 );
 INSERT INTO abilities(FIELD1,ability_name,generation,effects,ability_description) VALUES (0,'stench',3,'This Pokémon''s damaging moves have a 10% chance to make the target flinch with each hit if they do not already cause flinching as a secondary effect.
 

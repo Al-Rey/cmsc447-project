@@ -356,4 +356,4 @@ DELETE FROM abilities WHERE FIELD1= 354;
 DELETE FROM abilities WHERE FIELD1= 355;
 DELETE FROM abilities WHERE FIELD1= 356;
 
-drop table abilities;
+DROP TABLE abilities;

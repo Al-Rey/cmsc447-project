@@ -1,23 +1,23 @@
 
 
 CREATE TABLE IF NOT EXISTS pokemon(
-   FIELD1          INTEGER  NOT NULL PRIMARY KEY 
-  ,pokemon_name    VARCHAR(10) NOT NULL
-  ,pokedex_id      INTEGER  NOT NULL
-  ,attack          INTEGER  NOT NULL
-  ,special_attack  INTEGER  NOT NULL
-  ,defense         INTEGER  NOT NULL
-  ,special_defense INTEGER  NOT NULL
-  ,speed           INTEGER  NOT NULL
-  ,hp              INTEGER  NOT NULL
-  ,type1           VARCHAR(8) NOT NULL
-  ,type2           VARCHAR(8) NOT NULL
-  ,move_list       VARCHAR(7493) NOT NULL
-  ,ability_name    VARCHAR(74) NOT NULL
-  ,height          INTEGER  NOT NULL
-  ,weight          INTEGER  NOT NULL
-  ,generation      INTEGER  NOT NULL
-  ,evolutions      VARCHAR(473) NOT NULL
+    FIELD1          INTEGER  NOT NULL PRIMARY KEY ,
+    pokemon_name    VARCHAR(10) NOT NULL,
+    pokedex_id      INTEGER  NOT NULL,
+    attack          INTEGER  NOT NULL,
+    special_attack  INTEGER  NOT NULL,
+    defense         INTEGER  NOT NULL,
+    special_defense INTEGER  NOT NULL,
+    speed           INTEGER  NOT NULL,
+    hp              INTEGER  NOT NULL,
+    type1           VARCHAR(8) NOT NULL,
+    type2           VARCHAR(8) NOT NULL,
+    move_list       VARCHAR(7493) NOT NULL,
+    ability_name    VARCHAR(74) NOT NULL,
+    height          INTEGER  NOT NULL,
+    weight          INTEGER  NOT NULL,
+    generation      INTEGER  NOT NULL,
+    evolutions      VARCHAR(473) NOT NULL
 );
 INSERT INTO pokemon(FIELD1,pokemon_name,pokedex_id,attack,special_attack,defense,special_defense,speed,hp,type1,type2,move_list,ability_name,height,weight,generation,evolutions) VALUES (0,'bulbasaur',1,49,65,49,65,45,45,'grass','poison','[(''razor-wind'', ''egg''), (''swords-dance'', ''machine''), (''cut'', ''machine''), (''bind'', ''tutor''), (''vine-whip'', 13), (''headbutt'', ''tutor''), (''tackle'', 1), (''body-slam'', ''machine''), (''take-down'', ''machine''), (''double-edge'', ''tutor''), (''growl'', 1), (''strength'', ''machine''), (''mega-drain'', ''machine''), (''leech-seed'', 7), (''growth'', 34), (''razor-leaf'', 27), (''solar-beam'', ''machine''), (''poison-powder'', 20), (''sleep-powder'', 41), (''petal-dance'', ''egg''), (''string-shot'', ''tutor''), (''toxic'', ''egg''), (''rage'', ''machine''), (''mimic'', ''tutor''), (''double-team'', ''machine''), (''defense-curl'', ''tutor''), (''light-screen'', ''machine''), (''reflect'', ''machine''), (''bide'', ''machine''), (''sludge'', ''egg''), (''skull-bash'', ''egg''), (''amnesia'', ''machine''), (''flash'', ''machine''), (''rest'', ''machine''), (''substitute'', ''machine''), (''snore'', ''machine''), (''curse'', ''egg''), (''protect'', ''machine''), (''sludge-bomb'', ''machine''), (''mud-slap'', ''tutor''), (''outrage'', -1), (''giga-drain'', ''machine''), (''endure'', ''machine''), (''charm'', ''machine''), (''false-swipe'', ''machine''), (''swagger'', ''machine''), (''fury-cutter'', ''tutor''), (''attract'', ''machine''), (''sleep-talk'', ''machine''), (''return'', ''machine''), (''frustration'', ''machine''), (''safeguard'', ''machine''), (''sweet-scent'', ''machine''), (''synthesis'', ''tutor''), (''hidden-power'', ''machine''), (''sunny-day'', ''machine''), (''rock-smash'', ''machine''), (''facade'', ''machine''), (''nature-power'', ''egg''), (''helping-hand'', ''machine''), (''ingrain'', ''egg''), (''knock-off'', ''tutor''), (''secret-power'', ''machine''), (''weather-ball'', ''machine''), (''grass-whistle'', ''egg''), (''bullet-seed'', ''machine''), (''magical-leaf'', ''machine''), (''natural-gift'', ''machine''), (''worry-seed'', ''tutor''), (''seed-bomb'', ''machine''), (''energy-ball'', ''machine''), (''leaf-storm'', ''machine''), (''power-whip'', ''machine''), (''captivate'', ''machine''), (''grass-knot'', ''machine''), (''venoshock'', ''machine''), (''round'', ''machine''), (''echoed-voice'', ''machine''), (''grass-pledge'', ''tutor''), (''work-up'', ''machine'')]','[(''overgrow'', False), (''chlorophyll'', True)]',7,69,1,'[(''bulbasaur'', '''', 0), (''ivysaur'', ''level-up(16)'', 1), (''venusaur'', ''level-up(32)'', 2)]');
 INSERT INTO pokemon(FIELD1,pokemon_name,pokedex_id,attack,special_attack,defense,special_defense,speed,hp,type1,type2,move_list,ability_name,height,weight,generation,evolutions) VALUES (1,'ivysaur',2,62,80,63,80,60,60,'grass','poison','[(''swords-dance'', ''machine''), (''cut'', ''machine''), (''bind'', ''tutor''), (''vine-whip'', 13), (''headbutt'', ''tutor''), (''tackle'', 1), (''body-slam'', ''machine''), (''take-down'', ''machine''), (''double-edge'', ''tutor''), (''growl'', 1), (''strength'', ''machine''), (''mega-drain'', ''machine''), (''leech-seed'', 1), (''growth'', 38), (''razor-leaf'', 30), (''solar-beam'', ''machine''), (''poison-powder'', 22), (''sleep-powder'', 46), (''string-shot'', ''tutor''), (''toxic'', ''machine''), (''rage'', ''machine''), (''mimic'', ''tutor''), (''double-team'', ''machine''), (''defense-curl'', ''tutor''), (''light-screen'', ''machine''), (''reflect'', ''machine''), (''bide'', ''machine''), (''amnesia'', ''machine''), (''flash'', ''machine''), (''rest'', ''machine''), (''substitute'', ''machine''), (''snore'', ''machine''), (''curse'', ''machine''), (''protect'', ''machine''), (''sludge-bomb'', ''machine''), (''mud-slap'', ''tutor''), (''outrage'', -1), (''giga-drain'', ''machine''), (''endure'', ''machine''), (''charm'', ''machine''), (''false-swipe'', ''machine''), (''swagger'', ''machine''), (''fury-cutter'', ''tutor''), (''attract'', ''machine''), (''sleep-talk'', ''machine''), (''return'', ''machine''), (''frustration'', ''machine''), (''safeguard'', ''machine''), (''sweet-scent'', ''machine''), (''synthesis'', ''tutor''), (''hidden-power'', ''machine''), (''sunny-day'', ''machine''), (''rock-smash'', ''machine''), (''facade'', ''machine''), (''nature-power'', ''machine''), (''helping-hand'', ''machine''), (''knock-off'', ''tutor''), (''secret-power'', ''machine''), (''weather-ball'', ''machine''), (''bullet-seed'', ''machine''), (''magical-leaf'', ''machine''), (''natural-gift'', ''machine''), (''worry-seed'', ''tutor''), (''seed-bomb'', ''machine''), (''energy-ball'', ''machine''), (''leaf-storm'', ''machine''), (''power-whip'', ''machine''), (''captivate'', ''machine''), (''grass-knot'', ''machine''), (''venoshock'', ''machine''), (''round'', ''machine''), (''echoed-voice'', ''machine''), (''grass-pledge'', ''tutor''), (''work-up'', ''machine'')]','[(''overgrow'', False), (''chlorophyll'', True)]',10,130,1,'[(''bulbasaur'', '''', 0), (''ivysaur'', ''level-up(16)'', 1), (''venusaur'', ''level-up(32)'', 2)]');

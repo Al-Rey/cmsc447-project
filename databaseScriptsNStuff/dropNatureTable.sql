@@ -24,4 +24,4 @@ DELETE FROM natures WHERE FIELD1= 22;
 DELETE FROM natures WHERE FIELD1= 23;
 DELETE FROM natures WHERE FIELD1= 24;
 
-drop table natures;
+DROP TABLE natures;
