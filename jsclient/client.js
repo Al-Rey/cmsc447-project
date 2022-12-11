@@ -233,14 +233,15 @@ async function makeApiCall(request)
     }
 }
 
+//BUILD YOUR JsonRequest BETWEEN THESE COMMENTS
 let rule1 = new Rule("speed", "lt", 100);
 let rule2 = new Rule("pokemon_name", "eq", "piKAchu");
-
 let andBlock1 = new AndParameters([rule1, rule2]);
-
 let request = new JsonRequest(10, [andBlock1]);
+//BUILD YOUR JsonRequest BETWEEN THESE COMMENTS
+
 var RESPONSE = makeApiCall(request);
-while (typeof RESPONSE == 'undefined' && RESPONDE != ""){ }
+while (typeof RESPONSE == 'undefined' && RESPONSE != ""){ }
 RESPONSE.then(function(test) {console.log(JSON.parse(JSON.stringify(RESPONSE)).Results); });
 RESPONSE = "";
 

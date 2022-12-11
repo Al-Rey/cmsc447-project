@@ -27,13 +27,13 @@ In order to use this API users will need to have the following software installe
 
 2. the rust compiler (This is needed to build the API.) [Rust Installation Documentation](https://www.rust-lang.org/tools/install)
 
-You will also need to create a GitHub account if you do not already have one. Additonally it is recommended that you have an Integrated Development Environment, commonly referred to as an IDE that provides an integrated terminal or command line interface. if you do not already have one installed you can find a list of popular IDEs [here](https://www.techrepublic.com/article/best-ide-software/).
+You will also need to create a GitHub account if you do not already have one. Additonally it is recommended that you have an Integrated Development Environment, commonly referred to as an IDE that provides an integrated terminal or command line interface. If you do not already have one installed you can find a list of popular IDEs [here](https://www.techrepublic.com/article/best-ide-software/).
 
 ### How to downlaod and run the API
 
-Once you have the prerequisite software installed on your system it you are ready to download and run the API. you should begin by opening a terminal and navgating to the directory you would like to clone this git repository to. this can be done using the command: **cd** followed by the path to the directory you have chosen. Once there you will clone this repository by entering the command: **git clone https://github.com/Al-Rey/cmsc447-project.git** from there you will be prompted for your GitHub credentials. After providing your credentials the code from this repository will be downloaded to your machine.
+Once you have the prerequisite software installed on your system it you are ready to download and run the API. You should begin by opening a terminal and navgating to the directory you would like to clone this git repository to. This can be done using the command: **cd** followed by the path to the directory you have chosen. Once there you will clone this repository by entering the command: **git clone https://github.com/Al-Rey/cmsc447-project.git** from there you will be prompted for your GitHub credentials. After providing your credentials the code from this repository will be downloaded to your machine.
 
-Now that you have the source code on your machine you will want to navigate to the Rust-Server directory of the project. to do this enter in: **cd rust-server**.
+Now that you have the source code on your machine you will want to navigate to the rust-server directory of the project. to do this enter in: **cd cmsc447-project/rust-server** if you are on Linux or **cd cmsc447-project\rust-server** if you are on Windows.
 
 The final step is to build and run the API. To do this enter the command: **cargo run**. This will automatically download the needed dependencies and compile the API. Once it is done compiling, the API will begin running. At this point the API will run until the interupt command is given, in most terminals the interupt command is given by pressing the **control** key and the **C** key simultaneously, but it may be different depending based on your system.
 
