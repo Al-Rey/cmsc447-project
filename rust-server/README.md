@@ -37,7 +37,7 @@ Now that you have the source code on your machine you will want to navigate to t
 
 The final step is to build and run the API. To do this enter the command: **cargo run**. This will automatically download the needed dependencies and compile the API. Once it is done compiling, the API will begin running. At this point the API will run until the interupt command is given, in most terminals the interupt command is given by pressing the **control** key and the **C** key simultaneously, but it may be different depending based on your system.
 
-Now that the API is running you can send it commands using the **client.js** script located in the **jsclient** directory of this project. For information on how to use that script please refer to it's README document.
+Now that the API is running you can send it commands using the **client.js** script located in the **jsclient** directory of this project. For information on how to use that script please refer to the [Getting Started](https://github.com/Al-Rey/cmsc447-project/tree/main/jsclient#2-getting-started) section of the jsclient's README document.
 
 ## 3. Notable Features
 

@@ -36,7 +36,7 @@ You will also need to create a GitHub account if you do not already have one. Ad
 
 Once you have the prerequisite software installed on your system it you are ready to download and run the API. You should begin by opening a terminal and navgating to the directory you would like to clone this git repository to. This can be done using the command: **cd** followed by the path to the directory you have chosen. Once there you will clone this repository by entering the command: **git clone https://github.com/Al-Rey/cmsc447-project.git** from there you will be prompted for your GitHub credentials. After providing your credentials the code from this repository will be downloaded to your machine.
 
-Before continuing please have an instance of the API running in a seperate terminal or CLI. for instructions on how to build and run the API please refer to the [Getting Started](https://github.com/Al-Rey/cmsc447-project/tree/main/rust-server#2-getting-started) section of the rust-server README.md file.
+Before continuing please have an instance of the API running in a seperate terminal or CLI. for instructions on how to build and run the API please refer to the [Getting Started](https://github.com/Al-Rey/cmsc447-project/tree/main/rust-server#2-getting-started) section of the rust-server README file.
 
 Now that you have the source code on your machine you will want to navigate to the front-end client directory of the project. to do this enter in: **cd cmsc447-project/jsclient** if you are on Linux or **cd cmsc447-project\jsclient** if you are on Windows.
 
