@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 //Constants
 
 const VALID_RULES: [&str; 6] = ["eq", "neq", "lt", "gt", "lte", "gte"];
-const STRING_CATEGORIES: [&str; 4] = ["pokemon_name", "type1", "type2", "ability_name"];
+const STRING_CATEGORIES: [&str; 3] = ["pokemon_name", "type1", "type2"];
 const INT_CATEGORIES: [&str; 10] = ["pokedex_id", "attack", "special-attack", "defense", "special-defense", "speed", "hp", "height", "weight", "generation"];
 
 //Struct Declarations
