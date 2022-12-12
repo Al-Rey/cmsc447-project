@@ -4,37 +4,21 @@ import numpy as np
 import requests
 import json
 from sys import argv
-from cleaning_helpers import query_api_general
-from cleaning_helpers import query_api_specific
-from cleaning_helpers import get_generations
 from cleaning_helpers import get_gen_number
-from cleaning_helpers import get_games_gen_num
 from cleaning_helpers import get_games
+from cleaning_helpers import get_games_gen_num
 from cleaning_helpers import query_api
 from cleaning_helpers import HIGHEST_GEN_NUM
 from cleaning_helpers import export_csv
+from cleaning_helpers import get_index
 from pathlib import Path
 
 
 SPECIES_URL_BASE = "https://pokeapi.co/api/v2/pokemon-species/"
 POKEMON_LIST_URL = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
 
-def get_index(index_name, columns):
-        try:
-            ind = columns.index(index_name)
-            return ind
-        except ValueError:
-            print(index_name, "index not found")
-            exit(1) # trouble finding the index for the column in the dataframe
-        except Exception as inst:
-            print("error getting", index_name, "list data")
-            print(inst)
-            # return None
-            exit(2) # any other error
-
 def get_item_list(item_data, item_name, valid_items):
     item_list = []
-    # all_items = item_data[item_name]
     info = 0
 
     for item in item_data:
@@ -43,12 +27,13 @@ def get_item_list(item_data, item_name, valid_items):
             continue
 
         if item_name == "move":
-            # info = (name, -1)
             info = get_move_tuple(item)
+            if info[1] == None:
+                continue
         elif item_name == "ability":
             info = (name, item["is_hidden"])
         else:
-            print("item name is not ability or move")
+            # print("item name is not ability or move") # This statement is for DEBUG purposes
             return np.nan
             
         item_list.append(info)
@@ -57,34 +42,28 @@ def get_item_list(item_data, item_name, valid_items):
 
 def get_move_tuple(move_data):
     name = move_data["move"]["name"]
-    learn = -1
+    learn = None
     learn_list = move_data["version_group_details"]
 
     for index in range(len(learn_list)-1, -1, -1):
-        if learn_list[index]["version_group"]["name"] in get_games():
+        gen = get_games_gen_num(learn_list[index]["version_group"]["name"])
+        if gen <= HIGHEST_GEN_NUM and gen >= 1:
             learn = learn_list[index]["level_learned_at"]
             if learn == 0:
                 learn = learn_list[index]["move_learn_method"]["name"]
+                if learn in ["machine", "tutor", "egg", "level-up"]:
+                    break
+                else:
+                    learn = None
+                    continue
+            if learn != None:
                 break
 
     return (name, learn)
 
 def get_evolution_data(chain_link):
     chain_data = query_api(chain_link, "chain")
-    # cur_name = chain_data["species"]["name"]
-    
-    """
-    info = (cur_name, "", 0)
-    
-    chain = []
 
-    chain.append(info)
-    
-    rest_of_chain = chain_data["evolves_to"]
-    if len(rest_of_chain) != 0:
-        for poke in rest_of_chain:
-            chain.append(get_evo_tuple(poke, 1))
-    """
     return get_evo_tuple(chain_data, 0)
 
 def get_evo_tuple(data, stage):
@@ -97,8 +76,9 @@ def get_evo_tuple(data, stage):
         # get evolution trigger
         details_len = len(data["evolution_details"])
         if details_len >=1:
-            if details_len != 1:
-                print(cur_name, "has more than one item in evolution details")
+            # The following if-statment is made for DEBUG purposes
+            # if details_len != 1:
+                # print(cur_name, "has more than one item in evolution details")
             
             trigger = []
             
@@ -157,7 +137,7 @@ def get_evo_tuple(data, stage):
     
 def get_pokmeon_data(export_data = False):
     link = 'https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0'
-    pokemon_data = query_api_general(link)
+    pokemon_data = query_api(link, "results")
 
     # load the names of the abilities and moves we will be looking at
     config_path = Path(argv[0]).resolve().parent # ensure that we don't have to worry about file paths for the files
@@ -185,14 +165,14 @@ def get_pokmeon_data(export_data = False):
         # get species data
         species_query = requests.get(SPECIES_URL_BASE + name)
         if species_query.status_code == 404:
-            print(name, "does not have a species page")
+            # print(name, "does not have a species page") # Print statement for DEBUG purposes
             continue
         species_data = json.loads(species_query.text)
         gen = species_data["generation"]["name"]
         gen = get_gen_number(gen)
 
         # if the pokemon is not in the generations we are looking at, ignore it
-        if gen > HIGHEST_GEN_NUM:
+        if gen > HIGHEST_GEN_NUM or gen < 1:
             break
 
         # put the name and generation in the dataframe
@@ -217,7 +197,7 @@ def get_pokmeon_data(export_data = False):
         hold[index] = get_evolution_data(species_data["evolution_chain"]["url"])
 
         # get the pokemon's game information
-        pokemon_query = query_api_specific(pokemon["url"])
+        pokemon_query = query_api(pokemon["url"])
 
         # get the base stats of the pokemon
         all_stats = pokemon_query["stats"]
