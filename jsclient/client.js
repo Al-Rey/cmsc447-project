@@ -234,8 +234,8 @@ async function makeApiCall(request)
 }
 
 //BUILD YOUR JsonRequest BETWEEN THESE COMMENTS
-let rule1 = new Rule("speed", "lt", 100);
-let rule2 = new Rule("pokemon_name", "eq", "piKAchu");
+let rule1 = new Rule("speed", "lt", -1);
+let rule2 = new Rule("pokemon_name", "eq", "a");
 let andBlock1 = new AndParameters([rule1, rule2]);
 let request = new JsonRequest(10, [andBlock1]);
 //BUILD YOUR JsonRequest BETWEEN THESE COMMENTS

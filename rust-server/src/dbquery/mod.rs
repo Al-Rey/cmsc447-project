@@ -1,8 +1,8 @@
-use crate::pokemonmodel::Pokemon;
-use crate::jsonstructs::JsonRequest;
-use sqlx::mysql::{MySqlPoolOptions, MySqlRow};
-use sqlx::{Row, Pool, MySql};
 use dotenv;
+use crate::jsonstructs::JsonRequest;
+use crate::pokemonmodel::Pokemon;
+use sqlx::{Row, Pool, MySql};
+use sqlx::mysql::{MySqlPoolOptions, MySqlRow};
 
 //Struct declarations
 
@@ -21,11 +21,13 @@ impl DbClient
     //DO NOT TOUCH THIS CODE IF YOU DO WE MAY NEVER GET IT WORKING AGAIN.
     pub async fn query_database(request: JsonRequest) -> String
     {
-        let sql_query: String = build_query(request);
+        //Formats the data from the frontend
+        let sql_query: String = request.parse_request();
         println!("{}", sql_query);
-        let conn_str: &str = &DbClient::get_connection_string();
-        let pool = DbClient::get_connection(conn_str);
+        //Connects to Database and sends query
+        let pool = DbClient::get_connection();
         let results = DbClient::send_query(&pool.await, &sql_query).await;
+        //Parses the results returned by the database into json.
         let mut parsed_results: String = String::new();
         let mut i: usize = 0;
         while i < results.len()
@@ -47,9 +49,9 @@ impl DbClient
         }
         else
         {
-            parsed_results = "No results found".to_string();
+            parsed_results = "{ \"Results\": \"No results found for your query.\"}".to_string();
         }
-        return parsed_results.to_string();
+        return parsed_results;
     }
 
     async fn send_query(pool: &Pool<MySql>, sql_query: &str) -> Vec<Pokemon>
@@ -83,28 +85,22 @@ impl DbClient
     }
 
     //Initializes a connection with the database
-    pub async fn get_connection(conn_str: &str) -> Pool<MySql>
+    pub async fn get_connection() -> Pool<MySql>
     {
         return MySqlPoolOptions::new()
             .max_connections(10)
-            .connect(conn_str).await.unwrap();
+            .connect(&DbClient::get_connection_string()).await.unwrap();
     }
     
     //Constructs a connection string using variables found in the .env file. (environmental variables)
-    pub fn get_connection_string() -> String
+    fn get_connection_string() -> String
     {
         dotenv::dotenv().ok();
-        let database_type: &str = &std::env::var("DB_TYPE").unwrap();
         let user: &str = &std::env::var("DB_USER").unwrap();
         let password: &str = &std::env::var("DB_PASSWORD").unwrap();
         let host: &str = &std::env::var("DB_HOST").unwrap();
+        let port: &str = &std::env::var("DB_PORT").unwrap();
         let name: &str = &std::env::var("DB_NAME").unwrap();
-        let connection_string: String = format!{"{}://{}:{}@{}:3306/{}", database_type, user, password, host, name};
-        return connection_string;
+        return format!{"mysql://{}:{}@{}:{}/{}", user, password, host, port, name};
     }
-}
-
-pub fn build_query(request: JsonRequest) -> String
-{
-    return request.parse_request();
 }

@@ -1,10 +1,9 @@
 #![feature(decl_macro)]
-use lib::dbquery::DbClient;
-use rocket::{self, post, routes};
-use futures::executor::block_on;
-//use serde_json;
 #[macro_use]
 extern crate ferris_print;
+use futures::executor::block_on;
+use lib::dbquery::DbClient;
+use rocket::{self, post, routes};
 
 #[post("/GUP", data="<query>")]
 fn get_using_post(query: String) -> String
