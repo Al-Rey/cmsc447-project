@@ -12,7 +12,7 @@ const HOST = 'localhost';
 const PORT = "8000";
 const PROTOCOL = "GUP";
 const VALID_RULES = ["eq", "neq", "lt", "gt", "lte", "gte"];
-const STRING_CATEGORIES = ["pokemon_name", "type1", "type2", "ability_name"];
+const STRING_CATEGORIES = ["pokemon_name", "type1", "type2"];
 const INT_CATEGORIES = ["pokedex_id", "attack", "special-attack", "defense", "special-defense", "speed", "hp", "height", "weight", "generation"];
 
 
