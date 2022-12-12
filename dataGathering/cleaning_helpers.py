@@ -1,8 +1,7 @@
 # Libraries
 import requests
 import json
-# import pandas as pd
-# import numpy as np
+
 
 GEN_DICT = {'generation-i':1, 
             'generation-ii':2, 
@@ -12,7 +11,11 @@ GEN_DICT = {'generation-i':1,
             'generation-vi':6,
             'generation-vii':7,
             'generation-viii':8}
+
 HIGHEST_GEN_NUM = 5
+
+DATA_UNAVAILABLE = "NA"
+
 GAME_GENS_SINGLE = { "red" : 1,
                 "blue" : 1,
                 "yellow" : 1,
@@ -41,6 +44,7 @@ GAME_GENS_SINGLE = { "red" : 1,
                 "shield": 8
                 }
 
+
 GAME_GENS_CONBO = { "red-blue" : 1,
                 "yellow" : 1,
                 "gold-silver" : 2,
@@ -60,17 +64,17 @@ GAME_GENS_CONBO = { "red-blue" : 1,
                 "sword-shield": 8
                 }
 
-def query_api_general(link):
-    query = requests.get(link)
-    query_data = json.loads(query.text)
-    return query_data["results"]
 
-def query_api_specific(link):
-    query = requests.get(link)
-    return json.loads(query.text)
-
-# TODO new query link to use insdtead of the two above
 def query_api(link, specific_index=None):
+    """
+    This function takes the API link passed into the function and returns the
+    requested results
+    Params:
+        - link: The link that will be used to query the data
+        - specific_index: if you want to get a specific part of the query
+            results
+    return: the JSON file that the function gets from the queries
+    """
     query = requests.get(link)
     query_data = json.loads(query.text)
 
@@ -79,19 +83,26 @@ def query_api(link, specific_index=None):
     else:
         return query_data
 
-def get_generations():
-    # important variables we need
-    gens = list(GEN_DICT.keys())
-    return gens
-
-def get_gen_dict():
-    return GEN_DICT
-
 def get_gen_number(gen_str):
+    """
+    The function takes a string representing the generation and tries to
+    convert it to a number representing the generation. The funciton raises
+    an error if the string isn't a generation string.
+    Param:
+        - gen_str: A string representing the generation
+    Return: An integer representing the generaiton
+    """
+    
     if "generation" in gen_str:
         return GEN_DICT[gen_str]
     else:
-        if "iv" in gen_str:
+        if "viii" in gen_str:
+            return 8
+        elif "vii" in gen_str:
+            return 7
+        elif "vi" in gen_str:
+            return 6
+        elif "iv" in gen_str:
             return 4
         elif "v" in gen_str:
             return 5
@@ -107,21 +118,58 @@ def get_gen_number(gen_str):
             print(gen_str)
             raise ValueError("We got an invalid generation!")
 
-def get_latest_game():
-    return "black-2-white-2"
-
-def get_second_latest_game():
-    return "black-white"
-
 def export_csv(dataframe, file_name):
+    """
+    This function takes a dataframe and saves it to a file
+    Param:
+        - dataframe: The pandas dataframe that we want to save as a csv file
+        - file_name: The path and name of the file that we will be saving the
+            data from the dataframe to
+    return: None
+    """
+
     dataframe.to_csv(file_name)
     return None
 
 def get_games_gen_num(game_name):
-    return GAME_GENS_CONBO[game_name]
+    """
+    Takes the combined game text and convert that string into the
+    corresponding generation number. 
+    Param:
+        - game_name: The game string, (usually) in the format of "game-game"
+    Return: The game's generation, or -1 if it is not a main series game
+    """
+    try:
+        return GAME_GENS_CONBO[game_name]
+    except KeyError as inst:
+        # print("KeyError in get_games_gen:", inst)
+        return -1 # return -1 if it is not a main series game
 
 def get_games():
+    """
+    Return the names of the games
+    Params: None
+    Return: list of the names of games (as strings)
+    """
     return list(GAME_GENS_CONBO.keys())
 
-def get_games_single():
-    return list(GAME_GENS_SINGLE.keys())
+def get_index(index_name, columns):
+    """
+    Params:
+        - index_name - the column name that we want to find the index for
+        - columns - the list of column names in our dataframe
+    This function takes the list of column names that our dataframe is using and returns
+    what index that name is in. If the given name is not present in the list of column
+    names, an error is thrown and the program ends with an error exit status
+    """
+    try:
+        ind = columns.index(index_name)
+        return ind
+    except ValueError:
+        print(index_name, "index not found")
+        exit(1) # trouble finding the index for the column in the dataframe
+    except Exception as inst:
+        print("error getting", index_name, "list data")
+        print(inst)
+        # return None
+        exit(2) # any other error

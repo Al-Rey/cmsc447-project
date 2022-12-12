@@ -1,0 +1,3 @@
+DELETE FROM abilities WHERE FIELD1 BETWEEN 0 AND 163;
+
+DROP TABLE abilities;

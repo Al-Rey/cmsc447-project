@@ -1,0 +1,4 @@
+DELETE FROM natures 
+ WHERE FIELD1 BETWEEN 0 AND 24;
+
+DROP TABLE natures;
