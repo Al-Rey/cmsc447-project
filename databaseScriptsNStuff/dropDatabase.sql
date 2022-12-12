@@ -1,1 +1,1 @@
-DROP DATABASE IF EXISTS pokemonDatabase;
+DROP DATABASE IF EXISTS pokemon_database;
