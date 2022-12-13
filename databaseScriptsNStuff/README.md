@@ -53,7 +53,7 @@ The database has the following tables:
 
 Here is a diagram showing the relationships between these tables:
 
-![Schema diagram]([schema.png](https://github.com/Al-Rey/cmsc447-project/blob/main/databaseScriptsNStuff/schema.png))
+![Schema diagram](![schema.png](https://github.com/Al-Rey/cmsc447-project/blob/main/databaseScriptsNStuff/schema.png))
 
 
 ## Files
