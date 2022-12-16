@@ -1,6 +1,6 @@
 # Pokemon In a Network
-class: CMSC 447
-Team Members: James Bartkowski, Alana Reyes, Adam Popp, Kevin Lee, Evan Frantz
+-Class: CMSC 447
+-Team Members: James Bartkowski, Alana Reyes, Adam Popp, Kevin Lee, Evan Frantz
 
 # Directories:
 ## Pokedex
