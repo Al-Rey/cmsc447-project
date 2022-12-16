@@ -7,14 +7,15 @@
 ## Pokedex
 - Contains the files for our web app prototype.
 
-##dataGathering
+
+## dataGathering
 - Contains all the scripts and resulting files that were used to clean the pokmeon data that was pulled from the pokemon API.
 
-##databaseScriptsAndStuff
+## databaseScriptsAndStuff
 - Contains all the scripts to populate and drop the tables in the database.
 
-##jsclient
+## jsclient
 - Contiains the files that the front-end will look at and use to hook up the API to the database.
 
-##rust-server
+## rust-server
 - Contains all the files for the actual API.
