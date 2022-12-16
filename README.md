@@ -1,5 +1,3 @@
 # Pokemon In a Network
 class: CMSC 447
-Team Members: 
-hey
-[description of project goes here]
+Team Members: Adam, Evan, James, Kevin, Alana
